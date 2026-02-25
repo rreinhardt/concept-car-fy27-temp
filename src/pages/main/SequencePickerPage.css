@@ -1,0 +1,148 @@
+.seqp-page {
+  display: flex;
+  height: 100%;
+}
+
+/* Main — card grid */
+.seqp-main {
+  flex: 1;
+  padding: var(--padding-section);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-zone);
+}
+
+.seqp-header h2 {
+  margin-bottom: var(--gap-sub);
+}
+
+.seqp-tabs {
+  align-self: flex-start;
+}
+
+/* Card grid */
+.seqp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--gap-zone);
+}
+
+.seqp-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+  padding: var(--padding-section-nested);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-surface);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.seqp-card:hover {
+  border-color: var(--color-border-input);
+  box-shadow: var(--shadow-sm);
+}
+
+.seqp-card-selected {
+  border-color: var(--color-brand-dark);
+  box-shadow: 0 0 0 1px var(--color-brand-dark);
+}
+
+.seqp-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.seqp-card-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sub);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-accent-purple);
+}
+
+.seqp-card-meta {
+  margin-top: auto;
+}
+
+.seqp-footer {
+  display: flex;
+  justify-content: center;
+}
+
+/* Preview panel */
+.seqp-preview {
+  width: var(--drawer-width);
+  border-left: 1px solid var(--color-border);
+  padding: var(--padding-section);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-zone);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.seqp-preview-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+}
+
+.seqp-preview-stats {
+  display: flex;
+  gap: var(--gap-zone);
+}
+
+.seqp-preview-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Step list */
+.seqp-preview-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+}
+
+.seqp-preview-steps h4 {
+  margin-bottom: var(--gap-sub);
+}
+
+.seqp-preview-step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-component);
+  padding-left: var(--gap-sub);
+}
+
+.seqp-step-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand-dark);
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.seqp-step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.seqp-preview-actions {
+  margin-top: auto;
+}
+
+.seqp-preview-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

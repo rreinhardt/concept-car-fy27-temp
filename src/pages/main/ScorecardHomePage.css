@@ -118,3 +118,10 @@
   gap: var(--gap-component);
   margin-top: var(--gap-sub);
 }
+
+.scorecard-restart {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--gap-zone);
+  border-top: 1px solid var(--color-border);
+}

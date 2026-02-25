@@ -1,0 +1,97 @@
+.diag-page {
+  padding: var(--padding-section);
+  overflow-y: auto;
+  height: 100%;
+}
+
+.diag-container {
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);
+}
+
+/* Insight card */
+.diag-insight {
+  padding: var(--padding-section);
+  background: linear-gradient(135deg, var(--color-accent-purple-bg) 0%, #F5F0FF 100%);
+  border-radius: var(--radius-surface);
+}
+
+.diag-insight-header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  color: var(--color-accent-purple);
+  margin-bottom: var(--gap-component);
+}
+
+.diag-insight-header h2 {
+  color: var(--color-text-primary);
+}
+
+/* Sections */
+.diag-section h3 {
+  margin-bottom: var(--gap-zone);
+}
+
+/* Root causes */
+.diag-causes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+}
+
+.diag-cause {
+  padding: var(--padding-section-nested);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-component);
+}
+
+.diag-cause-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--gap-sub);
+}
+
+/* Fixes */
+.diag-fixes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+}
+
+.diag-fix {
+  display: flex;
+  gap: var(--gap-zone);
+  padding: var(--padding-section-nested);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-component);
+}
+
+.diag-fix-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.diag-fix p {
+  margin-top: 2px;
+}
+
+/* Actions */
+.diag-actions {
+  display: flex;
+  gap: var(--gap-component);
+  padding-top: var(--gap-zone);
+  border-top: 1px solid var(--color-border);
+}

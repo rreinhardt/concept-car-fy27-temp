@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { mockContacts } from '@/data/mockContacts'
 import Badge from '@/components/shared/Badge'
 import Input from '@/components/shared/Input'
@@ -25,6 +26,7 @@ const filterSections = [
 ]
 
 export default function SearchPage() {
+  const navigate = useNavigate()
   const [selectedRows, setSelectedRows] = useState<number[]>([])
 
   const toggleRow = (id: number) => {
@@ -107,8 +109,8 @@ export default function SearchPage() {
         {selectedRows.length > 0 && (
           <div className="search-bulk-bar">
             <span className="text-body-sm font-medium">{selectedRows.length} selected</span>
-            <Button variant="secondary" size="sm">Save to list</Button>
-            <Button variant="secondary" size="sm">Enroll</Button>
+            <Button variant="secondary" size="sm" onClick={() => navigate('/save-to-list')}>Save to list</Button>
+            <Button variant="secondary" size="sm" onClick={() => navigate('/enroll')}>Enroll</Button>
             <Button variant="secondary" size="sm">Export</Button>
             <Button variant="ghost" size="sm" onClick={() => setSelectedRows([])}>Dismiss</Button>
           </div>
@@ -179,7 +181,7 @@ export default function SearchPage() {
           </table>
         </div>
 
-        {/* Pagination */}
+        {/* Pagination + flow CTA */}
         <div className="search-pagination">
           <button className="search-page-btn"><IconChevronLeft size={14} /></button>
           <span className="text-body-sm font-medium">1</span>
@@ -187,6 +189,11 @@ export default function SearchPage() {
           <span className="text-caption text-secondary" style={{ marginLeft: 'var(--space-2)' }}>
             1 - 25 of 126,222
           </span>
+          <div style={{ marginLeft: 'auto' }}>
+            <Button variant="primary" size="sm" onClick={() => navigate('/review')}>
+              Review contacts
+            </Button>
+          </div>
         </div>
       </div>
     </div>

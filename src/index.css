@@ -202,3 +202,17 @@ img, svg {
 /* Color modifiers */
 .text-secondary { color: var(--color-text-secondary); }
 .text-tertiary { color: var(--color-text-tertiary); }
+
+/* FlowBar clearance — prevent content from hiding behind the fixed bottom bar */
+.layout-content {
+  padding-bottom: 44px;
+}
+
+/* Onboarding pages also need clearance */
+.signup-page,
+.verified-page,
+.build-page,
+.kb-page,
+.ta-page {
+  padding-bottom: 44px;
+}

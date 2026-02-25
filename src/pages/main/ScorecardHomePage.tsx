@@ -1,7 +1,10 @@
+import { useNavigate } from 'react-router-dom'
 import { weeklyScorecard } from '@/data/mockMetrics'
+import Button from '@/components/shared/Button'
 import './ScorecardHomePage.css'
 
 export default function ScorecardHomePage() {
+  const navigate = useNavigate()
   const { funnel, metrics, coaching } = weeklyScorecard
 
   return (
@@ -77,7 +80,17 @@ export default function ScorecardHomePage() {
             <span className="text-caption text-secondary">Saved search:</span>
             <span className="text-body-sm" style={{ color: 'var(--color-text-link)' }}>{coaching.savedSearch}</span>
           </div>
+          <Button variant="primary" size="sm" onClick={() => navigate('/search')}>
+            Re-run search
+          </Button>
         </div>
+      </div>
+
+      {/* Restart flow */}
+      <div className="scorecard-restart">
+        <Button variant="ghost" onClick={() => navigate('/')}>
+          Restart prototype from beginning
+        </Button>
       </div>
     </div>
   )
