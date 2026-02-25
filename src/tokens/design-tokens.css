@@ -1,0 +1,168 @@
+/* ============================================================
+   Apollo Vision Prototype — Design Tokens
+   Source: Fabric / Tokens Northstar
+   ============================================================ */
+
+:root {
+  /* ---- Font Families ---- */
+  --font-display: 'Founders Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'ABC Diatype', 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* ---- Typography Scale ---- */
+
+  /* Display — Founders Grotesk */
+  --text-display-lg-size: 32px;
+  --text-display-lg-line: 40px;
+  --text-display-lg-spacing: -0.5px;
+  --text-display-lg-weight: 400;
+
+  --text-display-sm-size: 28px;
+  --text-display-sm-line: 36px;
+  --text-display-sm-spacing: -0.5px;
+  --text-display-sm-weight: 400;
+
+  /* Title — Founders Grotesk */
+  --text-title-lg-size: 24px;
+  --text-title-lg-line: 32px;
+  --text-title-lg-spacing: 0px;
+  --text-title-lg-weight: 400;
+
+  --text-title-md-size: 20px;
+  --text-title-md-line: 28px;
+  --text-title-md-spacing: 0px;
+  --text-title-md-weight: 400;
+
+  --text-title-sm-size: 18px;
+  --text-title-sm-line: 24px;
+  --text-title-sm-spacing: 0px;
+  --text-title-sm-weight: 400;
+
+  /* Subtitle — ABC Diatype */
+  --text-subtitle-lg-size: 14px;
+  --text-subtitle-lg-line: 22px;
+  --text-subtitle-lg-spacing: 0.5px;
+  --text-subtitle-lg-weight: 500;
+
+  --text-subtitle-sm-size: 12px;
+  --text-subtitle-sm-line: 18px;
+  --text-subtitle-sm-spacing: 0.5px;
+  --text-subtitle-sm-weight: 500;
+
+  /* Body Large — ABC Diatype, 16px */
+  --text-body-lg-size: 16px;
+  --text-body-lg-line: 24px;
+  --text-body-lg-spacing: 0px;
+
+  /* Body Small — ABC Diatype, 14px */
+  --text-body-sm-size: 14px;
+  --text-body-sm-line: 20px;
+  --text-body-sm-spacing: 0px;
+
+  /* Caption — ABC Diatype, 12px */
+  --text-caption-size: 12px;
+  --text-caption-line: 18px;
+  --text-caption-spacing: 0px;
+
+  /* ---- Spacing ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+
+  /* Semantic spacing roles */
+  --gap-region: 24px;
+  --gap-section: 24px;
+  --gap-zone: 16px;
+  --gap-component: 8px;
+  --gap-sub: 4px;
+
+  --padding-section: 24px;
+  --padding-section-nested: 16px;
+  --padding-component: 8px;
+  --padding-sub: 4px;
+
+  /* ---- Border Radius ---- */
+  --radius-surface: 12px;
+  --radius-component: 8px;
+  --radius-element: 4px;
+  --radius-none: 0px;
+  --radius-pill: 9999px;
+
+  /* ---- Colors ---- */
+
+  /* Backgrounds */
+  --color-bg-primary: #FFFFFF;
+  --color-bg-sidebar: #F7F5F0;
+  --color-bg-tertiary: #F9FAFB;
+  --color-bg-hover: #F3F4F6;
+  --color-bg-active: #EBEDF0;
+  --color-bg-overlay: rgba(0, 0, 0, 0.4);
+
+  /* Text */
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #6B7280;
+  --color-text-tertiary: #9CA3AF;
+  --color-text-inverse: #FFFFFF;
+  --color-text-link: #2563EB;
+
+  /* Borders */
+  --color-border: #E5E7EB;
+  --color-border-input: #D1D5DB;
+  --color-border-focus: #1A1A1A;
+
+  /* Brand */
+  --color-brand-dark: #1F2937;
+  --color-brand-workspace: #E8EDE4;
+
+  /* Accent — Green */
+  --color-accent-green: #22C55E;
+  --color-accent-green-bg: #DCFCE7;
+  --color-accent-green-text: #166534;
+
+  /* Accent — Blue */
+  --color-accent-blue: #3B82F6;
+  --color-accent-blue-bg: #DBEAFE;
+  --color-accent-blue-text: #1E40AF;
+
+  /* Accent — Yellow */
+  --color-accent-yellow: #F59E0B;
+  --color-accent-yellow-bg: #FEF3C7;
+  --color-accent-yellow-text: #92400E;
+
+  /* Accent — Red */
+  --color-accent-red: #EF4444;
+  --color-accent-red-bg: #FEE2E2;
+  --color-accent-red-text: #991B1B;
+
+  /* Accent — Purple (Assistant) */
+  --color-accent-purple: #7C3AED;
+  --color-accent-purple-bg: #EDE9FE;
+
+  /* Accent — Coral/Orange (count badges) */
+  --color-accent-coral: #F97316;
+  --color-accent-coral-bg: #FFF7ED;
+
+  /* ---- Component Dimensions ---- */
+  --sidebar-width: 220px;
+  --topbar-height: 52px;
+  --drawer-width: 340px;
+  --input-height: 40px;
+  --input-height-sm: 32px;
+  --table-row-height: 52px;
+  --table-row-dense: 38px;
+  --avatar-sm: 24px;
+  --avatar-md: 32px;
+  --avatar-lg: 48px;
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-overlay: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
+
+  /* ---- Transitions ---- */
+  --transition-fast: 120ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+}

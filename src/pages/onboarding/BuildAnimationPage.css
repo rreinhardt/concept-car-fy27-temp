@@ -1,0 +1,68 @@
+.build-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-tertiary);
+  position: relative;
+}
+
+.build-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.build-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.build-fading {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.build-badges {
+  display: flex;
+  gap: var(--gap-component);
+}
+
+.build-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-pill);
+  background: #EC4899;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.build-icon {
+  color: var(--color-text-primary);
+}
+
+.build-heading {
+  text-align: center;
+}
+
+.build-subtext {
+  text-align: center;
+}
+
+.build-skip {
+  position: absolute;
+  bottom: var(--space-6);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.build-skip:hover {
+  color: var(--color-text-secondary);
+}

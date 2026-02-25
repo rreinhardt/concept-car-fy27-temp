@@ -1,0 +1,120 @@
+.scorecard-page {
+  padding: var(--padding-section);
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);
+}
+
+.scorecard-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-zone);
+}
+
+/* Funnel */
+.scorecard-funnel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+  padding: var(--padding-section);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-surface);
+}
+
+.scorecard-funnel-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-zone);
+}
+
+.scorecard-funnel-label {
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.scorecard-funnel-bar-track {
+  flex: 1;
+  height: 24px;
+  background: var(--color-bg-hover);
+  border-radius: var(--radius-element);
+  overflow: hidden;
+}
+
+.scorecard-funnel-bar {
+  height: 100%;
+  background: var(--color-brand-dark);
+  border-radius: var(--radius-element);
+  min-width: 4px;
+  transition: width var(--transition-slow);
+}
+
+.scorecard-funnel-value {
+  width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Metric cards */
+.scorecard-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-zone);
+}
+
+.scorecard-metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sub);
+  padding: var(--padding-section-nested);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-surface);
+}
+
+/* Coaching */
+.scorecard-coaching {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--gap-zone);
+}
+
+.scorecard-coaching-section {
+  padding: var(--padding-section-nested);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-surface);
+}
+
+.scorecard-coaching-section h3 {
+  margin-bottom: var(--gap-component);
+}
+
+.scorecard-coaching-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+  padding-left: var(--space-4);
+  list-style: disc;
+}
+
+.scorecard-coaching-list li::marker {
+  color: var(--color-text-tertiary);
+}
+
+/* Next action */
+.scorecard-next-card {
+  padding: var(--padding-section-nested);
+  background: var(--color-accent-blue-bg);
+  border-radius: var(--radius-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+}
+
+.scorecard-saved-search {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  margin-top: var(--gap-sub);
+}

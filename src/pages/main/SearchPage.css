@@ -1,0 +1,218 @@
+.search-page {
+  display: flex;
+  height: 100%;
+}
+
+/* Sidebar filters */
+.search-filters {
+  width: 260px;
+  border-right: 1px solid var(--color-border);
+  padding: var(--padding-section-nested);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-zone);
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.search-filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-filters-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+}
+
+.search-view-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sub);
+  font-size: var(--text-body-sm-size);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+/* Stats */
+.search-stats {
+  display: flex;
+  gap: var(--gap-component);
+}
+
+.search-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--gap-component);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-element);
+}
+
+/* Filter list */
+.search-filter-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-filter-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--gap-component) 0;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border);
+  transition: color var(--transition-fast);
+}
+
+.search-filter-item:hover {
+  color: var(--color-text-primary);
+}
+
+.search-filter-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-filter-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sub);
+  cursor: pointer;
+}
+
+.search-pagination-info {
+  margin-top: auto;
+}
+
+/* Main table area */
+.search-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Bulk action bar */
+.search-bulk-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  padding: var(--gap-component) var(--padding-section-nested);
+  background: var(--color-bg-tertiary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Table */
+.search-table-wrapper {
+  flex: 1;
+  overflow: auto;
+}
+
+.search-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.search-table th {
+  text-align: left;
+  padding: var(--gap-component) var(--padding-section-nested);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--color-bg-primary);
+  z-index: 1;
+}
+
+.search-th-check {
+  width: 40px;
+}
+
+.search-table td {
+  padding: var(--gap-component) var(--padding-section-nested);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.search-table tr:hover {
+  background: var(--color-bg-tertiary);
+}
+
+.search-row-selected {
+  background: var(--color-accent-blue-bg) !important;
+}
+
+.search-cell-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Access buttons */
+.search-access-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sub);
+  padding: 3px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-element);
+  font-size: var(--text-caption-size);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.search-access-btn:hover {
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+}
+
+.search-add-col {
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Pagination */
+.search-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  padding: var(--gap-component) var(--padding-section-nested);
+  border-top: 1px solid var(--color-border);
+}
+
+.search-page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-element);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.search-page-btn:hover {
+  background: var(--color-bg-hover);
+}
+
+/* Checkbox styling */
+.search-table input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--color-brand-dark);
+}
