@@ -21,6 +21,7 @@ export default function SaveToListPage() {
 
   return (
     <div className="stl-page">
+      <div className="stl-card">
       <div className="stl-container">
         {!saved ? (
           <>
@@ -96,6 +97,7 @@ export default function SaveToListPage() {
             </div>
           </>
         )}
+      </div>
       </div>
     </div>
   )

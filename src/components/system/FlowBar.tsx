@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { IconChevronLeft, IconChevronRight } from '@/components/shared/Icons'
 import './FlowBar.css'
@@ -22,13 +23,26 @@ const flowSteps = [
 export default function FlowBar() {
   const location = useLocation()
   const navigate = useNavigate()
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'p' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        const tag = (e.target as HTMLElement).tagName
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
+        setVisible((v) => !v)
+      }
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [])
 
   const currentIndex = flowSteps.findIndex((s) => s.path === location.pathname)
   const prev = currentIndex > 0 ? flowSteps[currentIndex - 1] : null
   const next = currentIndex < flowSteps.length - 1 ? flowSteps[currentIndex + 1] : null
 
   return (
-    <div className="flowbar">
+    <div className={`flowbar ${visible ? 'flowbar-visible' : ''}`}>
       <button
         className="flowbar-nav-btn"
         disabled={!prev}

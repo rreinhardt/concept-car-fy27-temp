@@ -2,10 +2,16 @@
   padding: var(--padding-section);
   overflow-y: auto;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-zone);
 }
 
-.diag-container {
-  max-width: 640px;
+.diag-card {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-glow);
+  padding: var(--padding-section);
   display: flex;
   flex-direction: column;
   gap: var(--gap-section);
@@ -30,22 +36,31 @@
   color: var(--color-text-primary);
 }
 
-/* Sections */
-.diag-section h3 {
-  margin-bottom: var(--gap-zone);
+/* Two-column grid */
+.diag-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.diag-grid-header {
+  padding-bottom: var(--gap-zone);
+}
+
+/* Each row spans both columns */
+.diag-grid-row {
+  display: contents;
+}
+
+.diag-grid-row .diag-cause,
+.diag-grid-row .diag-fix {
+  padding: var(--padding-section-nested);
+  border-top: 1px solid var(--color-border);
 }
 
 /* Root causes */
-.diag-causes {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-component);
-}
-
 .diag-cause {
-  padding: var(--padding-section-nested);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-component);
+  padding-right: var(--gap-zone);
 }
 
 .diag-cause-header {
@@ -56,18 +71,15 @@
 }
 
 /* Fixes */
-.diag-fixes {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-component);
-}
-
 .diag-fix {
   display: flex;
   gap: var(--gap-zone);
-  padding: var(--padding-section-nested);
   background: var(--color-bg-tertiary);
-  border-radius: var(--radius-component);
+  border-radius: 0 var(--radius-component) var(--radius-component) 0;
+}
+
+.diag-fix-empty {
+  align-items: center;
 }
 
 .diag-fix-number {
@@ -93,5 +105,4 @@
   display: flex;
   gap: var(--gap-component);
   padding-top: var(--gap-zone);
-  border-top: 1px solid var(--color-border);
 }

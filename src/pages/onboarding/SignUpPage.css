@@ -12,6 +12,7 @@
   padding: var(--space-6) 48px;
   max-width: 540px;
   margin: 0 auto;
+  background: var(--color-bg-sidebar);
 }
 
 .signup-logo {
@@ -24,8 +25,9 @@
 
 .signup-logo-name {
   font-family: var(--font-display);
-  font-size: var(--text-title-md-size);
+  font-size: var(--text-title-sm-size);
   font-weight: 400;
+  letter-spacing: -0.3px;
 }
 
 .signup-headline {
@@ -139,9 +141,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #D4A574 0%, #8B6914 50%, #C4956A 100%);
+  background: linear-gradient(135deg, #D4A574 0%, #8B6914 33%, #C4956A 66%, #A67B5B 100%);
+  background-size: 300% 300%;
+  animation: gradientShift 12s ease infinite;
   min-height: 100vh;
   padding: var(--space-6);
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 0%;
+    filter: hue-rotate(0deg);
+  }
+  25% {
+    background-position: 100% 50%;
+    filter: hue-rotate(25deg);
+  }
+  50% {
+    background-position: 50% 100%;
+    filter: hue-rotate(-15deg);
+  }
+  75% {
+    background-position: 0% 50%;
+    filter: hue-rotate(20deg);
+  }
+  100% {
+    background-position: 0% 0%;
+    filter: hue-rotate(0deg);
+  }
 }
 
 .signup-preview-card {
@@ -150,6 +177,16 @@
   box-shadow: var(--shadow-overlay);
   padding: var(--padding-section);
   width: 320px;
+  animation: cardFloat 6s ease-in-out infinite;
+}
+
+@keyframes cardFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 .signup-preview-header {

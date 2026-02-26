@@ -6,6 +6,13 @@
   padding: var(--padding-section);
 }
 
+.meeting-card {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-glow);
+  padding: var(--padding-section);
+}
+
 .meeting-container {
   width: 100%;
   max-width: 480px;
@@ -81,7 +88,6 @@
 
 .meeting-flow-cta {
   padding-top: var(--gap-zone);
-  border-top: 1px solid var(--color-border);
   width: 100%;
   display: flex;
   justify-content: center;

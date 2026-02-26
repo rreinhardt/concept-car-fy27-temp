@@ -8,6 +8,7 @@ export default function MeetingBookedPage() {
 
   return (
     <div className="meeting-page">
+      <div className="meeting-card">
       <div className="meeting-container">
         {/* Success illustration */}
         <div className="meeting-success-icon">
@@ -59,6 +60,7 @@ export default function MeetingBookedPage() {
             Continue to Diagnostics
           </Button>
         </div>
+      </div>
       </div>
     </div>
   )

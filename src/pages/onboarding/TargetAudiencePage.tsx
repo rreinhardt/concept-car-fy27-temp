@@ -13,6 +13,7 @@ import {
   IconChevronRight,
   IconArrowLeft,
   IconGlobe,
+  IconApolloLogo,
 } from '@/components/shared/Icons'
 import './TargetAudiencePage.css'
 
@@ -65,27 +66,26 @@ export default function TargetAudiencePage() {
       {/* Left */}
       <div className="ta-left">
         <div className="ta-logo">
-          <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
-            <circle cx="16" cy="16" r="2.5" fill="currentColor" />
-            <path d="M16 4V12M16 20V28M4 16H12M20 16H28M7.5 7.5L12.2 12.2M19.8 19.8L24.5 24.5M24.5 7.5L19.8 12.2M12.2 19.8L7.5 24.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          </svg>
+          <IconApolloLogo size={20} />
           <span className="ta-logo-name">Apollo</span>
         </div>
 
-        <button className="ta-back" onClick={() => navigate('/knowledge-base')}>
-          <IconArrowLeft size={16} />
-        </button>
+        <div className="ta-left-content">
+          <button className="ta-back" onClick={() => navigate('/knowledge-base')}>
+            <IconArrowLeft size={16} />
+          </button>
 
-        <h1 className="ta-heading text-display-sm">
-          This is your target market
-        </h1>
-        <p className="ta-subtext text-body-lg text-secondary">
-          Based on your profile, these filters reflect companies and people that match your business
-        </p>
+          <h1 className="ta-heading text-display-sm">
+            This is your target market
+          </h1>
+          <p className="ta-subtext text-body-lg text-secondary">
+            Based on your profile, these filters reflect companies and people that match your business
+          </p>
 
-        <Button variant="primary" size="lg" onClick={() => navigate('/search')}>
-          Show 5,000+ results
-        </Button>
+          <Button variant="primary" size="lg" onClick={() => navigate('/search')}>
+            Show 5,000+ results
+          </Button>
+        </div>
 
         <div className="ta-lang">
           <IconGlobe size={14} />
@@ -108,7 +108,7 @@ export default function TargetAudiencePage() {
                 >
                   <span className="ta-filter-icon">{f.icon}</span>
                   <span className="ta-filter-label text-body-sm font-medium">{f.label}</span>
-                  <Badge variant="coral" size="sm">{f.count} selected</Badge>
+                  <Badge variant="blue" size="sm">{f.count} selected</Badge>
                   <span className="ta-filter-chevron">
                     {isExpanded ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
                   </span>

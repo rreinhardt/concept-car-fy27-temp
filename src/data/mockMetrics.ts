@@ -1,3 +1,24 @@
+export const funnelData = {
+  '7d': {
+    you: { sent: 48, opened: 12, replied: 4, meetings: 1 },
+    industry: { sent: 48, opened: 19, replied: 6, meetings: 2 },
+    previous: { sent: 36, opened: 8, replied: 2, meetings: 0 },
+  },
+  '30d': {
+    you: { sent: 192, opened: 52, replied: 14, meetings: 4 },
+    industry: { sent: 192, opened: 77, replied: 23, meetings: 8 },
+    previous: { sent: 155, opened: 38, replied: 9, meetings: 2 },
+  },
+  'all': {
+    you: { sent: 840, opened: 235, replied: 58, meetings: 16 },
+    industry: { sent: 840, opened: 336, replied: 101, meetings: 34 },
+    previous: { sent: 680, opened: 170, replied: 41, meetings: 9 },
+  },
+}
+
+export type FunnelPeriod = keyof typeof funnelData
+export type FunnelSource = keyof typeof funnelData['7d']
+
 export const weeklyScorecard = {
   funnel: {
     sent: 48,
@@ -17,9 +38,9 @@ export const weeklyScorecard = {
       'Pain-signal personalization drove 3 of 4 replies',
     ],
     whatToChange: [
-      'Narrow ICP filter — 60% of non-replies were poor fit',
-      'Rewrite Step 3 — lowest engagement in the sequence',
-      'Add a phone touchpoint for high-fit contacts',
+      { text: 'Narrow ICP filter — 60% of non-replies were poor fit', action: 'Edit filters', route: '/search' },
+      { text: 'Rewrite Step 3 — lowest engagement in the sequence', action: 'Edit sequence', route: '/sequences' },
+      { text: 'Add a phone touchpoint for high-fit contacts', action: 'Add step', route: '/sequences' },
     ],
     savedSearch: 'Radiation Oncology — VP Ops — 50-500 employees',
     doThisNext: 'Re-run your saved search to find 15 new prospects',

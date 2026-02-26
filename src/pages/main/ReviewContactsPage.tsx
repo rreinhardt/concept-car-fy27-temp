@@ -52,7 +52,8 @@ export default function ReviewContactsPage() {
         </div>
       )}
 
-      {/* Table */}
+      {/* Table with glow frame */}
+      <div className="review-table-frame">
       <div className="review-table-wrapper">
         <table className="review-table">
           <thead>
@@ -152,6 +153,7 @@ export default function ReviewContactsPage() {
             ))}
           </tbody>
         </table>
+      </div>
       </div>
 
       {/* CTA */}

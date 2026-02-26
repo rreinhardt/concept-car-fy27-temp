@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-6);
-  background: var(--color-bg-tertiary);
+  background: var(--color-bg-sidebar);
 }
 
 .verified-logo {

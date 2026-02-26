@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg-tertiary);
+  background: var(--color-bg-sidebar);
   position: relative;
 }
 
@@ -13,39 +13,51 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-4);
-  transition: opacity 300ms ease, transform 300ms ease;
+  transition: opacity 400ms ease;
 }
 
 .build-visible {
   opacity: 1;
-  transform: translateY(0);
 }
 
 .build-fading {
   opacity: 0;
-  transform: translateY(-8px);
-}
-
-.build-badges {
-  display: flex;
-  gap: var(--gap-component);
-}
-
-.build-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: var(--radius-pill);
-  background: #EC4899;
-  color: white;
-  font-size: 11px;
-  font-weight: 600;
 }
 
 .build-icon {
   color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+  animation: logoSpin 3s cubic-bezier(0.4, 0, 0.2, 1) infinite, logoPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes logoSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(180deg);
+  }
+  40% {
+    transform: rotate(360deg);
+  }
+  65% {
+    transform: rotate(540deg);
+  }
+  80% {
+    transform: rotate(680deg);
+  }
+  100% {
+    transform: rotate(720deg);
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    scale: 0.9;
+  }
+  50% {
+    scale: 1.1;
+  }
 }
 
 .build-heading {

@@ -13,6 +13,12 @@
   background: var(--color-brand-dark);
   color: var(--color-text-inverse);
   font-size: var(--text-caption-size);
+  transform: translateY(100%);
+  transition: transform var(--transition-base);
+}
+
+.flowbar-visible {
+  transform: translateY(0);
 }
 
 .flowbar-nav-btn {

@@ -1,6 +1,8 @@
 .review-page {
   display: flex;
   flex-direction: column;
+  padding: var(--padding-section);
+  gap: var(--gap-zone);
   height: 100%;
 }
 
@@ -8,17 +10,26 @@
   display: flex;
   align-items: baseline;
   gap: var(--gap-zone);
-  padding: var(--padding-section-nested) var(--padding-section);
-  border-bottom: 1px solid var(--color-border);
 }
 
 .review-bulk-bar {
   display: flex;
   align-items: center;
   gap: var(--gap-component);
-  padding: var(--gap-component) var(--padding-section);
+  padding: var(--gap-component) var(--padding-section-nested);
   background: var(--color-bg-tertiary);
   border-bottom: 1px solid var(--color-border);
+}
+
+/* Table card frame with glow border */
+.review-table-frame {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-glow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .review-table-wrapper {
@@ -148,8 +159,6 @@
 
 /* Footer CTA */
 .review-footer {
-  padding: var(--padding-section-nested) var(--padding-section);
-  border-top: 1px solid var(--color-border);
   display: flex;
   justify-content: flex-end;
 }

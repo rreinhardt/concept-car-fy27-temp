@@ -1,6 +1,7 @@
 .layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .layout-main {
@@ -8,10 +9,13 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  height: 100vh;
+  background: var(--color-bg-sidebar);
 }
 
 .layout-content {
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
+  min-height: 0;
 }

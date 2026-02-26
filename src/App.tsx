@@ -4,6 +4,7 @@ import { UserProvider } from '@/contexts/UserContext'
 import { PrototypeProvider } from '@/contexts/PrototypeContext'
 import Layout from '@/components/system/Layout'
 import FlowBar from '@/components/system/FlowBar'
+import FeedbackOverlay from '@/components/system/FeedbackOverlay'
 
 /* Onboarding pages (standalone — no layout shell) */
 import SignUpPage from '@/pages/onboarding/SignUpPage'
@@ -56,6 +57,7 @@ function App() {
 
           {/* Prototype flow navigation — always visible */}
           <FlowBar />
+          <FeedbackOverlay />
         </PrototypeProvider>
       </FlowProvider>
     </UserProvider>

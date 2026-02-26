@@ -5,7 +5,7 @@ import {
   IconSequence,
   IconInbox,
   IconChart,
-  IconSearch,
+  IconApolloLogo,
 } from '@/components/shared/Icons'
 import './Sidebar.css'
 
@@ -60,17 +60,8 @@ export default function Sidebar() {
     <aside className="sidebar">
       {/* Logo */}
       <div className="sidebar-logo" onClick={() => navigate('/home')}>
-        <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
-          <circle cx="16" cy="16" r="2.5" fill="currentColor" />
-          <path d="M16 4V12M16 20V28M4 16H12M20 16H28M7.5 7.5L12.2 12.2M19.8 19.8L24.5 24.5M24.5 7.5L19.8 12.2M12.2 19.8L7.5 24.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
+        <IconApolloLogo size={18} />
         <span className="sidebar-logo-text">Apollo</span>
-      </div>
-
-      {/* Search */}
-      <div className="sidebar-search">
-        <IconSearch size={14} />
-        <span>Search</span>
       </div>
 
       {/* Nav Groups */}

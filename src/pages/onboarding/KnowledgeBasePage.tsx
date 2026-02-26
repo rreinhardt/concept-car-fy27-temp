@@ -3,7 +3,7 @@ import { useUser } from '@/contexts/UserContext'
 import Button from '@/components/shared/Button'
 import Tag from '@/components/shared/Tag'
 import Avatar from '@/components/shared/Avatar'
-import { IconGlobe } from '@/components/shared/Icons'
+import { IconGlobe, IconApolloLogo } from '@/components/shared/Icons'
 import './KnowledgeBasePage.css'
 
 export default function KnowledgeBasePage() {
@@ -15,27 +15,26 @@ export default function KnowledgeBasePage() {
       {/* Left column */}
       <div className="kb-left">
         <div className="kb-logo">
-          <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
-            <circle cx="16" cy="16" r="2.5" fill="currentColor" />
-            <path d="M16 4V12M16 20V28M4 16H12M20 16H28M7.5 7.5L12.2 12.2M19.8 19.8L24.5 24.5M24.5 7.5L19.8 12.2M12.2 19.8L7.5 24.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          </svg>
+          <IconApolloLogo size={20} />
           <span className="kb-logo-name">Apollo</span>
         </div>
 
-        <h1 className="kb-heading text-display-sm">
-          Here's how we understand your company
-        </h1>
-        <p className="kb-subtext text-body-lg text-secondary">
-          We used public company information to tailor your search and recommendations.
-        </p>
+        <div className="kb-left-content">
+          <h1 className="kb-heading text-display-sm">
+            Here's how we understand your company
+          </h1>
+          <p className="kb-subtext text-body-lg text-secondary">
+            We used public company information to tailor your search and recommendations.
+          </p>
 
-        <div className="kb-actions">
-          <Button variant="primary" size="lg" onClick={() => navigate('/target-audience')}>
-            Continue
-          </Button>
-          <Button variant="ghost" size="lg">
-            Edit details
-          </Button>
+          <div className="kb-actions">
+            <Button variant="primary" size="lg" onClick={() => navigate('/target-audience')}>
+              Continue
+            </Button>
+            <Button variant="ghost" size="lg">
+              Edit details
+            </Button>
+          </div>
         </div>
 
         <div className="kb-lang">

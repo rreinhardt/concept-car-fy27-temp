@@ -5,10 +5,9 @@
 
 /* Left */
 .kb-left {
-  flex: 0 0 400px;
+  flex: 0 0 420px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   padding: var(--space-6) 48px;
 }
 
@@ -16,16 +15,22 @@
   display: flex;
   align-items: center;
   gap: var(--gap-component);
-  position: absolute;
-  top: var(--space-6);
-  left: var(--space-6);
   color: var(--color-text-primary);
+  margin-bottom: var(--space-6);
 }
 
 .kb-logo-name {
   font-family: var(--font-display);
-  font-size: var(--text-title-md-size);
+  font-size: var(--text-title-sm-size);
   font-weight: 400;
+  letter-spacing: -0.3px;
+}
+
+.kb-left-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .kb-heading {
@@ -39,7 +44,6 @@
 .kb-actions {
   display: flex;
   gap: var(--gap-component);
-  margin-bottom: auto;
 }
 
 .kb-lang {
@@ -47,9 +51,6 @@
   align-items: center;
   gap: var(--gap-sub);
   color: var(--color-text-secondary);
-  position: absolute;
-  bottom: var(--space-6);
-  left: 48px;
 }
 
 /* Right */
@@ -59,7 +60,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-6);
-  background: var(--color-bg-tertiary);
+  background: var(--color-bg-sidebar);
 }
 
 .kb-card {

@@ -6,6 +6,13 @@
   padding: var(--padding-section);
 }
 
+.stl-card {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-glow);
+  padding: var(--padding-section);
+}
+
 .stl-container {
   width: 100%;
   max-width: 480px;
