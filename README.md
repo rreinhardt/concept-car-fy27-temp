@@ -67,4 +67,4 @@ To process collected feedback in Claude Code, say "review feedback" or "process 
 
 ## Flow navigation
 
-A persistent flow bar at the bottom of the screen allows jumping between any screen in the prototype sequence for demo purposes.
+Press **`p`** to toggle the flow navigation bar at the bottom of the screen, allowing you to jump between any screen in the prototype sequence for demo purposes.
