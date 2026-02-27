@@ -112,18 +112,18 @@ export default function SearchPage() {
 
         {/* Main table */}
         <div className="search-main">
-        {/* Action bar */}
-        {selectedRows.length > 0 && (
-          <div className="search-bulk-bar">
-            <span className="text-body-sm font-medium">{selectedRows.length} selected</span>
-            <Button variant="secondary" size="sm" onClick={() => navigate('/save-to-list')}>Save to list</Button>
-            <Button variant="secondary" size="sm" onClick={() => navigate('/sequences')}>Enroll</Button>
-            <Button variant="secondary" size="sm">Export</Button>
-            <Button variant="ghost" size="sm" onClick={() => setSelectedRows([])}>Dismiss</Button>
-          </div>
-        )}
-
-        {/* Table with glow frame */}
+        {/* Table area — positioning context for the floating bulk bar */}
+        <div className="search-table-area">
+          {/* Bulk action bar — slides up from behind the table */}
+          {selectedRows.length > 0 && (
+            <div className="search-bulk-bar">
+              <span className="text-body-sm font-medium">{selectedRows.length} selected</span>
+              <Button variant="secondary" size="sm" onClick={() => navigate('/save-to-list')}>Save to list</Button>
+              <Button variant="secondary" size="sm" onClick={() => navigate('/sequences')}>Enroll</Button>
+              <Button variant="secondary" size="sm">Export</Button>
+              <Button variant="ghost" size="sm" onClick={() => setSelectedRows([])}>Dismiss</Button>
+            </div>
+          )}
         <div className="search-table-frame">
           <div className="search-table-wrapper">
             <table className="search-table">
@@ -223,6 +223,7 @@ export default function SearchPage() {
               </Button>
             </div>
           </div>
+        </div>
         </div>
       </div>
       </div>

@@ -12,17 +12,43 @@
   gap: var(--gap-zone);
 }
 
+/* Table area — positioning context for floating bulk bar */
+.review-table-area {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Bulk action bar — slides up from behind the table */
 .review-bulk-bar {
+  position: absolute;
+  bottom: calc(100% - var(--radius-surface));
+  left: 0;
+  right: 0;
+  z-index: 0;
   display: flex;
   align-items: center;
   gap: var(--gap-component);
   padding: var(--gap-component) var(--padding-section-nested);
-  background: var(--color-bg-tertiary);
-  border-bottom: 1px solid var(--color-border);
+  padding-bottom: calc(var(--gap-component) + var(--radius-surface));
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-surface) var(--radius-surface) 0 0;
+  box-shadow: var(--shadow-glow);
+  animation: reviewBulkBarSlideUp 0.25s ease-out;
+}
+
+@keyframes reviewBulkBarSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
 
 /* Table card frame with glow border */
 .review-table-frame {
+  position: relative;
+  z-index: 1;
   background: var(--color-bg-primary);
   border-radius: var(--radius-surface);
   box-shadow: var(--shadow-glow);

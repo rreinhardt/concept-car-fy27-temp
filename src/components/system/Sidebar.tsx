@@ -21,6 +21,8 @@ import {
   IconChevronDown,
   IconChevronRight,
   IconApolloLogo,
+  IconRobot,
+  IconSpreadsheet,
 } from '@/components/shared/Icons'
 import './Sidebar.css'
 
@@ -67,6 +69,8 @@ const primaryGroups: NavGroup[] = [
 
 /* ── "More" accordion: placeholder / not-yet-wired items ── */
 const moreItems: NavItem[] = [
+  { id: 'agents', label: 'Agents', icon: <IconRobot /> },
+  { id: 'sheets', label: 'Sheets', icon: <IconSpreadsheet /> },
   { id: 'workflows', label: 'Workflows', icon: <IconWorkflows /> },
   { id: 'analytics', label: 'Analytics', icon: <IconChart /> },
   { id: 'enrichment', label: 'Data enrichment', icon: <IconDataEnrich /> },

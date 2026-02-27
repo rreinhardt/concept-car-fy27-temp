@@ -39,19 +39,20 @@ export default function ReviewContactsPage() {
         <span className="text-body-sm text-secondary">Verify data quality before saving</span>
       </div>
 
-      {/* Bulk action bar */}
-      {selectedRows.length > 0 && (
-        <div className="review-bulk-bar">
-          <span className="text-body-sm font-medium">{selectedRows.length} selected</span>
-          <Button variant="primary" size="sm" onClick={() => navigate('/save-to-list')}>
-            Save to list
-          </Button>
-          <Button variant="secondary" size="sm">Enroll</Button>
-          <Button variant="secondary" size="sm">Export</Button>
-          <Button variant="ghost" size="sm" onClick={() => setSelectedRows([])}>Dismiss</Button>
-        </div>
-      )}
-
+      {/* Table area — positioning context for the floating bulk bar */}
+      <div className="review-table-area">
+        {/* Bulk action bar — slides up from behind the table */}
+        {selectedRows.length > 0 && (
+          <div className="review-bulk-bar">
+            <span className="text-body-sm font-medium">{selectedRows.length} selected</span>
+            <Button variant="primary" size="sm" onClick={() => navigate('/save-to-list')}>
+              Save to list
+            </Button>
+            <Button variant="secondary" size="sm">Enroll</Button>
+            <Button variant="secondary" size="sm">Export</Button>
+            <Button variant="ghost" size="sm" onClick={() => setSelectedRows([])}>Dismiss</Button>
+          </div>
+        )}
       {/* Table with glow frame */}
       <div className="review-table-frame">
       <div className="review-table-wrapper">
@@ -153,6 +154,7 @@ export default function ReviewContactsPage() {
             ))}
           </tbody>
         </table>
+      </div>
       </div>
       </div>
 

@@ -330,6 +330,41 @@ export function IconTrending({ size = 16, className }: IconProps) {
   )
 }
 
+export function IconPanelLeft({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <rect x="1.5" y="2" width="13" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M5.5 2V14" stroke="currentColor" strokeWidth="1.3" />
+    </svg>
+  )
+}
+
+export function IconRobot({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <rect x="3" y="5" width="10" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M8 5V3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <circle cx="8" cy="2" r="1" fill="currentColor" />
+      <circle cx="6" cy="9" r="1" fill="currentColor" />
+      <circle cx="10" cy="9" r="1" fill="currentColor" />
+      <path d="M1 8V11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M15 8V11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function IconSpreadsheet({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <rect x="2" y="2" width="12" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M2 5.5H14" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M2 9H14" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M5.5 5.5V14" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M10 5.5V14" stroke="currentColor" strokeWidth="1.3" />
+    </svg>
+  )
+}
+
 export function IconClock({ size = 16, className }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
