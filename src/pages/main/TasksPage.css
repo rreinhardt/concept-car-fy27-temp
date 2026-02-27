@@ -1,0 +1,82 @@
+/* Task-specific styles — layout comes from SearchPage.css */
+
+/* Blockers — sit above the body */
+.tasks-blockers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+}
+
+.tasks-blocker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-zone);
+  padding: 8px 12px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-component);
+}
+
+.tasks-blocker-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tasks-blocker-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  flex-shrink: 0;
+}
+
+/* Next Best Action row highlight */
+.tasks-row-next {
+  background: var(--color-accent-green-bg) !important;
+}
+
+/* "Next" badge inline with contact name */
+.tasks-next-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-green-bg);
+  color: var(--color-accent-green-text);
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Reason cell with optional sequence name */
+.tasks-reason-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 280px;
+}
+
+/* Urgent due styling */
+.tasks-due-urgent {
+  color: var(--color-accent-red);
+  font-weight: 600;
+}
+
+/* Action cell */
+.tasks-action-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+}
+
+.tasks-action-cell button:last-child {
+  cursor: pointer;
+}
+
+/* Empty state */
+.tasks-empty {
+  padding: 48px;
+  text-align: center;
+}

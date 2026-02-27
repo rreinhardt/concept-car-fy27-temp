@@ -26,7 +26,7 @@
 }
 
 .seq-name {
-  font-style: italic;
+  font-weight: 600;
 }
 
 .seq-top-tabs {
@@ -213,13 +213,19 @@
 .seq-step-wrapper {
   display: flex;
   flex-direction: column;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.seq-step-wrapper:last-child {
+  border-bottom: none;
 }
 
 .seq-step-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-2) 0;
+  padding: var(--space-3) 0 var(--space-2);
 }
 
 .seq-step-header-left {
@@ -287,7 +293,9 @@
 .seq-step-subject {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sub);
+  gap: 2px;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .seq-step-email {
@@ -374,16 +382,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
+  height: 32px;
 }
 
 .seq-connector-line {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 24px;
-  width: 1px;
-  background: var(--color-border);
+  display: none;
 }
 
 .seq-add-step-btn {

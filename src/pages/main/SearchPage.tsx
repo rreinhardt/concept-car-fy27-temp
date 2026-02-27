@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { mockContacts } from '@/data/mockContacts'
-import Badge from '@/components/shared/Badge'
 import Input from '@/components/shared/Input'
 import Button from '@/components/shared/Button'
 import {
@@ -12,6 +11,8 @@ import {
   IconChevronLeft,
   IconChevronRight,
   IconPlus,
+  IconTrending,
+  IconClock,
 } from '@/components/shared/Icons'
 import './SearchPage.css'
 
@@ -48,6 +49,12 @@ export default function SearchPage() {
       {/* Page header — outside the white card */}
       <div className="search-page-header">
         <h2 className="text-title-md">People</h2>
+        <div className="search-liveness">
+          <span className="search-liveness-dot" />
+          <span className="text-caption text-secondary">
+            <strong>12</strong> new contacts match &middot; <strong>8</strong> signals detected &middot; Updated 3m ago
+          </span>
+        </div>
       </div>
 
       {/* Body: sidebar + table */}
@@ -133,7 +140,7 @@ export default function SearchPage() {
                   <th>Job Title</th>
                   <th>Emails</th>
                   <th>Phone Numbers</th>
-                  <th>Qualify</th>
+                  <th>Signals</th>
                   <th>
                     <button className="search-add-col text-caption" style={{ color: 'var(--color-text-link)' }}>
                       + Add columns
@@ -153,8 +160,24 @@ export default function SearchPage() {
                     </td>
                     <td>
                       <div className="search-cell-name">
-                        <div className="text-body-sm font-medium">{contact.name}</div>
-                        <div className="text-caption text-secondary">{contact.company}</div>
+                        <div className="search-cell-name-row">
+                          <span className="text-body-sm font-medium">{contact.name}</span>
+                          {contact.trending && (
+                            <span className="search-trending-badge">
+                              <IconTrending size={10} />
+                              Trending
+                            </span>
+                          )}
+                        </div>
+                        <div className="search-cell-meta">
+                          <span className="text-caption text-secondary">{contact.company}</span>
+                          {contact.updatedAgo && (
+                            <span className="search-updated">
+                              <IconClock size={10} />
+                              {contact.updatedAgo}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </td>
                     <td className="text-body-sm text-secondary">{contact.title}</td>
@@ -171,9 +194,13 @@ export default function SearchPage() {
                       </button>
                     </td>
                     <td>
-                      <Badge variant={contact.fitScore === 'Excellent' ? 'green' : contact.fitScore === 'Good' ? 'blue' : 'gray'} size="sm">
-                        {contact.fitScore}
-                      </Badge>
+                      <div className="search-signals">
+                        {contact.signals.map((signal) => (
+                          <span key={signal} className={`search-signal search-signal-${signal === 'High ICP fit' ? 'icp' : signal === 'Hiring' ? 'hiring' : signal === 'Funding' ? 'funding' : signal === 'Tech change' ? 'tech' : 'activity'}`}>
+                            {signal}
+                          </span>
+                        ))}
+                      </div>
                     </td>
                     <td className="text-caption text-tertiary">Click to run...</td>
                   </tr>

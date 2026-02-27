@@ -23,6 +23,10 @@ import TriageQueuePage from '@/pages/main/TriageQueuePage'
 import MeetingBookedPage from '@/pages/main/MeetingBookedPage'
 import DiagnosticPage from '@/pages/main/DiagnosticPage'
 import ScorecardHomePage from '@/pages/main/ScorecardHomePage'
+import TasksPage from '@/pages/main/TasksPage'
+import AssistantPage from '@/pages/main/AssistantPage'
+import FindCompaniesPage from '@/pages/main/FindCompaniesPage'
+import SavedListsPage from '@/pages/main/SavedListsPage'
 
 function App() {
   return (
@@ -41,6 +45,8 @@ function App() {
             <Route path="*" element={
               <Layout>
                 <Routes>
+                  <Route path="/companies" element={<FindCompaniesPage />} />
+                  <Route path="/lists" element={<SavedListsPage />} />
                   <Route path="/search" element={<SearchPage />} />
                   <Route path="/review" element={<ReviewContactsPage />} />
                   <Route path="/save-to-list" element={<SaveToListPage />} />
@@ -50,6 +56,8 @@ function App() {
                   <Route path="/meeting-booked" element={<MeetingBookedPage />} />
                   <Route path="/diagnostic" element={<DiagnosticPage />} />
                   <Route path="/home" element={<ScorecardHomePage />} />
+                  <Route path="/tasks" element={<TasksPage />} />
+                  <Route path="/assistant" element={<AssistantPage />} />
                 </Routes>
               </Layout>
             } />

@@ -163,7 +163,7 @@ export default function EnrollConfirmPage() {
       {/* Sequence top bar */}
       <div className="seq-topbar">
         <div className="seq-topbar-left">
-          <span className="seq-name text-subtitle-lg">*Sequence name here*</span>
+          <span className="seq-name text-subtitle-lg">Cold Outbound — Decision Makers</span>
           <Badge variant="default" size="sm">Inactive</Badge>
         </div>
         <Tabs

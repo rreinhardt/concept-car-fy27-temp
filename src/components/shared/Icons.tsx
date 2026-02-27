@@ -232,3 +232,109 @@ export function IconArrowRight({ size = 16, className }: IconProps) {
     </svg>
   )
 }
+
+export function IconTasks({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M5.5 8L7.5 10L10.5 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export function IconWorkflows({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M8 2V6M8 10V14M4 8H2M14 8H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="8" cy="8" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  )
+}
+
+export function IconSettings({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M8 1V3M8 13V15M1 8H3M13 8H15M3.05 3.05L4.46 4.46M11.54 11.54L12.95 12.95M12.95 3.05L11.54 4.46M4.46 11.54L3.05 12.95" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function IconPhone({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M3 2.5C3 2.22 3.22 2 3.5 2H6L7 5.5L5.5 6.5C6.2 8.14 7.86 9.8 9.5 10.5L10.5 9L14 10V12.5C14 12.78 13.78 13 13.5 13C7.7 13 3 8.3 3 2.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export function IconCalendar({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M2 6.5H14" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M5 1.5V3.5M11 1.5V3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function IconChat({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M2 3C2 2.45 2.45 2 3 2H13C13.55 2 14 2.45 14 3V10C14 10.55 13.55 11 13 11H5L2 14V3Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export function IconDataEnrich({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <circle cx="8" cy="8" r="3" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M8 2V4M8 12V14M2 8H4M12 8H14" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M4.34 4.34L5.76 5.76M10.24 10.24L11.66 11.66" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function IconBookmark({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M3 2.5C3 2.22 3.22 2 3.5 2H12.5C12.78 2 13 2.22 13 2.5V14L8 11L3 14V2.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export function IconDollar({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M8 2V14M5 5.5C5 4.12 6.34 3 8 3C9.66 3 11 4.12 11 5.5C11 6.88 9.66 8 8 8C6.34 8 5 9.12 5 10.5C5 11.88 6.34 13 8 13C9.66 13 11 11.88 11 10.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function IconFire({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M8 1C8 1 3 6 3 9.5C3 12.54 5.24 14 8 14C10.76 14 13 12.54 13 9.5C13 6 8 1 8 1Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+      <path d="M8 8C8 8 6 10 6 11C6 12.1 6.9 13 8 13C9.1 13 10 12.1 10 11C10 10 8 8 8 8Z" fill="currentColor" opacity="0.3" />
+    </svg>
+  )
+}
+
+export function IconTrending({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M2 12L6 7L9 10L14 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10 4H14V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export function IconClock({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M8 4.5V8L10.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}

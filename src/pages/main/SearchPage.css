@@ -9,8 +9,37 @@
 /* Page header — sits above the white card */
 .search-page-header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: var(--gap-zone);
+}
+
+/* Liveness indicator */
+.search-liveness {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.search-liveness strong {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.search-liveness-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent-green);
+  flex-shrink: 0;
+  position: relative;
+  top: -1px;
+  animation: livenessPulse 2s ease-in-out infinite;
+}
+
+@keyframes livenessPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 /* Body: sidebar + table side by side */
@@ -181,6 +210,80 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.search-cell-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-trending-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-green-bg);
+  color: var(--color-accent-green-text);
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.search-cell-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-updated {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+}
+
+/* Signals column */
+.search-signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.search-signal {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.search-signal-icp {
+  background: var(--color-accent-blue-bg);
+  color: var(--color-accent-blue-text);
+}
+
+.search-signal-hiring {
+  background: var(--color-accent-green-bg);
+  color: var(--color-accent-green-text);
+}
+
+.search-signal-funding {
+  background: var(--color-accent-purple-bg);
+  color: var(--color-accent-purple);
+}
+
+.search-signal-tech {
+  background: var(--color-accent-yellow-bg);
+  color: var(--color-accent-yellow-text);
+}
+
+.search-signal-activity {
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
 }
 
 /* Access buttons */

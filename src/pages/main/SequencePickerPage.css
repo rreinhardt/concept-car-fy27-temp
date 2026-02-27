@@ -1,19 +1,79 @@
-.seqp-page {
+/* ── Sidebar sub-nav ── */
+.seqp-sidebar-item {
   display: flex;
-  height: 100%;
+  align-items: center;
+  gap: var(--gap-component);
+  width: 100%;
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-element);
+  font-size: var(--text-body-sm-size);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  text-align: left;
+  background: none;
+  border: none;
+  transition: background var(--transition-fast), color var(--transition-fast);
 }
 
-/* Main — card grid */
-.seqp-main {
-  flex: 1;
+.seqp-sidebar-item span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.seqp-sidebar-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--color-text-primary);
+}
+
+.seqp-sidebar-item-active {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.seqp-sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.seqp-sidebar-section-label {
+  padding: var(--gap-component) var(--space-2);
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.seqp-sidebar-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.seqp-sidebar-inactive-link {
+  justify-content: space-between;
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ── Main wrapper — positioning context for overlay panel ── */
+.seqp-main-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Main content area ── */
+.seqp-main-content {
   padding: var(--padding-section);
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: var(--gap-zone);
+  overflow-y: auto;
 }
 
-.seqp-header h2 {
+.seqp-header h3 {
   margin-bottom: var(--gap-sub);
 }
 
@@ -24,7 +84,7 @@
 /* Card grid */
 .seqp-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: var(--gap-zone);
 }
 
@@ -34,7 +94,7 @@
   gap: var(--gap-component);
   padding: var(--padding-section-nested);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-surface);
+  border-radius: var(--radius-component);
   background: var(--color-bg-primary);
   text-align: left;
   cursor: pointer;
@@ -70,25 +130,52 @@
   margin-top: auto;
 }
 
-.seqp-footer {
-  display: flex;
-  justify-content: center;
-}
-
-/* Preview panel */
-.seqp-preview {
-  width: var(--drawer-width);
+/* ── Preview panel — slides in from left, overlays the white round rect ── */
+.seqp-preview-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 340px;
   padding: var(--padding-section);
   display: flex;
   flex-direction: column;
   gap: var(--gap-zone);
   overflow-y: auto;
-  flex-shrink: 0;
   background: var(--color-bg-primary);
   border-radius: var(--radius-surface);
-  box-shadow: var(--shadow-glow);
-  margin: var(--padding-section);
-  margin-left: 0;
+  box-shadow: var(--shadow-overlay);
+  z-index: 10;
+  transform: translateX(100%);
+  transition: transform 250ms ease;
+  pointer-events: none;
+}
+
+.seqp-preview-panel-open {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.seqp-preview-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-component);
+}
+
+.seqp-preview-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: var(--radius-element);
+  transition: background var(--transition-fast);
+}
+
+.seqp-preview-close:hover {
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .seqp-preview-header {
@@ -115,10 +202,6 @@
   gap: var(--gap-component);
 }
 
-.seqp-preview-steps h4 {
-  margin-bottom: var(--gap-sub);
-}
-
 .seqp-preview-step {
   display: flex;
   align-items: flex-start;
@@ -140,8 +223,3 @@
   flex-direction: column;
   gap: 1px;
 }
-
-.seqp-preview-actions {
-  margin-top: auto;
-}
-

@@ -9,15 +9,19 @@ const flowSteps = [
   { path: '/welcome', label: 'Welcome' },
   { path: '/knowledge-base', label: 'Knowledge Base' },
   { path: '/target-audience', label: 'Target Audience' },
+  { path: '/companies', label: 'Companies' },
   { path: '/search', label: 'Search' },
   { path: '/review', label: 'Review + Reveal' },
   { path: '/save-to-list', label: 'Save to List' },
+  { path: '/lists', label: 'Saved Lists' },
   { path: '/sequences', label: 'Sequences' },
   { path: '/enroll', label: 'Enroll' },
   { path: '/triage', label: 'Triage' },
   { path: '/meeting-booked', label: 'Meeting' },
   { path: '/diagnostic', label: 'Diagnostic' },
   { path: '/home', label: 'Scorecard' },
+  { path: '/tasks', label: 'Tasks' },
+  { path: '/assistant', label: 'Assistant' },
 ]
 
 export default function FlowBar() {

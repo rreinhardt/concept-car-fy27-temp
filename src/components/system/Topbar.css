@@ -110,14 +110,14 @@
 .ubar-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 99;
+  z-index: 200;
   backdrop-filter: blur(4px);
   background: rgba(0, 0, 0, 0.05);
 }
 
 /* ── Expanded state ── */
 .ubar-expanded {
-  z-index: 100;
+  z-index: 201;
 }
 
 .ubar-search-row {

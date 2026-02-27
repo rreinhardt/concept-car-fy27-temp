@@ -6,35 +6,135 @@
   flex-direction: column;
   padding: var(--space-4) var(--space-3);
   flex-shrink: 0;
-  overflow-y: auto;
+  overflow: visible;
   position: sticky;
   top: 0;
+  z-index: 100;
+  transition: width 0.2s ease;
 }
 
-/* Logo */
+/* ── Collapsed state ── */
+.sidebar-collapsed {
+  width: 56px;
+  padding: var(--space-4) 8px;
+}
+
+.sidebar-collapsed .sidebar-item-label,
+.sidebar-collapsed .sidebar-item-badge,
+.sidebar-collapsed .sidebar-item-chevron,
+.sidebar-collapsed .sidebar-group-label,
+.sidebar-collapsed .sidebar-user-name,
+.sidebar-collapsed .sidebar-user > svg {
+  display: none;
+}
+
+.sidebar-collapsed .sidebar-nav {
+  overflow: visible;
+}
+
+.sidebar-collapsed .sidebar-item {
+  justify-content: center;
+  padding: 6px;
+}
+
+.sidebar-collapsed .sidebar-user {
+  justify-content: center;
+  padding: 6px;
+}
+
+/* Tooltip on hover in collapsed mode */
+.sidebar-collapsed .sidebar-item[data-tooltip],
+.sidebar-collapsed .sidebar-user[data-tooltip] {
+  position: relative;
+}
+
+.sidebar-collapsed .sidebar-item[data-tooltip]::after,
+.sidebar-collapsed .sidebar-user[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 10px;
+  border-radius: var(--radius-element);
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  z-index: 9999;
+}
+
+.sidebar-collapsed .sidebar-item[data-tooltip]:hover::after,
+.sidebar-collapsed .sidebar-user[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
+/* ── Logo ── */
 .sidebar-logo {
   display: flex;
   align-items: center;
-  gap: var(--gap-component);
+  justify-content: space-between;
   padding: var(--gap-sub) 0;
   margin-bottom: var(--space-4);
-  cursor: pointer;
   color: var(--color-text-primary);
 }
 
-.sidebar-logo-text {
-  font-family: var(--font-display);
-  font-size: var(--text-title-sm-size);
-  font-weight: 400;
-  letter-spacing: -0.3px;
+.sidebar-logo-icon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
-/* Nav */
+.sidebar-collapse-btn {
+  font-size: 14px;
+  color: var(--color-text-tertiary);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  line-height: 1;
+}
+
+.sidebar:hover .sidebar-collapse-btn {
+  opacity: 1;
+}
+
+/* In collapsed mode: logo centered like icons, chevron overlays on hover */
+.sidebar-collapsed .sidebar-logo {
+  justify-content: center;
+  position: relative;
+}
+
+.sidebar-collapsed .sidebar-collapse-btn {
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
+.sidebar-collapsed:hover .sidebar-collapse-btn {
+  opacity: 1;
+}
+
+/* ── Nav ── */
 .sidebar-nav {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .sidebar-group {
@@ -77,6 +177,10 @@
   font-weight: 500;
 }
 
+.sidebar-item-placeholder {
+  opacity: 0.6;
+}
+
 .sidebar-item-icon {
   display: flex;
   align-items: center;
@@ -110,9 +214,142 @@
   font-weight: 600;
 }
 
-/* Bottom section */
+.sidebar-item-chevron {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-tertiary);
+}
+
+/* ── More accordion ── */
+.sidebar-more-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  width: 100%;
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-element);
+  font-size: var(--text-caption-size);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  margin-top: var(--space-2);
+}
+
+.sidebar-more-toggle:hover {
+  color: var(--color-text-secondary);
+}
+
+.sidebar-more-label {
+  flex: 1;
+  text-align: left;
+}
+
+.sidebar-more-items {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Collapsed "More" popover ── */
+.sidebar-more-collapsed {
+  position: relative;
+}
+
+.sidebar-more-dots {
+  justify-content: center;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--color-text-tertiary);
+}
+
+.sidebar-more-popover {
+  display: none;
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 0;
+  z-index: 9999;
+  min-width: 180px;
+  padding: var(--space-2);
+  background: var(--color-brand-dark);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-overlay);
+  flex-direction: column;
+}
+
+/* Invisible bridge between trigger and popover */
+.sidebar-more-popover::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 100%;
+  width: 16px;
+  height: calc(100% + 16px);
+}
+
+.sidebar-more-collapsed:hover .sidebar-more-popover {
+  display: flex;
+}
+
+.sidebar-more-popover .sidebar-item {
+  color: var(--color-text-inverse);
+  opacity: 0.8;
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-element);
+}
+
+.sidebar-more-popover .sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-text-inverse);
+  opacity: 1;
+}
+
+.sidebar-more-popover .sidebar-item-icon {
+  color: var(--color-text-inverse);
+}
+
+.sidebar-more-popover .sidebar-item-label {
+  display: block !important;
+}
+
+/* ── Bottom section ── */
 .sidebar-bottom {
   margin-top: auto;
   padding-top: var(--space-2);
   border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  width: 100%;
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-element);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  color: var(--color-text-secondary);
+}
+
+.sidebar-user:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.sidebar-user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-element);
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  font-size: 10px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.sidebar-user-name {
+  flex: 1;
+  text-align: left;
 }
