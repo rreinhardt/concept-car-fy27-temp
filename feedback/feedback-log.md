@@ -148,4 +148,12 @@ i dont want these items to wrap. use elipseses
 - **Screenshot:** ![](screenshots/fb-2026-02-27T04-27-21-886Z.png)
 ### Notes
 this is missing heierarchy.. the name of the item should be pulled out of this badge and given a heading placement subordinate to the page header. give the stat callout a more typographic treatment as opposed to useing a background color.
+---## fb-2026-02-27T04-48-54-168Z
+- **Date:** 2/26/2026, 8:48:54 PM
+- **URL:** `/lists`
+- **Status:** resolved
+- **Resolution:** Removed count badges from type filter tabs (All, People, Companies, Deals) so they fit within the sidebar width.
+- **Screenshot:** ![](screenshots/fb-2026-02-27T04-48-54-168Z.png)
+### Notes
+Fix the spacing of ALL PEOPLE COMPANIES DEALS so it fits. Remove counts if that does it.
 ---

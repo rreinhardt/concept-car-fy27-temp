@@ -117,9 +117,6 @@ export default function SavedListsPage() {
                 onClick={() => setFilterType(type)}
               >
                 {typeLabels[type]}
-                <span className="lists-type-count">
-                  {type === 'all' ? savedLists.length : savedLists.filter((l) => l.type === type).length}
-                </span>
               </button>
             ))}
           </div>

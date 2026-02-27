@@ -1,0 +1,261 @@
+/* ── Slot: flex child that expands to make room ── */
+.asst-slot {
+  width: 0;
+  flex-shrink: 0;
+  position: relative;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  background: var(--color-bg-sidebar);
+}
+
+.asst-slot-open {
+  width: 380px;
+}
+
+/* ── Card: the round-rect panel that slides down from under topbar ── */
+.asst-card {
+  position: absolute;
+  top: 0;
+  left: 8px;
+  bottom: 8px;
+  width: 364px;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-glow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  /* Start hidden above — clipped by slot overflow:hidden */
+  transform: translateY(-100%);
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: 0s;
+}
+
+.asst-slot-open .asst-card {
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: 0.15s;
+}
+
+/* ── Header ── */
+.asst-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.asst-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  color: var(--color-text-primary);
+}
+
+.asst-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-element);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.asst-close:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+/* ── Messages area ── */
+.asst-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Empty / loading state */
+.asst-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  color: var(--color-text-tertiary);
+  animation: asstPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes asstPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Message bubbles ── */
+.asst-msg {
+  display: flex;
+  gap: var(--gap-component);
+  animation: asstFadeIn 0.3s ease;
+}
+
+@keyframes asstFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.asst-msg-assistant {
+  align-items: flex-start;
+}
+
+.asst-msg-user {
+  justify-content: flex-end;
+}
+
+.asst-msg-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-element);
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.asst-msg-bubble {
+  max-width: 85%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-component);
+  line-height: 1.5;
+}
+
+.asst-msg-bubble p {
+  margin: 0;
+}
+
+.asst-msg-bubble-assistant {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  border-top-left-radius: 2px;
+}
+
+.asst-msg-bubble-user {
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  border-top-right-radius: 2px;
+}
+
+/* ── Navigation status message ── */
+.asst-nav-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: var(--space-1) 0;
+  color: var(--color-text-tertiary);
+  animation: asstFadeIn 0.3s ease;
+}
+
+.asst-nav-message .text-caption {
+  font-style: italic;
+}
+
+/* ── Chat input area — pinned to bottom ── */
+.asst-chat-input-area {
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.asst-chat-input-box {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gap-sub);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-component);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.asst-chat-input-box:focus-within {
+  border-color: var(--color-border-input);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+}
+
+.asst-chat-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  resize: none;
+  font-size: var(--text-body-sm-size);
+  font-family: inherit;
+  color: var(--color-text-primary);
+  background: none;
+  line-height: 1.5;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.asst-chat-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.asst-send-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-element);
+  border: none;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.asst-send-btn-active {
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+}
+
+.asst-send-btn:hover {
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+}
+
+.asst-disclaimer {
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ── Closing animation: reverse order ── */
+.asst-slot:not(.asst-slot-open) .asst-card {
+  transition-delay: 0s;
+}
+
+.asst-slot:not(.asst-slot-open) {
+  transition-delay: 0.15s;
+}

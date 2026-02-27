@@ -13,9 +13,18 @@
   background: var(--color-bg-sidebar);
 }
 
+/* Row below topbar: assistant panel + page content side by side */
+.layout-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .layout-content {
   flex: 1;
   overflow: hidden;
   position: relative;
   min-height: 0;
+  min-width: 0;
 }

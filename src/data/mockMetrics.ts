@@ -47,6 +47,20 @@ export const weeklyScorecard = {
   },
 }
 
+export const creditUsage = {
+  remaining: 8450,
+  total: 10000,
+  usedToday: 125,
+  percentUsed: 16,
+  breakdown: [
+    { label: 'Email Enrichment', count: 127 },
+    { label: 'Phone Enrichment', count: 84 },
+    { label: 'AI Research', count: 45 },
+    { label: 'List Creation', count: 23 },
+  ],
+  totalUsed: 279,
+}
+
 export const triageItems = [
   {
     id: 1,

@@ -5,13 +5,14 @@ import {
   IconApolloLogo,
   IconInbox,
   IconSequence,
-  IconChart,
   IconHome,
   IconPeople,
   IconMail,
   IconChevronRight,
+  IconSparkle,
 } from '@/components/shared/Icons'
-import { weeklyScorecard, triageItems } from '@/data/mockMetrics'
+import { useAssistantPanel } from '@/contexts/AssistantPanelContext'
+import { weeklyScorecard, triageItems, creditUsage } from '@/data/mockMetrics'
 import './Topbar.css'
 
 interface QuickAction {
@@ -27,7 +28,6 @@ const quickActions: QuickAction[] = [
   { id: 'search', label: 'Search people', description: 'Find contacts matching your ICP', icon: <IconPeople size={16} />, path: '/search', keywords: ['search', 'people', 'contacts', 'find', 'prospects'] },
   { id: 'triage', label: 'Triage inbox', description: `${triageItems.length} items need attention`, icon: <IconInbox size={16} />, path: '/triage', keywords: ['triage', 'inbox', 'replies', 'attention'] },
   { id: 'sequences', label: 'Sequences', description: 'View and manage active sequences', icon: <IconSequence size={16} />, path: '/sequences', keywords: ['sequences', 'enroll', 'outreach', 'campaigns'] },
-  { id: 'diagnostic', label: 'Diagnostic', description: 'Check account health and deliverability', icon: <IconChart size={16} />, path: '/diagnostic', keywords: ['diagnostic', 'health', 'deliverability'] },
   { id: 'scorecard', label: 'Weekly scorecard', description: 'Review your weekly performance', icon: <IconHome size={16} />, path: '/home', keywords: ['scorecard', 'home', 'weekly', 'performance', 'stats'] },
   { id: 'review', label: 'Review contacts', description: 'Review saved contacts before enrolling', icon: <IconPeople size={16} />, path: '/review', keywords: ['review', 'contacts', 'saved'] },
   { id: 'enroll', label: 'Enroll in sequence', description: 'Add contacts to a sequence', icon: <IconMail size={16} />, path: '/enroll', keywords: ['enroll', 'sequence', 'add'] },
@@ -35,6 +35,7 @@ const quickActions: QuickAction[] = [
 
 export default function Topbar() {
   const navigate = useNavigate()
+  const { assistantOpen, toggleAssistant } = useAssistantPanel()
   const [expanded, setExpanded] = useState(false)
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
@@ -43,7 +44,6 @@ export default function Topbar() {
   const { funnel } = weeklyScorecard
   const inboxCount = triageItems.length
 
-  // Filter quick actions based on query
   const filtered = useMemo(() => {
     if (!query.trim()) return quickActions
     const q = query.toLowerCase()
@@ -55,7 +55,6 @@ export default function Topbar() {
     )
   }, [query])
 
-  // Close on outside click
   useEffect(() => {
     if (!expanded) return
     const handleClick = (e: MouseEvent) => {
@@ -68,7 +67,6 @@ export default function Topbar() {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [expanded])
 
-  // Close on Escape
   useEffect(() => {
     if (!expanded) return
     const handleKey = (e: KeyboardEvent) => {
@@ -81,7 +79,6 @@ export default function Topbar() {
     return () => document.removeEventListener('keydown', handleKey)
   }, [expanded])
 
-  // Cmd+K to open
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -108,13 +105,25 @@ export default function Topbar() {
   const isSearching = query.trim().length > 0
 
   return (
-    <header className="topbar">
+    <header className={`topbar ${assistantOpen ? 'topbar-assistant-open' : ''}`}>
       {expanded && <div className="ubar-backdrop" />}
+
       <div className={`ubar ${expanded ? 'ubar-expanded' : ''}`} ref={barRef}>
         {/* Collapsed state */}
         {!expanded && (
-          <div className="ubar-collapsed" onClick={handleExpand}>
-            <div className="ubar-search-trigger">
+          <div className="ubar-collapsed">
+            {/* Assistant button — left side of the pill */}
+            <button
+              className={`ubar-assistant-btn ${assistantOpen ? 'ubar-assistant-btn-active' : ''}`}
+              onClick={toggleAssistant}
+            >
+              <IconSparkle size={14} />
+              <span>Assistant</span>
+            </button>
+
+            <div className="ubar-divider" />
+
+            <div className="ubar-search-trigger" onClick={handleExpand}>
               <IconSearch size={15} />
               <span className="ubar-placeholder">Search</span>
               <kbd className="ubar-kbd">⌘K</kbd>
@@ -122,7 +131,13 @@ export default function Topbar() {
 
             <div className="ubar-divider" />
 
-            <div className="ubar-stats">
+            <span className="ubar-credit">
+              <span>{creditUsage.remaining.toLocaleString()} credits</span>
+            </span>
+
+            <div className="ubar-divider" />
+
+            <div className="ubar-stats" onClick={handleExpand}>
               <span className="ubar-stat">
                 <IconInbox size={13} />
                 <span>{inboxCount} inbox</span>
@@ -136,25 +151,23 @@ export default function Topbar() {
                 <span>{funnel.meetings} meeting</span>
               </span>
             </div>
-
-            <div className="ubar-divider" />
-
-            <button
-              className="ubar-assistant"
-              onClick={(e) => {
-                e.stopPropagation()
-              }}
-            >
-              <IconApolloLogo size={14} />
-              <span>Assistant</span>
-            </button>
           </div>
         )}
 
-        {/* Expanded state */}
+        {/* Expanded state — 3-column grid */}
         {expanded && (
-          <>
-            <div className="ubar-search-row">
+          <div className="ubar-exp">
+            {/* ── Row 1: Search bar ── */}
+            <div className="ubar-exp-header ubar-exp-col-left">
+              <button
+                className={`ubar-assistant-btn ${assistantOpen ? 'ubar-assistant-btn-active' : ''}`}
+                onClick={toggleAssistant}
+              >
+                <IconSparkle size={14} />
+                <span>Assistant</span>
+              </button>
+            </div>
+            <div className="ubar-exp-header ubar-exp-col-mid">
               <IconSearch size={15} />
               <input
                 ref={inputRef}
@@ -163,70 +176,64 @@ export default function Topbar() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
-              <button
-                className="ubar-assistant"
-                onClick={(e) => {
-                  e.stopPropagation()
-                }}
-              >
-                <IconApolloLogo size={14} />
-                <span>Assistant</span>
-              </button>
+            </div>
+            <div className="ubar-exp-header ubar-exp-col-right">
+              <span className="ubar-credit">{creditUsage.remaining.toLocaleString()} credits</span>
             </div>
 
-            <div className="ubar-dropdown">
-              {!isSearching && (
-                <div className="ubar-section">
-                  <div className="ubar-section-label">This week</div>
-                  <div className="ubar-stats-grid">
-                    <div className="ubar-stat-card">
-                      <span className="ubar-stat-value">{funnel.sent}</span>
-                      <span className="ubar-stat-label">Sent</span>
-                    </div>
-                    <div className="ubar-stat-card">
-                      <span className="ubar-stat-value">{funnel.opened}</span>
-                      <span className="ubar-stat-label">Opened</span>
-                    </div>
-                    <div className="ubar-stat-card">
-                      <span className="ubar-stat-value">{funnel.replied}</span>
-                      <span className="ubar-stat-label">Replied</span>
-                    </div>
-                    <div className="ubar-stat-card ubar-stat-highlight">
-                      <span className="ubar-stat-value">{funnel.meetings}</span>
-                      <span className="ubar-stat-label">Meeting</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="ubar-section">
-                <div className="ubar-section-label">
-                  {isSearching ? 'Results' : 'Quick actions'}
-                </div>
-                <div className="ubar-actions-list">
-                  {filtered.length === 0 && (
-                    <div className="ubar-empty">No results for "{query}"</div>
-                  )}
-                  {filtered.map((action) => (
-                    <button
-                      key={action.id}
-                      className="ubar-action"
-                      onClick={() => handleAction(action.path)}
-                    >
-                      <span className="ubar-action-icon">{action.icon}</span>
-                      <span className="ubar-action-text">
-                        <span className="ubar-action-label">{action.label}</span>
-                        <span className="ubar-action-desc">{action.description}</span>
-                      </span>
-                      <IconChevronRight size={14} />
-                    </button>
-                  ))}
-                </div>
+            {/* ── Row 2: Dropdown columns ── */}
+            <div className="ubar-exp-body ubar-exp-col-left">
+              <div className="ubar-section-label">Try asking</div>
+              <div className="ubar-prompt-list">
+                <button className="ubar-prompt" onClick={() => { toggleAssistant(); setExpanded(false); setQuery(''); }}>
+                  <IconSparkle size={12} />
+                  <span>Find VPs at radiation oncology companies</span>
+                </button>
+                <button className="ubar-prompt" onClick={() => { toggleAssistant(); setExpanded(false); setQuery(''); }}>
+                  <IconSparkle size={12} />
+                  <span>Optimize my outreach sequence</span>
+                </button>
+                <button className="ubar-prompt" onClick={() => { toggleAssistant(); setExpanded(false); setQuery(''); }}>
+                  <IconSparkle size={12} />
+                  <span>Draft a follow-up for Jane Smith</span>
+                </button>
+                <button className="ubar-prompt" onClick={() => { toggleAssistant(); setExpanded(false); setQuery(''); }}>
+                  <IconSparkle size={12} />
+                  <span>Research Acme Corp before my call</span>
+                </button>
+                <button className="ubar-prompt" onClick={() => { toggleAssistant(); setExpanded(false); setQuery(''); }}>
+                  <IconSparkle size={12} />
+                  <span>Enrich my saved list with phone numbers</span>
+                </button>
               </div>
+            </div>
 
+            <div className="ubar-exp-body ubar-exp-col-mid">
+              <div className="ubar-section-label">
+                {isSearching ? 'Results' : 'Quick actions'}
+              </div>
+              <div className="ubar-actions-list">
+                {filtered.length === 0 && (
+                  <div className="ubar-empty">No results for &ldquo;{query}&rdquo;</div>
+                )}
+                {filtered.map((action) => (
+                  <button
+                    key={action.id}
+                    className="ubar-action"
+                    onClick={() => handleAction(action.path)}
+                  >
+                    <span className="ubar-action-icon">{action.icon}</span>
+                    <span className="ubar-action-text">
+                      <span className="ubar-action-label">{action.label}</span>
+                      <span className="ubar-action-desc">{action.description}</span>
+                    </span>
+                    <IconChevronRight size={14} />
+                  </button>
+                ))}
+              </div>
               {!isSearching && (
-                <div className="ubar-section">
-                  <div className="ubar-section-label">Recommended</div>
+                <>
+                  <div className="ubar-section-label ubar-exp-metrics-label">Recommended</div>
                   <button
                     className="ubar-action"
                     onClick={() => handleAction('/search')}
@@ -238,10 +245,57 @@ export default function Topbar() {
                     </span>
                     <IconChevronRight size={14} />
                   </button>
-                </div>
+                </>
               )}
             </div>
-          </>
+
+            <div className="ubar-exp-body ubar-exp-col-right">
+              {/* Credit usage */}
+              <div className="ubar-section-label">Credits</div>
+              <div className="ubar-credit-summary">
+                <div className="ubar-credit-header">
+                  <span className="ubar-credit-remaining">{creditUsage.remaining.toLocaleString()}</span>
+                  <span className="ubar-credit-total">/ {creditUsage.total.toLocaleString()}</span>
+                </div>
+                <div className="ubar-credit-bar">
+                  <div className="ubar-credit-bar-fill" style={{ width: `${creditUsage.percentUsed}%` }} />
+                </div>
+                <div className="ubar-credit-meta">
+                  <span>Used today: {creditUsage.usedToday}</span>
+                  <span>{creditUsage.percentUsed}% used</span>
+                </div>
+              </div>
+              <div className="ubar-credit-breakdown">
+                {creditUsage.breakdown.map((item) => (
+                  <div key={item.label} className="ubar-credit-row">
+                    <span className="ubar-credit-row-label">{item.label}</span>
+                    <span className="ubar-credit-row-count">{item.count}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Weekly metrics */}
+              <div className="ubar-section-label ubar-exp-metrics-label">This week</div>
+              <div className="ubar-mini-stats">
+                <div className="ubar-mini-stat">
+                  <span className="ubar-mini-value">{funnel.sent}</span>
+                  <span className="ubar-mini-label">Sent</span>
+                </div>
+                <div className="ubar-mini-stat">
+                  <span className="ubar-mini-value">{funnel.opened}</span>
+                  <span className="ubar-mini-label">Opened</span>
+                </div>
+                <div className="ubar-mini-stat">
+                  <span className="ubar-mini-value">{funnel.replied}</span>
+                  <span className="ubar-mini-label">Replied</span>
+                </div>
+                <div className="ubar-mini-stat ubar-mini-stat-highlight">
+                  <span className="ubar-mini-value">{funnel.meetings}</span>
+                  <span className="ubar-mini-label">Meeting</span>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </header>

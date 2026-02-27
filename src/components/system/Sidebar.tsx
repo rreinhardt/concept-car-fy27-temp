@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useUser } from '@/contexts/UserContext'
+import { useAssistantPanel } from '@/contexts/AssistantPanelContext'
 import {
   IconHome,
   IconSparkle,
@@ -79,8 +80,12 @@ export default function Sidebar() {
   const location = useLocation()
   const navigate = useNavigate()
   const user = useUser()
+  const { assistantOpen } = useAssistantPanel()
   const [moreOpen, setMoreOpen] = useState(false)
-  const [collapsed, setCollapsed] = useState(false)
+  const [userCollapsed, setUserCollapsed] = useState(false)
+
+  // Force collapsed when assistant panel is open
+  const collapsed = userCollapsed || assistantOpen
 
   const isActive = (path?: string) => path ? location.pathname === path : false
 
@@ -103,12 +108,12 @@ export default function Sidebar() {
     <aside className={`sidebar ${collapsed ? 'sidebar-collapsed' : ''}`}>
       {/* Logo + collapse toggle */}
       <div className="sidebar-logo">
-        <span className="sidebar-logo-icon" onClick={() => collapsed ? setCollapsed(false) : navigate('/home')}>
+        <span className="sidebar-logo-icon" onClick={() => collapsed ? setUserCollapsed(false) : navigate('/home')}>
           <IconApolloLogo size={18} />
         </span>
         <button
           className="sidebar-collapse-btn"
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => setUserCollapsed(!userCollapsed)}
         >
           {collapsed ? '\u00bb' : '\u00ab'}
         </button>

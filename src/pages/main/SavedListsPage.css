@@ -33,15 +33,6 @@
   box-shadow: var(--shadow-sm);
 }
 
-.lists-type-count {
-  font-size: 10px;
-  color: var(--color-text-tertiary);
-}
-
-.lists-type-tab-active .lists-type-count {
-  color: var(--color-text-secondary);
-}
-
 /* ── Sidebar list items ── */
 .lists-sidebar-items {
   display: flex;
