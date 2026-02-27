@@ -87,8 +87,8 @@
 }
 
 .kb-company-logo {
-  width: 40px;
-  height: 40px;
+  width: var(--avatar-lg);
+  height: var(--avatar-lg);
   border-radius: var(--radius-component);
   background: #4A3728;
   color: white;

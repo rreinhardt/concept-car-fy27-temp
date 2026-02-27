@@ -101,9 +101,6 @@ export default function SearchPage() {
             <button className="text-caption text-secondary">Reset all</button>
           </div>
 
-          <div className="search-pagination-info text-caption text-secondary">
-            1 - 25 of 126,222
-          </div>
         </aside>
 
         {/* Main table */}
@@ -113,7 +110,7 @@ export default function SearchPage() {
           <div className="search-bulk-bar">
             <span className="text-body-sm font-medium">{selectedRows.length} selected</span>
             <Button variant="secondary" size="sm" onClick={() => navigate('/save-to-list')}>Save to list</Button>
-            <Button variant="secondary" size="sm" onClick={() => navigate('/enroll')}>Enroll</Button>
+            <Button variant="secondary" size="sm" onClick={() => navigate('/sequences')}>Enroll</Button>
             <Button variant="secondary" size="sm">Export</Button>
             <Button variant="ghost" size="sm" onClick={() => setSelectedRows([])}>Dismiss</Button>
           </div>

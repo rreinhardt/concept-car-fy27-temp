@@ -31,8 +31,33 @@ i dont like how this card is so far on the left. can we come up with a more resp
 ---## fb-2026-02-26T04-16-24-611Z
 - **Date:** 2/25/2026, 8:16:24 PM
 - **URL:** `/home`
-- **Status:** pending
+- **Status:** resolved
+- **Resolution:** Added time range toggles, industry/historical benchmark overlays, and conversion rates to funnel chart.
 - **Screenshot:** ![](screenshots/fb-2026-02-26T04-16-24-611Z.png)
 ### Notes
 this is kind of a boring chart, and lots of white space, there is no benchmarking against historical or my-industry standards... could we have interactivity here. add toggles/comparisons, take up more space. keep it still minimal design tho so be smart about it.
+---## fb-2026-02-26T17-13-21-754Z
+- **Date:** 2/26/2026, 9:13:21 AM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Changed Enroll button in bulk action bar to navigate to `/sequences` (sequence picker) instead of `/enroll`.
+- **Screenshot:** ![](screenshots/fb-2026-02-26T17-13-21-754Z.png)
+### Notes
+This Enroll button should take the user to the sequence picker page instead of directly into the sequence editor page.
+---## fb-2026-02-26T18-23-42-749Z
+- **Date:** 2/26/2026, 10:23:42 AM
+- **URL:** `/knowledge-base`
+- **Status:** resolved
+- **Resolution:** Changed company logo size from 40px to `var(--avatar-lg)` (48px) to match the person avatar circle.
+- **Screenshot:** ![](screenshots/fb-2026-02-26T18-23-42-749Z.png)
+### Notes
+Fix the alignment of the circle and the round rect for the person and company so that they are the same size.
+---## fb-2026-02-26T20-22-46-993Z
+- **Date:** 2/26/2026, 12:22:46 PM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Removed duplicative "1 - 25 of 126,222" count from the sidebar filters. Pagination info remains in the table footer only.
+- **Screenshot:** ![](screenshots/fb-2026-02-26T20-22-46-993Z.png)
+### Notes
+get rid of the duplicative count on the table that is outside it
 ---
