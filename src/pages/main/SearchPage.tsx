@@ -1,8 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { mockContacts } from '@/data/mockContacts'
+import { useSidebar } from '@/contexts/SidebarContext'
 import Input from '@/components/shared/Input'
 import Button from '@/components/shared/Button'
+import PageLayout from '@/components/shared/PageLayout'
+import Badge from '@/components/shared/Badge'
+import ActionsPanel, { type ActionGroup } from '@/components/shared/ActionsPanel'
+import EmailComposeDrawer from '@/components/shared/EmailComposeDrawer'
+import SendingOverlay from '@/components/shared/SendingOverlay'
 import {
   IconSearch,
   IconFilter,
@@ -13,28 +19,148 @@ import {
   IconPlus,
   IconTrending,
   IconClock,
+  IconSequence,
+  IconMail,
+  IconPhone,
+  IconBookmark,
+  IconStar,
+  IconTag,
+  IconDataEnrich,
+  IconSparkle,
+  IconBuilding,
+  IconPeople,
+  IconSpreadsheet,
+  IconChart,
+  IconWorkflows,
+  IconRobot,
+  IconGlobe,
 } from '@/components/shared/Icons'
 import './SearchPage.css'
 
-const filterSections = [
-  'Job title',
-  'Industry',
-  'Number of employees',
-  'Buying intent',
-  'Keywords',
-  'Scores',
-  'Technologies',
+const filterSections: { label: string; count?: number }[] = [
+  { label: 'Job title', count: 4 },
+  { label: 'Industry', count: 5 },
+  { label: 'Number of employees', count: 5 },
+  { label: 'Buying intent', count: 5 },
+  { label: 'Keywords', count: 5 },
+  { label: 'Scores' },
+  { label: 'Technologies' },
+]
+
+const searchSuggestedGroups: ActionGroup[] = [
+  {
+    label: 'Outreach',
+    items: [
+      { icon: <IconSequence size={15} />, label: 'Add to sequence', desc: 'Enroll selected contacts', id: 'add-to-sequence' },
+      { icon: <IconMail size={15} />, label: 'Email', desc: 'Send a one-off email', id: 'email' },
+      { icon: <IconPhone size={15} />, label: 'Call', desc: 'Start a call task', id: 'call' },
+    ],
+  },
+  {
+    label: 'Organize',
+    items: [
+      { icon: <IconBookmark size={15} />, label: 'Add to list', desc: 'Save to an existing or new list', id: 'add-to-list' },
+      { icon: <IconStar size={15} />, label: 'Save search', desc: 'Re-run this search later', id: 'save-search' },
+      { icon: <IconTag size={15} />, label: 'Tag contacts', desc: 'Apply tags to selection', id: 'tag' },
+    ],
+  },
+  {
+    label: 'Enrich & Research',
+    items: [
+      { icon: <IconDataEnrich size={15} />, label: 'Enrich with Apollo', desc: 'Fill missing data fields', id: 'enrich' },
+      { icon: <IconSparkle size={15} />, label: 'Research with AI', desc: 'Deep research on contacts', id: 'research-ai' },
+    ],
+  },
+]
+
+const searchAdvancedGroups: ActionGroup[] = [
+  {
+    label: 'Data sources',
+    items: [
+      { icon: <IconBuilding size={15} />, label: 'Search for companies', id: 'search-companies' },
+      { icon: <IconPeople size={15} />, label: 'Find people at these companies', id: 'find-people-companies' },
+      { icon: <IconSpreadsheet size={15} />, label: 'Import from CSV', id: 'import-csv' },
+    ],
+  },
+  {
+    label: 'Enrichments',
+    items: [
+      { icon: <IconMail size={15} />, label: 'Enrich email', desc: 'Email by identifier', id: 'enrich-email' },
+      { icon: <IconSparkle size={15} />, label: 'Research agent', desc: 'Full-scale AI research', id: 'research-agent' },
+      { icon: <IconSparkle size={15} />, label: 'Qualification agent', desc: 'Qualify against ICP', id: 'qualification-agent' },
+      { icon: <IconChart size={15} />, label: 'Job change tracking', desc: 'Monitor role changes', id: 'job-change' },
+    ],
+  },
+  {
+    label: 'Automation',
+    items: [
+      { icon: <IconWorkflows size={15} />, label: 'Create Workflow', desc: 'Build automation rules', id: 'create-workflow' },
+      { icon: <IconRobot size={15} />, label: 'Run AI agent', desc: 'Execute an agent task', id: 'run-agent' },
+    ],
+  },
+  {
+    label: 'Export',
+    items: [
+      { icon: <IconSpreadsheet size={15} />, label: 'Download as CSV', id: 'download-csv' },
+      { icon: <IconSequence size={15} />, label: 'Push to Sequences', id: 'push-sequences' },
+      { icon: <IconGlobe size={15} />, label: 'Push to CRM', id: 'push-crm' },
+    ],
+  },
 ]
 
 export default function SearchPage() {
   const navigate = useNavigate()
+  const { promoteItem } = useSidebar()
   const [selectedRows, setSelectedRows] = useState<number[]>([])
+  const [actionsPanelOpen, setActionsPanelOpen] = useState(false)
+  const [panelView, setPanelView] = useState<'actions' | 'email'>('actions')
+  const [hiddenColCount, setHiddenColCount] = useState(0)
+  const [showSendingOverlay, setShowSendingOverlay] = useState(false)
+  const [sendingContact, setSendingContact] = useState('')
+  const tableWrapperRef = useRef<HTMLDivElement>(null)
 
   const toggleRow = (id: number) => {
     setSelectedRows((prev) =>
       prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]
     )
   }
+
+  // Auto-open actions panel when rows are selected
+  useEffect(() => {
+    if (selectedRows.length > 0 && !actionsPanelOpen) {
+      setActionsPanelOpen(true)
+    }
+  }, [selectedRows.length])
+
+  const updateHiddenCols = useCallback(() => {
+    const wrapper = tableWrapperRef.current
+    if (!wrapper) return
+    const table = wrapper.querySelector('table')
+    if (!table) return
+    const ths = table.querySelectorAll('thead th')
+    const wrapperRight = wrapper.getBoundingClientRect().right
+    let hidden = 0
+    ths.forEach((th) => {
+      const rect = th.getBoundingClientRect()
+      // Column is hidden if its right edge is past the wrapper's right edge
+      if (rect.right > wrapperRight + 1) hidden++
+    })
+    setHiddenColCount(hidden)
+  }, [])
+
+  useEffect(() => {
+    const wrapper = tableWrapperRef.current
+    if (!wrapper) return
+    wrapper.addEventListener('scroll', updateHiddenCols)
+    // Also check on resize
+    const ro = new ResizeObserver(updateHiddenCols)
+    ro.observe(wrapper)
+    updateHiddenCols()
+    return () => {
+      wrapper.removeEventListener('scroll', updateHiddenCols)
+      ro.disconnect()
+    }
+  }, [updateHiddenCols])
 
   const toggleAll = () => {
     if (selectedRows.length === mockContacts.length) {
@@ -44,88 +170,135 @@ export default function SearchPage() {
     }
   }
 
+  const sidebar = (
+    <>
+      <div className="search-filters-controls">
+        <div className="search-view-selector">
+          <span className="text-body-sm">Default view</span>
+          <IconChevronDown size={14} />
+        </div>
+        <Button variant="ghost" size="sm" icon={<IconFilter />}>Filters</Button>
+      </div>
+
+      <Input
+        placeholder="Search people"
+        sizeVariant="sm"
+        iconLeft={<IconSearch size={14} />}
+      />
+
+      <div className="search-stats">
+        <div className="search-stat">
+          <span className="text-caption text-secondary">Total</span>
+          <span className="text-body-sm font-medium">5,284</span>
+        </div>
+        <div className="search-stat">
+          <span className="text-caption text-secondary">Net New</span>
+          <span className="text-body-sm font-medium">5,284</span>
+        </div>
+        <div className="search-stat">
+          <span className="text-caption text-secondary">Saved</span>
+          <span className="text-body-sm font-medium">0</span>
+        </div>
+      </div>
+
+      <div className="search-filter-list">
+        {filterSections.map((section) => (
+          <button key={section.label} className="search-filter-item">
+            <span className="text-body-sm">{section.label}</span>
+            <span className="search-filter-item-right">
+              {section.count && <Badge variant="blue" size="sm">{section.count}</Badge>}
+              <IconChevronRight size={14} />
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <div className="search-filter-actions">
+        <button className="text-body-sm" style={{ color: 'var(--color-text-link)' }}>
+          <IconPlus size={14} /> Add filter
+        </button>
+        <button className="text-caption text-secondary">Reset all</button>
+      </div>
+    </>
+  )
+
   return (
-    <div className="search-page">
-      {/* Page header — outside the white card */}
-      <div className="search-page-header">
-        <h2 className="text-title-md">People</h2>
+    <PageLayout
+      title="People"
+      titleExtra={
         <div className="search-liveness">
           <span className="search-liveness-dot" />
           <span className="text-caption text-secondary">
             <strong>12</strong> new contacts match &middot; <strong>8</strong> signals detected &middot; Updated 3m ago
           </span>
         </div>
-      </div>
-
-      {/* Body: sidebar + table */}
-      <div className="search-body">
-        {/* Sidebar filters */}
-        <aside className="search-filters">
-          <div className="search-filters-controls">
-            <div className="search-view-selector">
-              <span className="text-body-sm">Default view</span>
-              <IconChevronDown size={14} />
-            </div>
-            <Button variant="ghost" size="sm" icon={<IconFilter />}>Filters</Button>
-          </div>
-
-          <Input
-            placeholder="Search people"
-            sizeVariant="sm"
-            iconLeft={<IconSearch size={14} />}
+      }
+      sidebar={sidebar}
+      actionsPanel={
+        panelView === 'email' ? (
+          <EmailComposeDrawer
+            onClose={() => {
+              setPanelView('actions')
+              setActionsPanelOpen(false)
+            }}
+            onBack={() => setPanelView('actions')}
+            onSend={() => {
+              // Get the first selected contact's name for the overlay
+              const firstId = selectedRows[0]
+              const c = firstId != null ? mockContacts.find(mc => mc.id === firstId) : undefined
+              setSendingContact(c?.name ?? 'your contact')
+              // Show overlay first, then close drawer after it's visible
+              setShowSendingOverlay(true)
+              setTimeout(() => {
+                setPanelView('actions')
+                setActionsPanelOpen(false)
+              }, 400)
+            }}
+            contacts={selectedRows.map(id => {
+              const c = mockContacts.find(mc => mc.id === id)!
+              return {
+                name: c.name,
+                email: `${c.name.toLowerCase().replace(/\s+/g, '.')}@${c.company.toLowerCase().replace(/\s+/g, '')}.com`,
+                title: c.title,
+                company: c.company,
+                signals: c.signals,
+              }
+            })}
           />
-
-          {/* Summary stats */}
-          <div className="search-stats">
-            <div className="search-stat">
-              <span className="text-caption text-secondary">Total</span>
-              <span className="text-body-sm font-medium">234.0M</span>
-            </div>
-            <div className="search-stat">
-              <span className="text-caption text-secondary">Net New</span>
-              <span className="text-body-sm font-medium">234.0M</span>
-            </div>
-            <div className="search-stat">
-              <span className="text-caption text-secondary">Saved</span>
-              <span className="text-body-sm font-medium">0</span>
-            </div>
-          </div>
-
-          {/* Filter sections */}
-          <div className="search-filter-list">
-            {filterSections.map((section) => (
-              <button key={section} className="search-filter-item">
-                <span className="text-body-sm">{section}</span>
-                <IconChevronRight size={14} />
-              </button>
-            ))}
-          </div>
-
-          <div className="search-filter-actions">
-            <button className="text-body-sm" style={{ color: 'var(--color-text-link)' }}>
-              <IconPlus size={14} /> Add filter
-            </button>
-            <button className="text-caption text-secondary">Reset all</button>
-          </div>
-
-        </aside>
-
-        {/* Main table */}
-        <div className="search-main">
-        {/* Table area — positioning context for the floating bulk bar */}
-        <div className="search-table-area">
-          {/* Bulk action bar — slides up from behind the table */}
-          {selectedRows.length > 0 && (
-            <div className="search-bulk-bar">
-              <span className="text-body-sm font-medium">{selectedRows.length} selected</span>
-              <Button variant="secondary" size="sm" onClick={() => navigate('/save-to-list')}>Save to list</Button>
-              <Button variant="secondary" size="sm" onClick={() => navigate('/sequences')}>Enroll</Button>
-              <Button variant="secondary" size="sm">Export</Button>
-              <Button variant="ghost" size="sm" onClick={() => setSelectedRows([])}>Dismiss</Button>
-            </div>
-          )}
+        ) : (
+          <ActionsPanel
+            onClose={() => setActionsPanelOpen(false)}
+            onAction={(id) => {
+              if (id === 'email') {
+                setPanelView('email')
+              } else if (id === 'add-to-sequence') {
+                navigate('/sequences')
+              } else if (id === 'add-to-list') {
+                navigate('/save-to-list')
+              } else if (id === 'enrich') {
+                navigate('/review')
+              } else {
+                setActionsPanelOpen(false)
+              }
+            }}
+            selectedCount={selectedRows.length}
+            onDeselect={() => setSelectedRows([])}
+            suggestedGroups={searchSuggestedGroups}
+            advancedGroups={searchAdvancedGroups}
+          />
+        )
+      }
+      actionsPanelOpen={actionsPanelOpen}
+      actionsPanelWidth={panelView === 'email' ? 680 : undefined}
+      actionsBtnVariant={panelView === 'email' ? 'secondary' : 'primary'}
+      onActionsPanelToggle={(open) => {
+        setActionsPanelOpen(open)
+        if (!open) setPanelView('actions')
+      }}
+    >
+      <div className="search-table-area">
         <div className="search-table-frame">
-          <div className="search-table-wrapper">
+          <div className="search-table-wrapper" ref={tableWrapperRef}>
             <table className="search-table">
               <thead>
                 <tr>
@@ -217,16 +390,27 @@ export default function SearchPage() {
             <span className="text-caption text-secondary" style={{ marginLeft: 'var(--space-2)' }}>
               1 - 25 of 126,222
             </span>
-            <div style={{ marginLeft: 'auto' }}>
-              <Button variant="primary" size="sm" onClick={() => navigate('/review')}>
-                Review contacts
-              </Button>
-            </div>
+            {hiddenColCount > 0 && (
+              <span className="search-overflow-counter">
+                <IconChevronRight size={12} />
+                {hiddenColCount} column{hiddenColCount !== 1 ? 's' : ''} out of view
+              </span>
+            )}
           </div>
         </div>
-        </div>
       </div>
-      </div>
-    </div>
+
+      {showSendingOverlay && (
+        <SendingOverlay
+          contactName={sendingContact}
+          onBackToSearch={() => setShowSendingOverlay(false)}
+          onViewInbox={() => {
+            setShowSendingOverlay(false)
+            promoteItem('emails')
+            navigate('/emails')
+          }}
+        />
+      )}
+    </PageLayout>
   )
 }

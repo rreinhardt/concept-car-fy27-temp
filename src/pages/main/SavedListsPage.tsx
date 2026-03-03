@@ -1,10 +1,24 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import PageLayout from '@/components/shared/PageLayout'
+import ActionsPanel, { type ActionGroup } from '@/components/shared/ActionsPanel'
 import {
   IconSearch,
   IconChevronLeft,
   IconChevronRight,
   IconPeople,
   IconBuilding,
+  IconSequence,
+  IconMail,
+  IconBookmark,
+  IconTag,
+  IconDataEnrich,
+  IconSparkle,
+  IconWorkflows,
+  IconRobot,
+  IconFilter,
+  IconSpreadsheet,
+  IconGlobe,
 } from '@/components/shared/Icons'
 import Input from '@/components/shared/Input'
 import '../main/SearchPage.css'
@@ -82,9 +96,70 @@ const typeIcons: Record<string, React.ReactNode> = {
   deals: <span style={{ fontSize: 12 }}>$</span>,
 }
 
+const listSuggestedGroups: ActionGroup[] = [
+  {
+    label: 'Outreach',
+    items: [
+      { icon: <IconSequence size={15} />, label: 'Add to sequence', desc: 'Enroll selected contacts', id: 'add-to-sequence' },
+      { icon: <IconMail size={15} />, label: 'Email', desc: 'Send a one-off email', id: 'email' },
+    ],
+  },
+  {
+    label: 'Organize',
+    items: [
+      { icon: <IconBookmark size={15} />, label: 'Add to another list', desc: 'Copy to a different list', id: 'add-to-list' },
+      { icon: <IconPeople size={15} />, label: 'Remove from list', desc: 'Remove selected records', id: 'remove-from-list' },
+      { icon: <IconTag size={15} />, label: 'Tag contacts', desc: 'Apply tags to selection', id: 'tag' },
+    ],
+  },
+  {
+    label: 'Enrich & Research',
+    items: [
+      { icon: <IconDataEnrich size={15} />, label: 'Enrich with Apollo', desc: 'Fill missing data fields', id: 'enrich' },
+      { icon: <IconSparkle size={15} />, label: 'Research with AI', desc: 'Deep research on contacts', id: 'research-ai' },
+    ],
+  },
+]
+
+const listAdvancedGroups: ActionGroup[] = [
+  {
+    label: 'Automation',
+    items: [
+      { icon: <IconWorkflows size={15} />, label: 'Create Workflow', desc: 'Build automation rules', id: 'create-workflow' },
+      { icon: <IconRobot size={15} />, label: 'Run AI agent', desc: 'Execute an agent task', id: 'run-agent' },
+      { icon: <IconFilter size={15} />, label: 'Create criteria', desc: 'Dynamic filter rules', id: 'create-criteria' },
+    ],
+  },
+  {
+    label: 'Export',
+    items: [
+      { icon: <IconSpreadsheet size={15} />, label: 'Download as CSV', id: 'download-csv' },
+      { icon: <IconSequence size={15} />, label: 'Push to Sequences', id: 'push-sequences' },
+      { icon: <IconGlobe size={15} />, label: 'Push to CRM', id: 'push-crm' },
+    ],
+  },
+  {
+    label: 'Integrations',
+    items: [
+      { icon: <IconGlobe size={15} />, label: 'Salesforce', id: 'salesforce' },
+      { icon: <IconGlobe size={15} />, label: 'HubSpot', id: 'hubspot' },
+    ],
+  },
+]
+
 export default function SavedListsPage() {
+  const navigate = useNavigate()
   const [filterType, setFilterType] = useState<ListType>('all')
   const [selectedId, setSelectedId] = useState(savedLists[0].id)
+  const [actionsPanelOpen, setActionsPanelOpen] = useState(false)
+  const [selectedRows, setSelectedRows] = useState<number[]>([])
+
+  // Auto-open actions when rows selected
+  useEffect(() => {
+    if (selectedRows.length > 0 && !actionsPanelOpen) {
+      setActionsPanelOpen(true)
+    }
+  }, [selectedRows.length])
 
   const filteredLists = filterType === 'all'
     ? savedLists
@@ -92,143 +167,153 @@ export default function SavedListsPage() {
 
   const selected = savedLists.find((l) => l.id === selectedId)!
 
+  const sidebar = (
+    <>
+      <div className="lists-type-tabs">
+        {(Object.keys(typeLabels) as ListType[]).map((type) => (
+          <button
+            key={type}
+            className={`lists-type-tab text-caption ${filterType === type ? 'lists-type-tab-active' : ''}`}
+            onClick={() => setFilterType(type)}
+          >
+            {typeLabels[type]}
+          </button>
+        ))}
+      </div>
+
+      <Input
+        placeholder="Search lists"
+        sizeVariant="sm"
+        iconLeft={<IconSearch size={14} />}
+      />
+
+      <div className="lists-sidebar-items">
+        {filteredLists.map((list) => (
+          <button
+            key={list.id}
+            className={`lists-sidebar-item ${selectedId === list.id ? 'lists-sidebar-item-active' : ''}`}
+            onClick={() => setSelectedId(list.id)}
+          >
+            <span className="lists-sidebar-item-icon">
+              {typeIcons[list.type]}
+            </span>
+            <div className="lists-sidebar-item-content">
+              <span className="text-body-sm">{list.name}</span>
+              <span className="text-caption text-tertiary">{list.count} records &middot; {list.updatedAgo}</span>
+            </div>
+          </button>
+        ))}
+      </div>
+    </>
+  )
+
   return (
-    <div className="search-page">
-      {/* Page header */}
-      <div className="search-page-header">
-        <h2 className="text-title-md">Saved Lists</h2>
+    <PageLayout
+      title="Saved Lists"
+      titleExtra={
         <div className="search-liveness">
           <span className="text-caption text-secondary">
             <strong>{savedLists.length}</strong> lists &middot; <strong>{savedLists.reduce((sum, l) => sum + l.count, 0).toLocaleString()}</strong> total records
           </span>
         </div>
-      </div>
-
-      {/* Body: sidebar + table */}
-      <div className="search-body">
-        {/* Sidebar — list names with type filter */}
-        <aside className="search-filters">
-          {/* Type tabs */}
-          <div className="lists-type-tabs">
-            {(Object.keys(typeLabels) as ListType[]).map((type) => (
-              <button
-                key={type}
-                className={`lists-type-tab text-caption ${filterType === type ? 'lists-type-tab-active' : ''}`}
-                onClick={() => setFilterType(type)}
-              >
-                {typeLabels[type]}
-              </button>
-            ))}
+      }
+      sidebar={sidebar}
+      sidebarLabel="Lists"
+      actionsPanel={
+        <ActionsPanel
+          onClose={() => setActionsPanelOpen(false)}
+          onAction={(id) => {
+            if (id === 'add-to-sequence') navigate('/sequences')
+            else if (id === 'add-to-list') navigate('/save-to-list')
+            else if (id === 'enrich') navigate('/review')
+            else setActionsPanelOpen(false)
+          }}
+          selectedCount={selectedRows.length}
+          onDeselect={() => setSelectedRows([])}
+          suggestedGroups={listSuggestedGroups}
+          advancedGroups={listAdvancedGroups}
+        />
+      }
+      actionsPanelOpen={actionsPanelOpen}
+      onActionsPanelToggle={setActionsPanelOpen}
+    >
+      <div className="search-table-frame">
+        <div className="lists-table-header">
+          <div className="lists-table-header-left">
+            <h3 className="text-title-sm">{selected.name}</h3>
+            <span className="text-caption text-tertiary">{selected.count} records &middot; Updated {selected.updatedAgo}</span>
           </div>
+          <span className="lists-type-badge text-caption">
+            {typeIcons[selected.type]}
+            {selected.type.charAt(0).toUpperCase() + selected.type.slice(1)}
+          </span>
+        </div>
 
-          <Input
-            placeholder="Search lists"
-            sizeVariant="sm"
-            iconLeft={<IconSearch size={14} />}
-          />
+        <div className="search-table-wrapper">
+          {selected.type === 'companies' ? (
+            <table className="search-table">
+              <thead>
+                <tr>
+                  <th className="search-th-check"><input type="checkbox" onChange={() => {
+                    const items = selected.type === 'companies' ? mockListCompanies : mockListContacts
+                    setSelectedRows(prev => prev.length === items.length ? [] : items.map(i => i.id))
+                  }} /></th>
+                  <th>Company</th>
+                  <th>Industry</th>
+                  <th>Employees</th>
+                  <th>Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                {mockListCompanies.map((company) => (
+                  <tr key={company.id}>
+                    <td><input type="checkbox" onChange={() => setSelectedRows(prev => prev.includes(company.id) ? prev.filter(r => r !== company.id) : [...prev, company.id])} checked={selectedRows.includes(company.id)} /></td>
+                    <td><span className="text-body-sm font-medium">{company.name}</span></td>
+                    <td className="text-body-sm text-secondary">{company.industry}</td>
+                    <td className="text-body-sm text-secondary">{company.employees}</td>
+                    <td className="text-body-sm text-secondary">{company.location}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <table className="search-table">
+              <thead>
+                <tr>
+                  <th className="search-th-check"><input type="checkbox" onChange={() => {
+                    const items = selected.type === 'companies' ? mockListCompanies : mockListContacts
+                    setSelectedRows(prev => prev.length === items.length ? [] : items.map(i => i.id))
+                  }} /></th>
+                  <th>Name</th>
+                  <th>Company</th>
+                  <th>Job Title</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                {mockListContacts.map((contact) => (
+                  <tr key={contact.id}>
+                    <td><input type="checkbox" onChange={() => setSelectedRows(prev => prev.includes(contact.id) ? prev.filter(r => r !== contact.id) : [...prev, contact.id])} checked={selectedRows.includes(contact.id)} /></td>
+                    <td><span className="text-body-sm font-medium">{contact.name}</span></td>
+                    <td className="text-body-sm text-secondary">{contact.company}</td>
+                    <td className="text-body-sm text-secondary">{contact.title}</td>
+                    <td className="text-body-sm text-secondary">{contact.email}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
 
-          {/* List items */}
-          <div className="lists-sidebar-items">
-            {filteredLists.map((list) => (
-              <button
-                key={list.id}
-                className={`lists-sidebar-item ${selectedId === list.id ? 'lists-sidebar-item-active' : ''}`}
-                onClick={() => setSelectedId(list.id)}
-              >
-                <span className="lists-sidebar-item-icon">
-                  {typeIcons[list.type]}
-                </span>
-                <div className="lists-sidebar-item-content">
-                  <span className="text-body-sm">{list.name}</span>
-                  <span className="text-caption text-tertiary">{list.count} records &middot; {list.updatedAgo}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </aside>
-
-        {/* Main table */}
-        <div className="search-main">
-          <div className="search-table-frame">
-            {/* List header inside the frame */}
-            <div className="lists-table-header">
-              <div className="lists-table-header-left">
-                <h3 className="text-title-sm">{selected.name}</h3>
-                <span className="text-caption text-tertiary">{selected.count} records &middot; Updated {selected.updatedAgo}</span>
-              </div>
-              <span className="lists-type-badge text-caption">
-                {typeIcons[selected.type]}
-                {selected.type.charAt(0).toUpperCase() + selected.type.slice(1)}
-              </span>
-            </div>
-
-            {/* Table */}
-            <div className="search-table-wrapper">
-              {selected.type === 'companies' ? (
-                <table className="search-table">
-                  <thead>
-                    <tr>
-                      <th className="search-th-check">
-                        <input type="checkbox" />
-                      </th>
-                      <th>Company</th>
-                      <th>Industry</th>
-                      <th>Employees</th>
-                      <th>Location</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockListCompanies.map((company) => (
-                      <tr key={company.id}>
-                        <td><input type="checkbox" /></td>
-                        <td><span className="text-body-sm font-medium">{company.name}</span></td>
-                        <td className="text-body-sm text-secondary">{company.industry}</td>
-                        <td className="text-body-sm text-secondary">{company.employees}</td>
-                        <td className="text-body-sm text-secondary">{company.location}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <table className="search-table">
-                  <thead>
-                    <tr>
-                      <th className="search-th-check">
-                        <input type="checkbox" />
-                      </th>
-                      <th>Name</th>
-                      <th>Company</th>
-                      <th>Job Title</th>
-                      <th>Email</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockListContacts.map((contact) => (
-                      <tr key={contact.id}>
-                        <td><input type="checkbox" /></td>
-                        <td><span className="text-body-sm font-medium">{contact.name}</span></td>
-                        <td className="text-body-sm text-secondary">{contact.company}</td>
-                        <td className="text-body-sm text-secondary">{contact.title}</td>
-                        <td className="text-body-sm text-secondary">{contact.email}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-
-            {/* Pagination */}
-            <div className="search-pagination">
-              <button className="search-page-btn"><IconChevronLeft size={14} /></button>
-              <span className="text-body-sm font-medium">1</span>
-              <button className="search-page-btn"><IconChevronRight size={14} /></button>
-              <span className="text-caption text-secondary" style={{ marginLeft: 'var(--space-2)' }}>
-                1 - 25 of {selected.count}
-              </span>
-            </div>
-          </div>
+        <div className="search-pagination">
+          <button className="search-page-btn"><IconChevronLeft size={14} /></button>
+          <span className="text-body-sm font-medium">1</span>
+          <button className="search-page-btn"><IconChevronRight size={14} /></button>
+          <span className="text-caption text-secondary" style={{ marginLeft: 'var(--space-2)' }}>
+            1 - 25 of {selected.count}
+          </span>
         </div>
       </div>
-    </div>
+    </PageLayout>
   )
 }

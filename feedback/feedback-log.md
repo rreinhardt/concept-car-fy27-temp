@@ -156,4 +156,28 @@ this is missing heierarchy.. the name of the item should be pulled out of this b
 - **Screenshot:** ![](screenshots/fb-2026-02-27T04-48-54-168Z.png)
 ### Notes
 Fix the spacing of ALL PEOPLE COMPANIES DEALS so it fits. Remove counts if that does it.
+---## fb-2026-02-27T15-40-56-973Z
+- **Date:** 2/27/2026, 7:40:56 AM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Added `align-self: center` to `.page-header-left` and `.page-header-right` groups so the toggle icon and other header controls align vertically with the title text, overriding the parent's `align-items: baseline`.
+- **Screenshot:** ![](screenshots/fb-2026-02-27T15-40-56-973Z.png)
+### Notes
+i want this icon to be better vertically alignd with the labels.
+---## fb-2026-02-27T15-51-11-747Z
+- **Date:** 2/27/2026, 7:51:11 AM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Removed `min-width: 240px` from `.page-sidebar-inner` (was wider than the 224px content area inside `.search-filters`) and replaced with `min-width: 0; width: 100%` so sidebar content fits without clipping.
+- **Screenshot:** ![](screenshots/fb-2026-02-27T15-51-11-747Z.png)
+### Notes
+update to the animation worked well, but now there is a clipping here, fix the padding plz
+---## fb-2026-02-27T15-57-05-622Z
+- **Date:** 2/27/2026, 7:57:05 AM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Removed "Review contacts" button from pagination row. Added `actions` prop to PageLayout with dropdown menu (right-aligned). SearchPage now passes "Review contacts", "Export list", and "Save search" as action items.
+- **Screenshot:** ![](screenshots/fb-2026-02-27T15-57-05-622Z.png)
+### Notes
+ok for the find people, remove review contacts from the bottom of the table and add it to action menu.
 ---

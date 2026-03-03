@@ -27,6 +27,7 @@ import TasksPage from '@/pages/main/TasksPage'
 import AssistantPage from '@/pages/main/AssistantPage'
 import FindCompaniesPage from '@/pages/main/FindCompaniesPage'
 import SavedListsPage from '@/pages/main/SavedListsPage'
+import EmailsPage from '@/pages/main/EmailsPage'
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
                   <Route path="/home" element={<ScorecardHomePage />} />
                   <Route path="/tasks" element={<TasksPage />} />
                   <Route path="/assistant" element={<AssistantPage />} />
+                  <Route path="/emails" element={<EmailsPage />} />
                 </Routes>
               </Layout>
             } />

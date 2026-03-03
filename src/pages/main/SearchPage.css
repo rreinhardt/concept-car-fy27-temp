@@ -112,6 +112,12 @@
   color: var(--color-text-primary);
 }
 
+.search-filter-item-right {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+}
+
 .search-filter-actions {
   display: flex;
   align-items: center;
@@ -193,7 +199,8 @@
 }
 
 .search-table {
-  width: 100%;
+  min-width: 100%;
+  width: max-content;
   border-collapse: collapse;
 }
 
@@ -221,7 +228,24 @@
   padding: var(--gap-component) var(--padding-section-nested);
   border-bottom: 1px solid var(--color-border);
   vertical-align: middle;
+  white-space: nowrap;
 }
+
+/* Column min-widths */
+.search-table th:nth-child(2),
+.search-table td:nth-child(2) { min-width: 180px; } /* Name */
+
+.search-table th:nth-child(3),
+.search-table td:nth-child(3) { min-width: 140px; } /* Job Title */
+
+.search-table th:nth-child(4),
+.search-table td:nth-child(4) { min-width: 130px; } /* Emails */
+
+.search-table th:nth-child(5),
+.search-table td:nth-child(5) { min-width: 130px; } /* Phone Numbers */
+
+.search-table th:nth-child(6),
+.search-table td:nth-child(6) { min-width: 150px; } /* Signals */
 
 .search-table tr:hover {
   background: var(--color-bg-tertiary);
@@ -273,7 +297,7 @@
 /* Signals column */
 .search-signals {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 4px;
 }
 
@@ -334,6 +358,16 @@
 .search-add-col {
   cursor: pointer;
   white-space: nowrap;
+}
+
+/* Overflow column counter — inside pagination bar */
+.search-overflow-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sub);
+  margin-left: auto;
+  font-size: var(--text-caption-size);
+  color: var(--color-text-tertiary);
 }
 
 /* Pagination */

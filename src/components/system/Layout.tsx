@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { AssistantPanelProvider, useAssistantPanel } from '@/contexts/AssistantPanelContext'
+import { SidebarProvider } from '@/contexts/SidebarContext'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
 import AssistantSidePanel from './AssistantSidePanel'
@@ -30,8 +31,10 @@ function LayoutInner({ children }: LayoutProps) {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <AssistantPanelProvider>
-      <LayoutInner>{children}</LayoutInner>
-    </AssistantPanelProvider>
+    <SidebarProvider>
+      <AssistantPanelProvider>
+        <LayoutInner>{children}</LayoutInner>
+      </AssistantPanelProvider>
+    </SidebarProvider>
   )
 }
