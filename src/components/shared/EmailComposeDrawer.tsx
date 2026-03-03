@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Button from './Button'
 import Input from './Input'
+import MailboxSetupWizard from './MailboxSetupWizard'
 import {
   IconClose,
   IconArrowLeft,
@@ -52,6 +54,7 @@ export default function EmailComposeDrawer({
   onSend,
   contacts,
 }: EmailComposeDrawerProps) {
+  const navigate = useNavigate()
   const contactList = contacts && contacts.length > 0 ? contacts : [defaultContact]
   const [contactIdx, setContactIdx] = useState(0)
   const [mode, setMode] = useState<'ai' | 'manual'>('ai')
@@ -59,6 +62,9 @@ export default function EmailComposeDrawer({
   const [body, setBody] = useState('')
   const [aiSubject, setAiSubject] = useState('Scaling operations at Mercy Health')
   const [aiBody, setAiBody] = useState(mockAiEmail)
+  const [mailboxConnected, setMailboxConnected] = useState(false)
+  const [showWizard, setShowWizard] = useState(false)
+  const [footerGlow, setFooterGlow] = useState(false)
 
   const contact = contactList[contactIdx]
   const canCycle = contactList.length > 1
@@ -83,24 +89,6 @@ export default function EmailComposeDrawer({
         </div>
         <button className="ecd-close" onClick={onClose}>
           <IconClose size={16} />
-        </button>
-      </div>
-
-      {/* Deliverability notice */}
-      <div className="ecd-notice ecd-notice-deliverability">
-        <div className="ecd-notice-content">
-          <span className="ecd-notice-icon ecd-notice-icon-warn">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1.5l6.5 12H1.5L8 1.5z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/><path d="M8 6.5v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><circle cx="8" cy="11.5" r="0.75" fill="currentColor"/></svg>
-          </span>
-          <div className="ecd-notice-text">
-            <span className="text-body-sm font-medium">Set up deliverability</span>
-            <span className="text-caption text-secondary">
-              Improve inbox placement and protect your sender reputation before sending.
-            </span>
-          </div>
-        </div>
-        <button className="ecd-notice-cta text-body-sm" onClick={() => {}}>
-          Complete setup
         </button>
       </div>
 
@@ -214,13 +202,58 @@ export default function EmailComposeDrawer({
       )}
 
       {/* Footer */}
-      <div className="ecd-footer">
-        <span className="ecd-save-hint">Sending will save {contact.name} as a contact (1 credit)</span>
-        <div className="ecd-footer-right">
-          <Button variant="secondary" size="sm">Schedule</Button>
-          <Button variant="primary" size="sm" onClick={onSend}>Send now</Button>
+      {!mailboxConnected ? (
+        <div className="ecd-setup-footer">
+          <span className="ecd-setup-label text-caption">Connect a mailbox to start sending</span>
+          <button className="ecd-setup-btn" onClick={() => setShowWizard(true)}>
+            Set up email
+          </button>
         </div>
-      </div>
+      ) : (
+        <div className={`ecd-footer${footerGlow ? ' ecd-footer-glow' : ''}`}>
+          <span className="ecd-save-hint">
+            <svg className="ecd-save-hint-icon" width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <ellipse cx="8" cy="5" rx="5.5" ry="2.5" stroke="currentColor" strokeWidth="1.3"/>
+              <path d="M2.5 5v3c0 1.38 2.46 2.5 5.5 2.5s5.5-1.12 5.5-2.5V5" stroke="currentColor" strokeWidth="1.3"/>
+              <path d="M2.5 8v3c0 1.38 2.46 2.5 5.5 2.5s5.5-1.12 5.5-2.5V8" stroke="currentColor" strokeWidth="1.3"/>
+            </svg>
+            Sending will save contacts
+            <span className="ecd-save-hint-tooltip">
+              Sending will save {contact.name} as a contact (1 credit)
+            </span>
+          </span>
+          <div className="ecd-footer-right">
+            <div className="ecd-health-lights">
+              <div className="ecd-health-dots">
+                <span className="ecd-health-dot ecd-health-dot-solid">
+                  <span className="ecd-health-tooltip">Domain is healthy</span>
+                </span>
+                <span className="ecd-health-dot ecd-health-dot-solid">
+                  <span className="ecd-health-tooltip">Domain is mature, older than 60 days</span>
+                </span>
+                <span className="ecd-health-dot ecd-health-dot-outline">
+                  <span className="ecd-health-tooltip">
+                    Mailbox could use warmup to improve reputation
+                    <button className="ecd-health-tooltip-link" onClick={() => navigate('/home')}>
+                      Set up warmup
+                    </button>
+                  </span>
+                </span>
+              </div>
+              <span className="ecd-health-label text-caption">Ready to send</span>
+            </div>
+            <Button variant="secondary" size="sm">Schedule</Button>
+            <Button variant="primary" size="sm" onClick={onSend}>Send now</Button>
+          </div>
+        </div>
+      )}
+
+      {showWizard && (
+        <MailboxSetupWizard
+          onComplete={() => { setMailboxConnected(true); setShowWizard(false); setFooterGlow(true) }}
+          onClose={() => setShowWizard(false)}
+        />
+      )}
     </div>
   )
 }

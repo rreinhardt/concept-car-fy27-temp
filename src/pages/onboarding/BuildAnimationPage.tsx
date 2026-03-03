@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IconApolloLogo } from '@/components/shared/Icons'
+import Lottie from 'lottie-react'
+import preloaderData from '@/assets/lottie-preloader.json'
 import './BuildAnimationPage.css'
 
 const steps = [
@@ -50,8 +51,8 @@ export default function BuildAnimationPage() {
 
   return (
     <div className="build-page">
-      <div className="build-icon">
-        <IconApolloLogo size={48} />
+      <div className="build-lottie">
+        <Lottie animationData={preloaderData} loop />
       </div>
 
       <div className={`build-content ${fading ? 'build-fading' : 'build-visible'}`}>

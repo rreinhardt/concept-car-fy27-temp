@@ -91,9 +91,8 @@ export default function Sidebar() {
   const navigate = useNavigate()
   const user = useUser()
   const { assistantOpen } = useAssistantPanel()
-  const { promotedItems, highlightItem, promotionPhase, animatingItemId, advancePhase } = useSidebar()
+  const { promotedItems, highlightItem, promotionPhase, animatingItemId, advancePhase, userCollapsed, setUserCollapsed } = useSidebar()
   const [moreOpen, setMoreOpen] = useState(false)
-  const [userCollapsed, setUserCollapsed] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const [ghost, setGhost] = useState<{
     top: number

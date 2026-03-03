@@ -9,6 +9,8 @@ interface SidebarState {
   animatingItemId: string | null
   promoteItem: (id: string) => void
   advancePhase: () => void
+  userCollapsed: boolean
+  setUserCollapsed: (collapsed: boolean) => void
 }
 
 const SidebarContext = createContext<SidebarState>({
@@ -18,6 +20,8 @@ const SidebarContext = createContext<SidebarState>({
   animatingItemId: null,
   promoteItem: () => {},
   advancePhase: () => {},
+  userCollapsed: false,
+  setUserCollapsed: () => {},
 })
 
 const PHASE_SEQUENCE: PromotionPhase[] = ['expand-more', 'fly', 'settle', 'collapse-more', 'idle']
@@ -27,6 +31,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
   const [highlightItem, setHighlightItem] = useState<string | null>(null)
   const [promotionPhase, setPromotionPhase] = useState<PromotionPhase>('idle')
   const [animatingItemId, setAnimatingItemId] = useState<string | null>(null)
+  const [userCollapsed, setUserCollapsed] = useState(false)
 
   const advancePhase = useCallback(() => {
     setPromotionPhase((prev) => {
@@ -65,6 +70,8 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
       animatingItemId,
       promoteItem,
       advancePhase,
+      userCollapsed,
+      setUserCollapsed,
     }}>
       {children}
     </SidebarContext.Provider>

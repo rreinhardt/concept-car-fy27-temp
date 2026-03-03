@@ -103,12 +103,19 @@ const companyAdvancedGroups: ActionGroup[] = [
 
 export default function FindCompaniesPage() {
   const navigate = useNavigate()
-  const { promoteItem } = useSidebar()
+  const { promoteItem, setUserCollapsed } = useSidebar()
   const [selectedRows, setSelectedRows] = useState<number[]>([])
   const [actionsPanelOpen, setActionsPanelOpen] = useState(false)
   const [panelView, setPanelView] = useState<'actions' | 'email'>('actions')
   const [showSendingOverlay, setShowSendingOverlay] = useState(false)
   const [sendingContact, setSendingContact] = useState('')
+
+  // Collapse main nav when email compose opens
+  useEffect(() => {
+    if (panelView === 'email') {
+      setUserCollapsed(true)
+    }
+  }, [panelView, setUserCollapsed])
 
   const toggleRow = (id: number) => {
     setSelectedRows((prev) =>
@@ -239,6 +246,7 @@ export default function FindCompaniesPage() {
       actionsPanelOpen={actionsPanelOpen}
       actionsPanelWidth={panelView === 'email' ? 680 : undefined}
       actionsBtnVariant={panelView === 'email' ? 'secondary' : 'primary'}
+      collapseSidebar={panelView === 'email'}
       onActionsPanelToggle={(open) => {
         setActionsPanelOpen(open)
         if (!open) setPanelView('actions')

@@ -21,6 +21,7 @@ interface PageLayoutProps {
   actionsPanelWidth?: number
   actionsBtnVariant?: 'primary' | 'secondary'
   onActionsPanelToggle?: (open: boolean) => void
+  collapseSidebar?: boolean
 }
 
 export default function PageLayout({
@@ -36,6 +37,7 @@ export default function PageLayout({
   actionsPanelWidth,
   actionsBtnVariant = 'primary',
   onActionsPanelToggle,
+  collapseSidebar,
 }: PageLayoutProps) {
   const [sidebarExpanded, setSidebarExpanded] = useState(true)
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -53,6 +55,13 @@ export default function PageLayout({
   useEffect(() => {
     setDragWidth(null)
   }, [actionsPanelWidth, actionsPanelOpen])
+
+  // Collapse inner sidebar when requested (e.g. email compose opens)
+  useEffect(() => {
+    if (collapseSidebar) {
+      setSidebarExpanded(false)
+    }
+  }, [collapseSidebar])
 
   // Close dropdowns on outside click
   useEffect(() => {

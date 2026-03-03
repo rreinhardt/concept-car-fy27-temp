@@ -110,7 +110,7 @@ const searchAdvancedGroups: ActionGroup[] = [
 
 export default function SearchPage() {
   const navigate = useNavigate()
-  const { promoteItem } = useSidebar()
+  const { promoteItem, setUserCollapsed } = useSidebar()
   const [selectedRows, setSelectedRows] = useState<number[]>([])
   const [actionsPanelOpen, setActionsPanelOpen] = useState(false)
   const [panelView, setPanelView] = useState<'actions' | 'email'>('actions')
@@ -119,16 +119,26 @@ export default function SearchPage() {
   const [sendingContact, setSendingContact] = useState('')
   const tableWrapperRef = useRef<HTMLDivElement>(null)
 
+  // Collapse main nav when email compose opens
+  useEffect(() => {
+    if (panelView === 'email') {
+      setUserCollapsed(true)
+    }
+  }, [panelView, setUserCollapsed])
+
   const toggleRow = (id: number) => {
     setSelectedRows((prev) =>
       prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]
     )
   }
 
-  // Auto-open actions panel when rows are selected
+  // Show/hide actions panel based on row selection
   useEffect(() => {
     if (selectedRows.length > 0 && !actionsPanelOpen) {
       setActionsPanelOpen(true)
+    } else if (selectedRows.length === 0 && actionsPanelOpen) {
+      setActionsPanelOpen(false)
+      setPanelView('actions')
     }
   }, [selectedRows.length])
 
@@ -291,6 +301,7 @@ export default function SearchPage() {
       actionsPanelOpen={actionsPanelOpen}
       actionsPanelWidth={panelView === 'email' ? 680 : undefined}
       actionsBtnVariant={panelView === 'email' ? 'secondary' : 'primary'}
+      collapseSidebar={panelView === 'email'}
       onActionsPanelToggle={(open) => {
         setActionsPanelOpen(open)
         if (!open) setPanelView('actions')

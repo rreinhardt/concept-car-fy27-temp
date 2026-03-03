@@ -24,40 +24,10 @@
   opacity: 0;
 }
 
-.build-icon {
-  color: var(--color-text-primary);
+.build-lottie {
+  width: 120px;
+  height: 120px;
   margin-bottom: var(--space-4);
-  animation: logoSpin 3s cubic-bezier(0.4, 0, 0.2, 1) infinite, logoPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes logoSpin {
-  0% {
-    transform: rotate(0deg);
-  }
-  20% {
-    transform: rotate(180deg);
-  }
-  40% {
-    transform: rotate(360deg);
-  }
-  65% {
-    transform: rotate(540deg);
-  }
-  80% {
-    transform: rotate(680deg);
-  }
-  100% {
-    transform: rotate(720deg);
-  }
-}
-
-@keyframes logoPulse {
-  0%, 100% {
-    scale: 0.9;
-  }
-  50% {
-    scale: 1.1;
-  }
 }
 
 .build-heading {

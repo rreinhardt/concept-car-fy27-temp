@@ -418,8 +418,18 @@
   align-items: center;
   justify-content: space-between;
   padding-top: var(--gap-component);
-  border-top: 1px solid var(--color-border);
   gap: var(--gap-component);
+}
+
+.ecd-footer-glow {
+  animation: ecd-glow-pulse 1.5s ease both;
+  border-radius: var(--radius-component);
+}
+
+@keyframes ecd-glow-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  40% { box-shadow: 0 0 12px 4px rgba(34, 197, 94, 0.25); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
 }
 
 .ecd-footer-right {
@@ -429,7 +439,147 @@
 }
 
 .ecd-save-hint {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   font-size: var(--text-caption-size);
   color: var(--color-text-tertiary);
   white-space: nowrap;
+  cursor: default;
+}
+
+.ecd-save-hint-icon {
+  flex-shrink: 0;
+}
+
+.ecd-save-hint-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+  border-radius: var(--radius-component);
+  box-shadow: var(--shadow-md);
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.ecd-save-hint:hover .ecd-save-hint-tooltip {
+  display: block;
+}
+
+/* ── Setup footer (pre-mailbox) ── */
+.ecd-setup-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-component);
+  padding-top: var(--gap-component);
+}
+
+.ecd-setup-label {
+  color: var(--color-text-tertiary);
+  text-align: right;
+  flex: 1;
+}
+
+.ecd-setup-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--input-height-sm);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-component);
+  font-family: var(--font-body);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background var(--transition-fast);
+}
+
+.ecd-setup-btn:hover {
+  background: #111827;
+}
+
+/* ── Traffic light health dots ── */
+.ecd-health-lights {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ecd-health-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.ecd-health-label {
+  color: var(--color-accent-green-text);
+}
+
+.ecd-health-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  cursor: default;
+}
+
+.ecd-health-dot-solid {
+  background: var(--color-accent-green);
+}
+
+.ecd-health-dot-outline {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--color-accent-green);
+}
+
+/* ── Health tooltip ── */
+.ecd-health-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+  border-radius: var(--radius-component);
+  box-shadow: var(--shadow-md);
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.ecd-health-dot:hover .ecd-health-tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  pointer-events: auto;
+}
+
+.ecd-health-tooltip-link {
+  background: none;
+  border: none;
+  color: var(--color-accent-blue-bg);
+  cursor: pointer;
+  font-size: var(--text-caption-size);
+  font-family: var(--font-body);
+  padding: 0;
+  text-decoration: underline;
+  text-align: left;
 }
