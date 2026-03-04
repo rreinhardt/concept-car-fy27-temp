@@ -11,6 +11,7 @@ import {
   IconChevronRight,
   IconSparkle,
 } from '@/components/shared/Icons'
+import MailboxSetupWizard from '@/components/shared/MailboxSetupWizard'
 import { useAssistantPanel } from '@/contexts/AssistantPanelContext'
 import { weeklyScorecard, triageItems, creditUsage } from '@/data/mockMetrics'
 import './Topbar.css'
@@ -33,19 +34,26 @@ const quickActions: QuickAction[] = [
   { id: 'enroll', label: 'Enroll in sequence', description: 'Add contacts to a sequence', icon: <IconMail size={16} />, path: '/enroll', keywords: ['enroll', 'sequence', 'add'] },
 ]
 
-// Mock health status data
-const mailboxConnected = true
-const healthItems = [
-  { id: 'mailbox', label: 'Mailbox connected', status: 'green' as const },
-  { id: 'deliverability', label: 'Domain reputation', status: 'green' as const },
-  { id: 'crm', label: 'CRM sync', status: 'green' as const },
+// Mock health status data — colours driven by healthStage
+const healthItemLabels = [
+  { id: 'mailbox', label: 'Mailbox configuration' },
+  { id: 'deliverability', label: 'Domain reputation' },
+  { id: 'warmup', label: 'Mailbox warm up' },
 ]
 
 export default function Topbar() {
   const navigate = useNavigate()
   const { assistantOpen, toggleAssistant } = useAssistantPanel()
   const [expanded, setExpanded] = useState(false)
+  // 0 = not configured, 1 = healthy, 2 = poor health
+  const [healthStage, setHealthStage] = useState<0 | 1 | 2>(0)
+  const [showMailboxWizard, setShowMailboxWizard] = useState(false)
   const [query, setQuery] = useState('')
+
+  const mailboxConnected = healthStage > 0
+  const isPoorHealth = healthStage === 2
+  const dotColor = isPoorHealth ? 'red' : 'green'
+  const healthItems = healthItemLabels.map(h => ({ ...h, status: dotColor }))
   const inputRef = useRef<HTMLInputElement>(null)
   const barRef = useRef<HTMLDivElement>(null)
 
@@ -93,6 +101,11 @@ export default function Topbar() {
         e.preventDefault()
         setExpanded(true)
         setTimeout(() => inputRef.current?.focus(), 0)
+      }
+      // Cycle health stage: 0 → 1 → 2 → 0
+      const tag = (e.target as HTMLElement).tagName
+      if (e.key === 's' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
+        setHealthStage(prev => ((prev + 1) % 3) as 0 | 1 | 2)
       }
     }
     document.addEventListener('keydown', handleKey)
@@ -146,22 +159,24 @@ export default function Topbar() {
             <div className="ubar-divider" />
 
             {/* Health cluster */}
-            <button className="ubar-health-cluster" onClick={handleExpand}>
+            <button className={`ubar-health-cluster${isPoorHealth ? ' ubar-health-cluster-error' : ''}`} onClick={handleExpand}>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                 <path d="M11 1L5.5 6.5M11 1L7.5 11L5.5 6.5L1 4.5L11 1Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              {mailboxConnected && healthItems.map((h) => (
-                <span key={h.id} className={`ubar-health-dot ubar-health-dot-${h.status}`} />
-              ))}
+              {mailboxConnected
+                ? <>
+                    {healthItems.map((h) => (
+                      <span key={h.id} className={`ubar-health-dot ubar-health-dot-${h.status}`} />
+                    ))}
+                    {isPoorHealth && <span className="ubar-health-warning">Issues</span>}
+                  </>
+                : <span className="ubar-health-setup">Setup...</span>
+              }
             </button>
 
             <div className="ubar-divider" />
 
             <div className="ubar-stats" onClick={handleExpand}>
-              <span className="ubar-stat">
-                <IconInbox size={13} />
-                <span>{inboxCount} inbox</span>
-              </span>
               <span className="ubar-stat">
                 <IconMail size={13} />
                 <span>{funnel.sent} sent</span>
@@ -209,22 +224,24 @@ export default function Topbar() {
               <div className="ubar-divider" />
 
               {/* Health cluster (expanded header) */}
-              <button className="ubar-health-cluster">
+              <button className={`ubar-health-cluster${isPoorHealth ? ' ubar-health-cluster-error' : ''}`}>
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M11 1L5.5 6.5M11 1L7.5 11L5.5 6.5L1 4.5L11 1Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                {mailboxConnected && healthItems.map((h) => (
-                  <span key={h.id} className={`ubar-health-dot ubar-health-dot-${h.status}`} />
-                ))}
+                {mailboxConnected
+                  ? <>
+                      {healthItems.map((h) => (
+                        <span key={h.id} className={`ubar-health-dot ubar-health-dot-${h.status}`} />
+                      ))}
+                      {isPoorHealth && <span className="ubar-health-warning">Issues</span>}
+                    </>
+                  : <span className="ubar-health-setup">Setup...</span>
+                }
               </button>
 
               <div className="ubar-divider" />
 
               <div className="ubar-stats">
-                <span className="ubar-stat">
-                  <IconInbox size={13} />
-                  <span>{inboxCount} inbox</span>
-                </span>
                 <span className="ubar-stat">
                   <IconMail size={13} />
                   <span>{funnel.sent} sent</span>
@@ -331,22 +348,30 @@ export default function Topbar() {
 
                 <div className="ubar-section-label ubar-exp-sep">Sending health</div>
                 {mailboxConnected ? (
-                  <div className="ubar-health-list">
-                    {healthItems.map((h) => (
-                      <button key={h.id} className="ubar-health-row">
-                        <span className={`ubar-health-dot ubar-health-dot-${h.status}`} />
-                        <span className="ubar-health-row-label">{h.label}</span>
-                        <IconChevronRight size={12} />
-                      </button>
-                    ))}
-                  </div>
+                  <>
+                    {isPoorHealth && (
+                      <div className="ubar-health-alert">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/><path d="M6 5V7M6 8.5V9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
+                        Sending issues detected
+                      </div>
+                    )}
+                    <div className="ubar-health-list">
+                      {healthItems.map((h) => (
+                        <button key={h.id} className={`ubar-health-row${isPoorHealth ? ' ubar-health-row-error' : ''}`}>
+                          <span className={`ubar-health-dot ubar-health-dot-${h.status}`} />
+                          <span className="ubar-health-row-label">{h.label}</span>
+                          <IconChevronRight size={12} />
+                        </button>
+                      ))}
+                    </div>
+                  </>
                 ) : (
                   <div className="ubar-health-unconfigured">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                       <path d="M18 2L9 11M18 2L12.5 18L9 11L2 7.5L18 2Z" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <span>Mailbox not connected</span>
-                    <button className="ubar-health-configure">Configure →</button>
+                    <button className="ubar-health-configure" onClick={() => { setExpanded(false); setQuery(''); setShowMailboxWizard(true) }}>Configure →</button>
                   </div>
                 )}
 
@@ -374,6 +399,12 @@ export default function Topbar() {
           </>
         )}
       </div>
+      {showMailboxWizard && (
+        <MailboxSetupWizard
+          onComplete={() => { setHealthStage(1); setShowMailboxWizard(false) }}
+          onClose={() => setShowMailboxWizard(false)}
+        />
+      )}
     </header>
   )
 }

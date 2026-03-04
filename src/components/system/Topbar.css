@@ -474,6 +474,12 @@
   color: var(--color-text-secondary);
 }
 
+.ubar-health-setup {
+  font-size: var(--text-caption-size);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
 .ubar-health-dot {
   width: 7px;
   height: 7px;
@@ -562,4 +568,50 @@
 
 .ubar-health-configure:hover {
   background: var(--color-bg-hover);
+}
+
+/* ── Poor health / error state ── */
+.ubar-health-cluster-error {
+  color: var(--color-accent-red);
+}
+
+.ubar-health-cluster-error:hover {
+  color: var(--color-accent-red);
+}
+
+.ubar-health-warning {
+  font-size: var(--text-caption-size);
+  color: var(--color-accent-red);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ubar-health-alert {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: var(--space-1) var(--space-3) var(--space-1);
+  padding: 5px var(--space-2);
+  background: var(--color-accent-red-bg, rgba(239, 68, 68, 0.08));
+  border-radius: var(--radius-element);
+  font-size: var(--text-caption-size);
+  color: var(--color-accent-red);
+  font-weight: 500;
+}
+
+.ubar-health-alert svg {
+  flex-shrink: 0;
+  color: var(--color-accent-red);
+}
+
+.ubar-health-row-error {
+  color: var(--color-accent-red);
+}
+
+.ubar-health-row-error .ubar-health-row-label {
+  color: var(--color-accent-red);
+}
+
+.ubar-health-row-error > svg {
+  color: var(--color-accent-red);
 }

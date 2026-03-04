@@ -212,4 +212,20 @@ add a 'create your own with ai' button in addition to + Add Filter somehow.
 - **Screenshot:** ![](screenshots/fb-2026-03-04T04-34-48-441Z.png)
 ### Notes
 this icon isn't correct . it looks like a stacked mountain. it should be the line stroke equialent of paper airplane aiming up and to the right
+---## fb-2026-03-04T04-55-05-135Z
+- **Date:** 3/3/2026, 8:55:05 PM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Added "Setup..." text label next to the airplane icon in the collapsed topbar health cluster when mailbox is not connected.
+- **Screenshot:** ![](screenshots/fb-2026-03-04T04-55-05-135Z.png)
+### Notes
+this can say setup... in this state
+---## fb-2026-03-04T05-08-06-040Z
+- **Date:** 3/3/2026, 9:08:06 PM
+- **URL:** `/home`
+- **Status:** resolved
+- **Resolution:** Removed the inbox stat (`{inboxCount} inbox`) from both the collapsed and expanded topbar stats row. Remaining stats: sent + meeting.
+- **Screenshot:** ![](screenshots/fb-2026-03-04T05-08-06-040Z.png)
+### Notes
+remove 3 inbox item from this topbar in both expanded and collapsed mode
 ---
