@@ -201,7 +201,7 @@
   border-top: none;
   border-radius: 0 0 var(--radius-surface) var(--radius-surface);
   box-shadow: var(--shadow-overlay);
-  max-height: min(400px, 55vh);
+  max-height: min(520px, 70vh);
   overflow: hidden;
 }
 
@@ -216,7 +216,7 @@
   width: 240px;
   padding: var(--space-2) 0;
   overflow-y: auto;
-  max-height: min(400px, 55vh);
+  max-height: min(520px, 70vh);
 }
 
 .ubar-drop-col-mid {
@@ -279,7 +279,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-1);
-  padding: 0 var(--space-3);
+  padding: 0 var(--space-3) var(--space-4);
 }
 
 .ubar-mini-stat {
@@ -454,4 +454,112 @@
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-body-sm-size);
   color: var(--color-text-tertiary);
+}
+
+/* ── Health cluster (collapsed pill) ── */
+.ubar-health-cluster {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 2px;
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+  transition: color var(--transition-fast);
+}
+
+.ubar-health-cluster:hover {
+  color: var(--color-text-secondary);
+}
+
+.ubar-health-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ubar-health-dot-green {
+  background: var(--color-accent-green);
+  box-shadow: 0 0 0 1.5px rgba(34, 197, 94, 0.25);
+}
+
+.ubar-health-dot-yellow {
+  background: var(--color-accent-yellow);
+  box-shadow: 0 0 0 1.5px rgba(245, 158, 11, 0.25);
+}
+
+.ubar-health-dot-red {
+  background: var(--color-accent-red);
+  box-shadow: 0 0 0 1.5px rgba(239, 68, 68, 0.25);
+}
+
+/* ── Health list (expanded dropdown) ── */
+.ubar-health-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--space-3);
+  margin-bottom: var(--space-1);
+}
+
+.ubar-health-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  padding: 5px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  color: var(--color-text-secondary);
+  font-size: var(--text-caption-size);
+  font-family: var(--font-body);
+  transition: color var(--transition-fast);
+}
+
+.ubar-health-row:hover {
+  color: var(--color-text-primary);
+}
+
+.ubar-health-row .ubar-health-dot {
+  flex-shrink: 0;
+}
+
+.ubar-health-row-label {
+  flex: 1;
+}
+
+.ubar-health-row > svg {
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+}
+
+/* Pre-connect state */
+.ubar-health-unconfigured {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-3) var(--space-2);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-caption-size);
+}
+
+.ubar-health-configure {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-element);
+  padding: 4px 10px;
+  font-size: var(--text-caption-size);
+  font-family: var(--font-body);
+  color: var(--color-text-link);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.ubar-health-configure:hover {
+  background: var(--color-bg-hover);
 }

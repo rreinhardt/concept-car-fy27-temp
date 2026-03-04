@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useUser } from '@/contexts/UserContext'
 import { useAssistantPanel } from '@/contexts/AssistantPanelContext'
@@ -338,8 +338,9 @@ export default function Sidebar() {
           })()}
       </nav>
 
-      {/* Bottom — Settings + User */}
+      {/* Bottom — CRM Sync + Settings + User */}
       <div className="sidebar-bottom">
+        <CrmSyncStatus collapsed={collapsed} />
         <button className="sidebar-item" data-tooltip="Settings">
           <span className="sidebar-item-icon">
             <IconSettings />
@@ -358,5 +359,129 @@ export default function Sidebar() {
         </button>
       </div>
     </aside>
+  )
+}
+
+// ── CRM Sync Status ──────────────────────────────────────────
+function CrmSyncStatus({ collapsed }: { collapsed: boolean }) {
+  const [open, setOpen] = useState(false)
+  const btnRef = useRef<HTMLButtonElement>(null)
+  const [popStyle, setPopStyle] = useState<React.CSSProperties>({})
+
+  const handleToggle = () => {
+    if (!open && btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect()
+      setPopStyle({
+        position: 'fixed',
+        bottom: window.innerHeight - r.bottom,
+        left: r.right + 8,
+        width: 300,
+      })
+    }
+    setOpen((v) => !v)
+  }
+
+  return (
+    <div className="crm-sync-wrapper">
+      <button
+        ref={btnRef}
+        className={`sidebar-item${open ? ' sidebar-item-active' : ''}`}
+        onClick={handleToggle}
+        data-tooltip="CRM Sync"
+      >
+        <span className="sidebar-item-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M2.5 8C2.5 4.96 4.96 2.5 8 2.5C10.09 2.5 11.91 3.68 12.84 5.42" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M13.5 8C13.5 11.04 11.04 13.5 8 13.5C5.91 13.5 4.09 12.32 3.16 10.58" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M10.5 5.5H13.5V2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M5.5 10.5H2.5V13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </span>
+        <span className="sidebar-item-label">CRM Sync</span>
+        <span className={`crm-status-dot${collapsed ? ' crm-status-dot-collapsed' : ''}`} />
+      </button>
+
+      {open && (
+        <>
+          <div className="crm-sync-backdrop" onClick={() => setOpen(false)} />
+          <div className="crm-sync-popover" style={popStyle}>
+            <div className="crm-sync-popover-header">
+              <div className="crm-sync-popover-title">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2C5.24 2 3 4.24 3 7C3 7.14 3.01 7.28 3.02 7.41C2.04 7.52 1.33 8.36 1.33 9.34C1.33 10.41 2.2 11.27 3.27 11.27H11.6C12.72 11.27 13.6 10.39 13.6 9.27C13.6 8.22 12.82 7.35 11.81 7.21C11.6 5.56 10.17 4.27 8.42 4.27C7.64 4.27 6.92 4.54 6.35 5C6.18 4 6 4 8 2Z" fill="#00A1E0"/>
+                </svg>
+                <span>Salesforce Sync Status</span>
+              </div>
+              <button className="crm-sync-close" onClick={() => setOpen(false)}>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M9 3L3 9M3 3L9 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              </button>
+            </div>
+
+            <div className="crm-sync-health-badge">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" fill="#22C55E"/><path d="M3.5 6L5 7.5L8.5 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <span>All systems healthy</span>
+            </div>
+
+            <div className="crm-sync-stats">
+              {[
+                { label: 'Records Synced Today', value: '2,847', pct: 100 },
+                { label: 'Contacts Pushed', value: '1,234', pct: 85 },
+                { label: 'Contacts Pulled', value: '1,613', pct: 92 },
+              ].map((s) => (
+                <div key={s.label} className="crm-sync-stat">
+                  <div className="crm-sync-stat-row">
+                    <span className="crm-sync-stat-label">{s.label}</span>
+                    <span className="crm-sync-stat-value">{s.value}</span>
+                  </div>
+                  <div className="crm-sync-bar"><div className="crm-sync-bar-fill" style={{ width: `${s.pct}%` }} /></div>
+                </div>
+              ))}
+            </div>
+
+            <div className="crm-sync-section">
+              <div className="crm-sync-section-title">Recent Activity</div>
+              {[
+                { text: '156 contacts synced to Salesforce', time: '2 min ago', ok: true },
+                { text: '89 account updates pulled', time: '5 min ago', ok: true },
+                { text: '3 records skipped (duplicate)', time: '12 min ago', ok: false },
+              ].map((a) => (
+                <div key={a.text} className="crm-sync-activity">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    {a.ok
+                      ? <><circle cx="6" cy="6" r="5" fill="#22C55E"/><path d="M3.5 6L5 7.5L8.5 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></>
+                      : <><circle cx="6" cy="6" r="5" fill="#F59E0B"/><path d="M6 3.5V6.5M6 7.5V8" stroke="white" strokeWidth="1.5" strokeLinecap="round"/></>
+                    }
+                  </svg>
+                  <div>
+                    <span className="crm-sync-activity-text">{a.text}</span>
+                    <span className="crm-sync-activity-time">{a.time}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="crm-sync-section">
+              <div className="crm-sync-section-title">Diagnostics</div>
+              {[
+                { label: 'Last Full Sync', value: 'Today, 9:00 AM', ok: false },
+                { label: 'Sync Frequency', value: 'Every 15 min', ok: false },
+                { label: 'API Calls Used', value: '12,450 / 100,000', ok: false },
+                { label: 'Field Mappings', value: '42 active', ok: true },
+              ].map((d) => (
+                <div key={d.label} className="crm-sync-diag">
+                  <span className="crm-sync-diag-label">{d.label}</span>
+                  <span className={`crm-sync-diag-value${d.ok ? ' ok' : ''}`}>{d.value}</span>
+                </div>
+              ))}
+            </div>
+
+            <button className="crm-sync-settings-btn">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 8.5C7.60457 8.5 8.5 7.60457 8.5 6.5C8.5 5.39543 7.60457 4.5 6.5 4.5C5.39543 4.5 4.5 5.39543 4.5 6.5C4.5 7.60457 5.39543 8.5 6.5 8.5Z" stroke="currentColor" strokeWidth="1.2"/><path d="M2.5 6.5C2.5 6.24 2.53 5.99 2.59 5.74L1.5 5.07L2.5 3.34L3.59 4.01C4 3.62 4.5 3.33 5.07 3.17V2H7.07V3.17C7.64 3.33 8.14 3.62 8.55 4.01L9.64 3.34L10.64 5.07L9.55 5.74C9.61 5.99 9.64 6.24 9.64 6.5C9.64 6.76 9.61 7.01 9.55 7.26L10.64 7.93L9.64 9.66L8.55 8.99C8.14 9.38 7.64 9.67 7.07 9.83V11H5.07V9.83C4.5 9.67 4 9.38 3.59 8.99L2.5 9.66L1.5 7.93L2.59 7.26C2.53 7.01 2.5 6.76 2.5 6.5Z" stroke="currentColor" strokeWidth="1.2"/></svg>
+              Sync Settings
+            </button>
+          </div>
+        </>
+      )}
+    </div>
   )
 }

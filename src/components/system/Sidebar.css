@@ -412,3 +412,229 @@
   flex: 1;
   text-align: left;
 }
+
+/* ── CRM Sync Status ── */
+.crm-sync-wrapper {
+  position: relative;
+}
+
+.crm-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-accent-green);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.sidebar-collapsed .crm-status-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  margin-left: 0;
+}
+
+.crm-sync-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+}
+
+.crm-sync-popover {
+  z-index: 9999;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-overlay);
+  animation: crm-slide-up 0.18s ease;
+  overflow: hidden;
+}
+
+@keyframes crm-slide-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.crm-sync-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.crm-sync-popover-title {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  font-size: var(--text-body-sm-size);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.crm-sync-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-element);
+  background: none;
+  border: none;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.crm-sync-close:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
+}
+
+.crm-sync-health-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  margin: 10px 14px;
+  padding: 8px 10px;
+  border-radius: var(--radius-element);
+  background: var(--color-accent-green-bg);
+  color: var(--color-accent-green-text);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+}
+
+.crm-sync-stats {
+  padding: 0 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.crm-sync-stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.crm-sync-stat-label {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.crm-sync-stat-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.crm-sync-bar {
+  height: 4px;
+  background: var(--color-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.crm-sync-bar-fill {
+  height: 100%;
+  background: var(--color-accent-green);
+  border-radius: 2px;
+}
+
+.crm-sync-section {
+  padding: 10px 14px;
+  border-top: 1px solid var(--color-border);
+}
+
+.crm-sync-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-tertiary);
+  margin-bottom: 8px;
+}
+
+.crm-sync-activity {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-component);
+  margin-bottom: 8px;
+}
+
+.crm-sync-activity:last-child {
+  margin-bottom: 0;
+}
+
+.crm-sync-activity > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.crm-sync-activity svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.crm-sync-activity-text {
+  font-size: 11px;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.crm-sync-activity-time {
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+}
+
+.crm-sync-diag {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.crm-sync-diag:last-child {
+  margin-bottom: 0;
+}
+
+.crm-sync-diag-label {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.crm-sync-diag-value {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.crm-sync-diag-value.ok {
+  color: var(--color-accent-green-text);
+}
+
+.crm-sync-settings-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sub);
+  width: calc(100% - 28px);
+  margin: 10px 14px 14px;
+  padding: 8px 14px;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-element);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+  font-family: var(--font-body);
+}
+
+.crm-sync-settings-btn:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-input);
+  color: var(--color-text-primary);
+}

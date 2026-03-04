@@ -180,4 +180,36 @@ update to the animation worked well, but now there is a clipping here, fix the p
 - **Screenshot:** ![](screenshots/fb-2026-02-27T15-57-05-622Z.png)
 ### Notes
 ok for the find people, remove review contacts from the bottom of the table and add it to action menu.
+---## fb-2026-03-04T03-58-34-147Z
+- **Date:** 3/3/2026, 7:58:34 PM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Ported `CrmSyncStatus` component from RKO prototype into Sidebar. Added above Settings in `sidebar-bottom`. Popover opens right of sidebar via `position: fixed` with button-rect calculation. Shows Salesforce status badge, synced stats with bars, recent activity log, diagnostics, and Sync Settings button. Green status dot on the item; repositions to icon top-right in collapsed mode.
+- **Screenshot:** ![](screenshots/fb-2026-03-04T03-58-34-147Z.png)
+### Notes
+Above the settings line item here, i want to bring over the CRM settings item and popover from the rko prototype in the reference folder.
+---## fb-2026-03-04T04-01-00-017Z
+- **Date:** 3/3/2026, 8:01:00 PM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Added paper airplane icon + 3 green traffic-light dots between credits and metrics in the collapsed topbar pill (flanked by vertical dividers). In the expanded dropdown, added a "Sending health" section in the right column between credits and "This week" — lists each health item (Mailbox connected, Domain reputation, CRM sync) with label and chevron. Pre-connect state shows paper airplane icon + Configure CTA. Increased dropdown max-height from 400px to 520px to accommodate added content.
+- **Screenshot:** ![](screenshots/fb-2026-03-04T04-01-00-017Z.png)
+### Notes
+i want to add these three dots to the topbar between credits and the metrics (put between vertical lines). instead of a ready to send, put a tiny send-mail paper airplane icon. on the expanded version of the topbar, create a detailed section that shows the traffic lights vertically in a horizontal section between the credits and the metrics. each traffic light can show the label to the right and a chevron  to nav elsewhere(fake for now). before mailbox has been connected, have the paper airplane icon and a configure cta.
+---## fb-2026-03-04T04-25-34-457Z
+- **Date:** 3/3/2026, 8:25:34 PM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Added "Create your own with AI" button below the "+ Add filter / Reset all" row in the search filter actions. Uses sparkle icon (purple accent) with caption text. The existing row was wrapped in `.search-filter-actions-main` and the AI button added as a second row.
+- **Screenshot:** ![](screenshots/fb-2026-03-04T04-25-34-457Z.png)
+### Notes
+add a 'create your own with ai' button in addition to + Add Filter somehow.
+---## fb-2026-03-04T04-34-48-441Z
+- **Date:** 3/3/2026, 8:34:48 PM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Replaced mountain-shaped SVG with correct paper airplane path (`M11 1L5.5 6.5M11 1L7.5 11L5.5 6.5L1 4.5L11 1Z`) pointing up-right in both the collapsed and expanded topbar header health clusters, and the larger pre-connect state icon.
+- **Screenshot:** ![](screenshots/fb-2026-03-04T04-34-48-441Z.png)
+### Notes
+this icon isn't correct . it looks like a stacked mountain. it should be the line stroke equialent of paper airplane aiming up and to the right
 ---

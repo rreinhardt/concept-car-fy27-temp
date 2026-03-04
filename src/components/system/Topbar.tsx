@@ -33,6 +33,14 @@ const quickActions: QuickAction[] = [
   { id: 'enroll', label: 'Enroll in sequence', description: 'Add contacts to a sequence', icon: <IconMail size={16} />, path: '/enroll', keywords: ['enroll', 'sequence', 'add'] },
 ]
 
+// Mock health status data
+const mailboxConnected = true
+const healthItems = [
+  { id: 'mailbox', label: 'Mailbox connected', status: 'green' as const },
+  { id: 'deliverability', label: 'Domain reputation', status: 'green' as const },
+  { id: 'crm', label: 'CRM sync', status: 'green' as const },
+]
+
 export default function Topbar() {
   const navigate = useNavigate()
   const { assistantOpen, toggleAssistant } = useAssistantPanel()
@@ -137,6 +145,18 @@ export default function Topbar() {
 
             <div className="ubar-divider" />
 
+            {/* Health cluster */}
+            <button className="ubar-health-cluster" onClick={handleExpand}>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M11 1L5.5 6.5M11 1L7.5 11L5.5 6.5L1 4.5L11 1Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              {mailboxConnected && healthItems.map((h) => (
+                <span key={h.id} className={`ubar-health-dot ubar-health-dot-${h.status}`} />
+              ))}
+            </button>
+
+            <div className="ubar-divider" />
+
             <div className="ubar-stats" onClick={handleExpand}>
               <span className="ubar-stat">
                 <IconInbox size={13} />
@@ -185,6 +205,18 @@ export default function Topbar() {
               <span className="ubar-credit">
                 <span>{creditUsage.remaining.toLocaleString()} credits</span>
               </span>
+
+              <div className="ubar-divider" />
+
+              {/* Health cluster (expanded header) */}
+              <button className="ubar-health-cluster">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M11 1L5.5 6.5M11 1L7.5 11L5.5 6.5L1 4.5L11 1Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                {mailboxConnected && healthItems.map((h) => (
+                  <span key={h.id} className={`ubar-health-dot ubar-health-dot-${h.status}`} />
+                ))}
+              </button>
 
               <div className="ubar-divider" />
 
@@ -296,6 +328,27 @@ export default function Topbar() {
                     </div>
                   ))}
                 </div>
+
+                <div className="ubar-section-label ubar-exp-sep">Sending health</div>
+                {mailboxConnected ? (
+                  <div className="ubar-health-list">
+                    {healthItems.map((h) => (
+                      <button key={h.id} className="ubar-health-row">
+                        <span className={`ubar-health-dot ubar-health-dot-${h.status}`} />
+                        <span className="ubar-health-row-label">{h.label}</span>
+                        <IconChevronRight size={12} />
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="ubar-health-unconfigured">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M18 2L9 11M18 2L12.5 18L9 11L2 7.5L18 2Z" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span>Mailbox not connected</span>
+                    <button className="ubar-health-configure">Configure →</button>
+                  </div>
+                )}
 
                 <div className="ubar-section-label ubar-exp-sep">This week</div>
                 <div className="ubar-mini-stats">

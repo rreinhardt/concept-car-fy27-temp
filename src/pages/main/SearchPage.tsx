@@ -37,7 +37,7 @@ import {
 } from '@/components/shared/Icons'
 import './SearchPage.css'
 
-const filterSections: { label: string; count?: number }[] = [
+const filterSections: { label: string; count?: number; locked?: boolean }[] = [
   { label: 'Job title', count: 4 },
   { label: 'Industry', count: 5 },
   { label: 'Number of employees', count: 5 },
@@ -45,6 +45,8 @@ const filterSections: { label: string; count?: number }[] = [
   { label: 'Keywords', count: 5 },
   { label: 'Scores' },
   { label: 'Technologies' },
+  { label: 'People Lookalikes', locked: true },
+  { label: 'Company Lookalikes', locked: true },
 ]
 
 const searchSuggestedGroups: ActionGroup[] = [
@@ -213,21 +215,27 @@ export default function SearchPage() {
 
       <div className="search-filter-list">
         {filterSections.map((section) => (
-          <button key={section.label} className="search-filter-item">
+          <button key={section.label} className={`search-filter-item${section.locked ? ' search-filter-item-locked' : ''}`}>
             <span className="text-body-sm">{section.label}</span>
             <span className="search-filter-item-right">
               {section.count && <Badge variant="blue" size="sm">{section.count}</Badge>}
-              <IconChevronRight size={14} />
+              {section.locked ? <IconLock size={13} className="search-filter-lock" /> : <IconChevronRight size={14} />}
             </span>
           </button>
         ))}
       </div>
 
       <div className="search-filter-actions">
-        <button className="text-body-sm" style={{ color: 'var(--color-text-link)' }}>
-          <IconPlus size={14} /> Add filter
+        <div className="search-filter-actions-main">
+          <button className="text-body-sm" style={{ color: 'var(--color-text-link)' }}>
+            <IconPlus size={14} /> Add filter
+          </button>
+          <button className="text-caption text-secondary">Reset all</button>
+        </div>
+        <button className="search-filter-ai-btn">
+          <IconSparkle size={12} />
+          <span className="text-caption">Create your own with AI</span>
         </button>
-        <button className="text-caption text-secondary">Reset all</button>
       </div>
     </>
   )
