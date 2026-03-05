@@ -89,7 +89,7 @@ export default function ListCartPanel({
         </p>
 
         {/* List picker accordion */}
-        <div className="svcp-accordion">
+        <div className="svcp-accordion svcp-accordion-selection">
           <button
             className="svcp-accordion-header svcp-accordion-header-selection"
             onClick={() => setListExpanded(v => !v)}

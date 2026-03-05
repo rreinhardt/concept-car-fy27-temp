@@ -103,13 +103,17 @@
   transform: rotate(90deg);
 }
 
-/* Selection accordion — highlighted to draw attention */
+/* Selection accordion — stark black border */
+.svcp-accordion-selection {
+  border-color: var(--color-text-primary);
+}
+
 .svcp-accordion-header-selection {
-  background: color-mix(in srgb, var(--color-text-primary) 6%, transparent);
+  background: #fff;
 }
 
 .svcp-accordion-header-selection:hover {
-  background: color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+  background: var(--color-bg-subtle);
 }
 
 .svcp-accordion-body {

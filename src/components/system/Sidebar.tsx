@@ -68,20 +68,20 @@ const primaryGroups: NavGroup[] = [
   },
 ]
 
-/* ── "More" accordion: placeholder / not-yet-wired items ── */
+/* ── "More" accordion: all items now have paths ── */
 const moreItems: NavItem[] = [
-  { id: 'agents', label: 'Agents', icon: <IconRobot /> },
-  { id: 'sheets', label: 'Sheets', icon: <IconSpreadsheet /> },
-  { id: 'workflows', label: 'Workflows', icon: <IconWorkflows /> },
-  { id: 'analytics', label: 'Analytics', icon: <IconChart /> },
-  { id: 'enrichment', label: 'Data enrichment', icon: <IconDataEnrich /> },
-  { id: 'emails', label: 'Emails', icon: <IconMail /> },
-  { id: 'dialer', label: 'Dialer', icon: <IconPhone /> },
-  { id: 'meetings', label: 'Meetings', icon: <IconCalendar /> },
-  { id: 'conversations', label: 'Conversations', icon: <IconChat /> },
+  { id: 'agents', label: 'Agents', path: '/agents', icon: <IconRobot /> },
+  { id: 'sheets', label: 'Sheets', path: '/sheets', icon: <IconSpreadsheet /> },
+  { id: 'workflows', label: 'Workflows', path: '/workflows', icon: <IconWorkflows /> },
+  { id: 'analytics', label: 'Analytics', path: '/analytics', icon: <IconChart /> },
+  { id: 'enrichment', label: 'Data enrichment', path: '/enrichment', icon: <IconDataEnrich /> },
+  { id: 'emails', label: 'Emails', path: '/emails', icon: <IconMail /> },
+  { id: 'dialer', label: 'Dialer', path: '/dialer', icon: <IconPhone /> },
+  { id: 'meetings', label: 'Meetings', path: '/meetings', icon: <IconCalendar /> },
+  { id: 'conversations', label: 'Conversations', path: '/conversations', icon: <IconChat /> },
 ]
 
-/* ── Path mapping for promoted items ── */
+/* ── Path mapping for promoted items (animation) ── */
 const promotedPaths: Record<string, string> = {
   emails: '/emails',
 }
@@ -190,9 +190,15 @@ export default function Sidebar() {
     })
   }, [promotedItems])
 
+  // The active More item (if any) floats above More as a temporary anchor
+  const activePinnedItem = useMemo(
+    () => moreItems.find(item => item.path === location.pathname && !promotedItems.includes(item.id)) ?? null,
+    [location.pathname, promotedItems],
+  )
+
   const filteredMoreItems = useMemo(
-    () => moreItems.filter((item) => !promotedItems.includes(item.id)),
-    [promotedItems],
+    () => moreItems.filter((item) => !promotedItems.includes(item.id) && (moreOpen || item.id !== activePinnedItem?.id)),
+    [promotedItems, activePinnedItem, moreOpen],
   )
 
   // During expand-more and fly phases, keep the animating item in the More list
@@ -200,11 +206,11 @@ export default function Sidebar() {
   const visibleMoreItems = useMemo(() => {
     if ((promotionPhase === 'expand-more' || promotionPhase === 'fly') && animatingItemId) {
       return moreItems.filter(
-        (item) => !promotedItems.includes(item.id) || item.id === animatingItemId,
+        (item) => (!promotedItems.includes(item.id) && item.id !== activePinnedItem?.id) || item.id === animatingItemId,
       )
     }
     return filteredMoreItems
-  }, [promotionPhase, animatingItemId, promotedItems, filteredMoreItems])
+  }, [promotionPhase, animatingItemId, promotedItems, activePinnedItem, filteredMoreItems])
 
   const isActive = (path?: string) => (path ? location.pathname === path : false)
 
@@ -265,6 +271,13 @@ export default function Sidebar() {
           </div>
         ))}
 
+        {/* Active More item — floats above More only when More is collapsed */}
+        {activePinnedItem && !moreOpen && (
+          <div className="sidebar-group sidebar-pinned-group">
+            {renderItem(activePinnedItem)}
+          </div>
+        )}
+
         {/* More accordion */}
         {collapsed ? (
           <div className="sidebar-group sidebar-more-collapsed">
@@ -275,7 +288,7 @@ export default function Sidebar() {
               {filteredMoreItems.map((item) => (
                 <button
                   key={item.id}
-                  className="sidebar-item"
+                  className={`sidebar-item${isActive(item.path) ? ' sidebar-item-active' : ''}`}
                   onClick={() => item.path && navigate(item.path)}
                 >
                   <span className="sidebar-item-icon">{item.icon}</span>
@@ -302,7 +315,7 @@ export default function Sidebar() {
                   return (
                     <button
                       key={item.id}
-                      className={`sidebar-item ${isFlyCollapsing ? 'sidebar-item-fly-collapse' : ''}`}
+                      className={['sidebar-item', isActive(item.path) ? 'sidebar-item-active' : '', isFlyCollapsing ? 'sidebar-item-fly-collapse' : ''].filter(Boolean).join(' ')}
                       onClick={() => item.path && navigate(item.path)}
                       data-tooltip={item.label}
                       data-sidebar-id={item.id}

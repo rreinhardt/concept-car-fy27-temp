@@ -28,6 +28,7 @@ import AssistantPage from '@/pages/main/AssistantPage'
 import FindCompaniesPage from '@/pages/main/FindCompaniesPage'
 import SavedListsPage from '@/pages/main/SavedListsPage'
 import EmailsPage from '@/pages/main/EmailsPage'
+import NotImplementedPage from '@/pages/main/NotImplementedPage'
 
 function App() {
   return (
@@ -60,6 +61,14 @@ function App() {
                   <Route path="/tasks" element={<TasksPage />} />
                   <Route path="/assistant" element={<AssistantPage />} />
                   <Route path="/emails" element={<EmailsPage />} />
+                  <Route path="/agents" element={<NotImplementedPage />} />
+                  <Route path="/sheets" element={<NotImplementedPage />} />
+                  <Route path="/workflows" element={<NotImplementedPage />} />
+                  <Route path="/analytics" element={<NotImplementedPage />} />
+                  <Route path="/enrichment" element={<NotImplementedPage />} />
+                  <Route path="/dialer" element={<NotImplementedPage />} />
+                  <Route path="/meetings" element={<NotImplementedPage />} />
+                  <Route path="/conversations" element={<NotImplementedPage />} />
                 </Routes>
               </Layout>
             } />
