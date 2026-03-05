@@ -256,6 +256,64 @@
   z-index: 1;
 }
 
+/* ── Sticky checkbox + name columns ── */
+.search-table th:nth-child(1),
+.search-table td:nth-child(1) {
+  position: sticky;
+  left: 0;
+  background: var(--color-bg-primary);
+  z-index: 2;
+}
+
+.search-table th:nth-child(2),
+.search-table td:nth-child(2) {
+  position: sticky;
+  left: 40px;
+  background: var(--color-bg-primary);
+  z-index: 2;
+}
+
+/* Header sticky cells sit above body sticky cells */
+.search-table th:nth-child(1),
+.search-table th:nth-child(2) {
+  z-index: 3;
+}
+
+/* Keep hover + selected bg on sticky cells */
+.search-table tr:hover td:nth-child(1),
+.search-table tr:hover td:nth-child(2) {
+  background: var(--color-bg-tertiary);
+}
+
+.search-table .search-row-selected td:nth-child(1),
+.search-table .search-row-selected td:nth-child(2) {
+  background: var(--color-accent-blue-bg);
+}
+
+/* Hover state for selected rows — slightly lighter blue across the whole row */
+.search-table tr.search-row-selected:hover {
+  background: color-mix(in srgb, var(--color-accent-blue-bg) 60%, white 40%) !important;
+}
+
+.search-table tr.search-row-selected:hover td:nth-child(1),
+.search-table tr.search-row-selected:hover td:nth-child(2) {
+  background: color-mix(in srgb, var(--color-accent-blue-bg) 60%, white 40%);
+}
+
+/* Vertical divider on name column — only when scrolled horizontally.
+   ::after pseudo-element so it paints above the adjacent non-sticky cell */
+.search-table-wrapper.is-scrolled-x .search-table th:nth-child(2)::after,
+.search-table-wrapper.is-scrolled-x .search-table td:nth-child(2)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-border);
+  z-index: 1;
+}
+
 .search-th-check {
   width: 40px;
 }
@@ -282,6 +340,15 @@
 
 .search-table th:nth-child(6),
 .search-table td:nth-child(6) { min-width: 150px; } /* Signals */
+
+.search-table th:nth-child(7),
+.search-table td:nth-child(7) { min-width: 100px; } /* Freshness */
+
+.search-table th:nth-child(8),
+.search-table td:nth-child(8) { min-width: 90px; } /* Verified */
+
+.search-table th:nth-child(9),
+.search-table td:nth-child(9) { min-width: 110px; } /* Reachability */
 
 .search-table tr:hover {
   background: var(--color-bg-tertiary);
@@ -438,3 +505,668 @@
   cursor: pointer;
   accent-color: var(--color-brand-dark);
 }
+
+/* ── Waterfall indicator on Email/Phone headers ── */
+.search-th-waterfall {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 5px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-accent-green);
+  background: transparent;
+  font-size: 9px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  color: var(--color-accent-green-text);
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: nowrap;
+  line-height: 1;
+  transition: opacity var(--transition-fast);
+}
+
+.search-th-waterfall:hover {
+  opacity: 0.7;
+}
+
+/* ── Save-all button with tooltip + confirm ── */
+.search-th-save-all-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.search-th-save-all {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-element);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.search-th-save-all:hover {
+  color: var(--color-accent-green);
+  background: var(--color-bg-hover);
+}
+
+/* Tooltip on hover */
+.search-th-save-all-tooltip {
+  display: none;
+  position: fixed;
+  transform: translateX(-50%) translateY(-100%);
+  padding: 2px 8px;
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  font-size: 10px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  border-radius: var(--radius-element);
+  white-space: nowrap;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.search-th-save-all-wrap:hover .search-th-save-all-tooltip {
+  display: block;
+}
+
+/* Elevate the sticky th's stacking context when its tooltip is active
+   so adjacent th elements don't paint on top of the fixed tooltip */
+.search-table th:has(.search-th-save-all-wrap:hover) {
+  z-index: 9999;
+}
+
+/* Confirm popover */
+.search-th-save-all-confirm {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-component);
+  box-shadow: var(--shadow-overlay);
+  white-space: nowrap;
+  z-index: 20;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.search-th-confirm-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  background: var(--color-accent-green);
+  color: white;
+  border-radius: var(--radius-element);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.search-th-confirm-btn:hover {
+  opacity: 0.9;
+}
+
+/* Save button in blank cells — hidden by default, shown on row hover */
+.search-save-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.search-save-btn {
+  display: none;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-element);
+  font-size: var(--text-caption-size);
+  font-family: var(--font-body);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.search-table tr:hover .search-save-btn {
+  display: inline-flex;
+}
+
+.search-save-btn:hover {
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+}
+
+.search-save-wrap:hover .search-access-tooltip {
+  display: flex;
+  pointer-events: auto;
+}
+
+/* Verified badge */
+.search-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sub);
+  color: var(--color-accent-green);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+  animation: enrichReveal 0.3s ease-out;
+}
+
+/* Reachability bar */
+.search-reach {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  animation: enrichReveal 0.3s ease-out;
+}
+
+.search-reach-bar {
+  width: 60px;
+  height: 6px;
+  background: var(--color-bg-hover);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.search-reach-fill {
+  height: 100%;
+  background: var(--color-accent-green);
+  border-radius: var(--radius-pill);
+  transition: width var(--transition-slow);
+}
+
+/* ── Enrichment: column header info icon ── */
+.search-th-enrichable {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.search-th-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-element);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.search-th-info:hover {
+  color: var(--color-text-secondary);
+  background: var(--color-bg-hover);
+}
+
+/* ── Enrichment: access button tooltip ── */
+.search-access-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.search-access-tooltip {
+  display: none;
+  position: fixed;
+  transform: translateX(-50%) translateY(-100%);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+  border-radius: var(--radius-component);
+  box-shadow: var(--shadow-md);
+  white-space: nowrap;
+  z-index: 9999;
+  pointer-events: none;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+/* Email tooltip: single row with dot + text + gear */
+.search-access-tooltip-email {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Bridge pseudo-element so cursor can travel from button up to tooltip */
+.search-access-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+}
+
+.search-access-wrap:hover .search-access-tooltip,
+.search-access-tooltip:hover {
+  display: flex;
+  pointer-events: auto;
+}
+
+.search-access-tooltip-link {
+  background: none;
+  border: none;
+  color: var(--color-accent-blue-bg);
+  cursor: pointer;
+  font-size: var(--text-caption-size);
+  font-family: var(--font-body);
+  padding: 0;
+  text-decoration: underline;
+  text-align: center;
+}
+
+.search-access-tooltip-gear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+  transition: color 120ms, background 120ms;
+  flex-shrink: 0;
+}
+
+.search-access-tooltip-gear:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.12);
+}
+
+/* ── Enrichment: loading spinner ── */
+.search-enriching {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-enriching-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-text-secondary);
+  border-radius: 50%;
+  animation: enrichSpin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes enrichSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Enrichment: revealed email/phone ── */
+.search-email-revealed-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.search-email-revealed {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  animation: enrichReveal 0.3s ease-out;
+}
+
+@keyframes enrichReveal {
+  from { opacity: 0; transform: translateX(-6px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.search-email-verified-icon {
+  color: var(--color-accent-green);
+}
+
+.search-email-unverified-icon {
+  color: var(--color-accent-yellow-text);
+}
+
+/* ── Enrichment: verification popover ── */
+.search-enrich-popover {
+  display: none;
+  position: fixed;
+  transform: translateY(-100%);
+  min-width: 280px;
+  padding: var(--space-3);
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-component);
+  box-shadow: var(--shadow-overlay);
+  z-index: 9999;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.search-email-revealed-wrap:hover .search-enrich-popover {
+  display: flex;
+}
+
+.search-enrich-popover-title {
+  color: var(--color-text-primary);
+}
+
+.search-enrich-popover-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.search-enrich-popover-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.search-enrich-popover-source-found {
+  background: var(--color-accent-green-bg);
+  color: var(--color-accent-green-text);
+}
+
+.search-enrich-popover-source-not_found {
+  background: var(--color-bg-hover);
+  color: var(--color-text-tertiary);
+}
+
+/* Details section (found by / validated by) */
+.search-enrich-popover-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.search-enrich-popover-details strong {
+  font-weight: 600;
+}
+
+/* Waterfall visualization */
+.search-enrich-popover-waterfall {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.search-enrich-popover-wf-step {
+  display: inline-flex;
+  align-items: center;
+}
+
+.search-enrich-popover-wf-arrow {
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+  margin: 0 3px;
+}
+
+.search-enrich-popover-wf-node {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: var(--radius-element);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.search-enrich-popover-wf-found {
+  background: var(--color-accent-green-bg);
+  color: var(--color-accent-green-text);
+}
+
+.search-enrich-popover-wf-not_found {
+  background: var(--color-bg-hover);
+  color: var(--color-text-tertiary);
+}
+
+.search-enrich-popover-wf-skipped {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-tertiary);
+  opacity: 0.5;
+}
+
+/* Validation result */
+.search-enrich-popover-validation {
+  color: var(--color-text-secondary);
+}
+
+.search-enrich-popover-vresult-valid {
+  color: var(--color-accent-green);
+  font-weight: 600;
+}
+
+.search-enrich-popover-vresult-invalid {
+  color: var(--color-accent-red, #ef4444);
+  font-weight: 600;
+}
+
+.search-enrich-popover-vresult-risky {
+  color: var(--color-accent-yellow-text);
+  font-weight: 600;
+}
+
+/* Footer badge */
+.search-enrich-popover-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.search-enrich-popover-badge {
+  display: inline-flex;
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.search-enrich-popover-badge-verified {
+  background: var(--color-accent-green-bg);
+  color: var(--color-accent-green-text);
+}
+
+.search-enrich-popover-badge-unverified {
+  background: var(--color-accent-yellow-bg);
+  color: var(--color-accent-yellow-text);
+}
+
+/* ── Email Status filter panel ─────────────────────────────── */
+
+.search-filter-email-status {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header inherits .search-filter-item, just remove default button styles */
+.search-filter-email-status-header {
+  width: 100%;
+  text-align: left;
+}
+
+.search-filter-email-chevron {
+  transition: transform 150ms ease;
+  color: var(--color-text-tertiary);
+}
+
+.search-filter-email-chevron-open {
+  transform: rotate(90deg);
+}
+
+/* Expanded body */
+.search-filter-email-status-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2) 0 var(--gap-component);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.search-filter-email-helper {
+  line-height: 1.5;
+  display: inline;
+}
+
+.search-filter-email-cog {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  padding: 0 2px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background var(--transition-fast);
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+.search-filter-email-cog:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-tertiary);
+}
+
+/* Traffic light tier selector */
+.search-filter-traffic {
+  display: flex;
+  gap: 4px;
+}
+
+.search-filter-traffic-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px 3px 6px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  flex: 1;
+  justify-content: center;
+}
+
+/* Shared traffic-light dot (used in tier buttons, checkboxes, and access button) */
+.search-filter-traffic-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.search-filter-traffic-btn-safe .search-filter-traffic-dot,
+.search-filter-traffic-dot-safe { background: var(--color-accent-green); }
+
+.search-filter-traffic-btn-caution .search-filter-traffic-dot,
+.search-filter-traffic-dot-caution { background: var(--color-accent-yellow, #F59E0B); }
+
+.search-filter-traffic-btn-risk .search-filter-traffic-dot,
+.search-filter-traffic-dot-risk { background: var(--color-accent-red, #EF4444); }
+
+.search-filter-traffic-btn-safe.active {
+  background: var(--color-accent-green-bg);
+  border-color: var(--color-accent-green);
+  color: var(--color-accent-green-text);
+}
+
+.search-filter-traffic-btn-caution.active {
+  background: var(--color-accent-yellow-bg);
+  border-color: var(--color-accent-yellow, #F59E0B);
+  color: var(--color-accent-yellow-text);
+}
+
+.search-filter-traffic-btn-risk.active {
+  background: var(--color-accent-red-bg, #FEF2F2);
+  border-color: var(--color-accent-red, #EF4444);
+  color: var(--color-accent-red, #EF4444);
+}
+
+/* Inclusion checkbox list */
+.search-filter-exclude-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.search-filter-exclude-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  padding: 2px 0;
+  user-select: none;
+}
+
+.search-filter-exclude-label input[type="checkbox"] {
+  width: 12px;
+  height: 12px;
+  accent-color: var(--color-accent-green);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Catch-all checkbox */
+.search-filter-catchall {
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border);
+}
+
+.search-filter-catchall-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  user-select: none;
+}
+
+.search-filter-catchall-label input[type="checkbox"] {
+  width: 12px;
+  height: 12px;
+  accent-color: var(--color-accent-green);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.search-filter-catchall-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Traffic light dot on "Access email" button */
+.search-access-traffic-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.search-access-traffic-dot-safe    { background: var(--color-accent-green); }
+.search-access-traffic-dot-caution { background: var(--color-accent-yellow, #F59E0B); }
+.search-access-traffic-dot-risk    { background: var(--color-accent-red, #EF4444); }

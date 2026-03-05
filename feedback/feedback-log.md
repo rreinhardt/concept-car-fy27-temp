@@ -228,4 +228,50 @@ this can say setup... in this state
 - **Screenshot:** ![](screenshots/fb-2026-03-04T05-08-06-040Z.png)
 ### Notes
 remove 3 inbox item from this topbar in both expanded and collapsed mode
+---## fb-2026-03-05T16-13-29-768Z
+- **Date:** 3/5/2026, 8:13:29 AM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Removed `search-trending-badge` span (icon + "Trending" text) from the Name cell in the contacts table.
+- **Screenshot:** ![](screenshots/fb-2026-03-05T16-13-29-768Z.png)
+### Notes
+remove these trending badges.
+---## fb-2026-03-05T16-14-26-811Z
+- **Date:** 3/5/2026, 8:14:26 AM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Removed `IconDataEnrich` from "Up to 5 sources" / "Up to 12 sources" column header pills. Replaced green background fill with transparent background + `border: 1px solid var(--color-accent-green)`. Set `line-height: 1; padding: 1px 5px` so pill height matches text.
+- **Screenshot:** ![](screenshots/fb-2026-03-05T16-14-26-811Z.png)
+### Notes
+remove the icon inside these. remove the background color, instead give it a stroke of this color. make the height of the pill match the height of the text string next to it to give the text a bit more padding.
+---## fb-2026-03-05T17-06-01-433Z
+- **Date:** 3/5/2026, 9:06:01 AM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Made `ActionGroup.label` optional. Added unlabeled group with a "Save" item (desc: "Access email and phone numbers", id: "save") as the first group in `defaultSuggestedGroups` and `searchSuggestedGroups`. Updated render loop to skip the label `<span>` when absent. Save action triggers email+phone enrichment for selected contacts.
+- **Screenshot:** ![](screenshots/fb-2026-03-05T17-06-01-433Z.png)
+### Notes
+add a save button (subtext can be access email and phone numbers) above the Outreach in an ungrouped section.
+---## fb-2026-03-05T17-18-36-014Z
+- **Date:** 3/5/2026, 9:18:36 AM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Added `tr.search-row-selected:hover` with a slightly deeper blue via `color-mix(accent-blue-bg 70%, accent-blue 30%)` applied to both the tr (`!important`) and the sticky td:nth-child(1/2) cells — uniform hover response across the entire selected row.
+### Notes
+when rows are selected, the hover state only extens to the first two columns when it should be the entire row
+---## fb-2026-03-05T17-29-27-316Z
+- **Date:** 3/5/2026, 9:29:27 AM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Wrapped `actionsPanel` content in a `page-actions-panel-inner` div in PageLayout.tsx. Added CSS giving it `border-radius: var(--radius-surface)`, `box-shadow: var(--shadow-glow)`, `background: var(--color-bg-surface)`, and `overflow: hidden` — matching the table frame card treatment.
+### Notes
+this right panel is missing the border radius and depth as the others.
+---## fb-2026-03-05T17-39-28-659Z
+- **Date:** 3/5/2026, 9:39:28 AM
+- **URL:** `/search`
+- **Status:** resolved
+- **Resolution:** Changed Save action description from "Access email and phone numbers" to "Access email and track changes" in both ActionsPanel.tsx and SearchPage.tsx.
+- **Screenshot:** ![](screenshots/fb-2026-03-05T17-39-28-659Z.png)
+### Notes
+say Access email and track changes
 ---

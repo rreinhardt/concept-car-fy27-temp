@@ -207,7 +207,9 @@ export default function PageLayout({
             className={`page-actions-panel ${panelOpen ? 'page-actions-panel-open' : ''}`}
             style={effectivePanelWidth ? { '--panel-width': `${effectivePanelWidth}px` } as React.CSSProperties : undefined}
           >
-            {actionsPanel}
+            <div className="page-actions-panel-inner">
+              {actionsPanel}
+            </div>
           </aside>
         )}
       </div>

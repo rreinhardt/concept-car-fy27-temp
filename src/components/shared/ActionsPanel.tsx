@@ -31,7 +31,7 @@ export interface ActionItemDef {
 }
 
 export interface ActionGroup {
-  label: string
+  label?: string
   items: ActionItemDef[]
 }
 
@@ -45,6 +45,11 @@ interface ActionsPanelProps {
 }
 
 const defaultSuggestedGroups: ActionGroup[] = [
+  {
+    items: [
+      { icon: <IconBookmark size={15} />, label: 'Save', desc: 'Access email and track changes', id: 'save' },
+    ],
+  },
   {
     label: 'Outreach',
     items: [
@@ -189,9 +194,9 @@ export default function ActionsPanel({ onClose, onAction, selectedCount = 0, onD
       </div>
 
       <div className="ap-body">
-        {filtered.map((group) => (
-          <div key={group.label} className="ap-group">
-            <span className="ap-group-label text-caption text-tertiary">{group.label}</span>
+        {filtered.map((group, i) => (
+          <div key={group.label ?? i} className="ap-group">
+            {group.label && <span className="ap-group-label text-caption text-tertiary">{group.label}</span>}
             <div className="ap-group-items">
               {group.items.map((item) => (
                 <button
