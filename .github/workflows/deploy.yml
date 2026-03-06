@@ -1,0 +1,115 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  IMAGE_REPO: us-docker.pkg.dev/stage-23704/us.gcr.io/concept-car-fy27
+  GKE_CLUSTER: staging
+  GKE_ZONE: us-central1-c
+  NAMESPACE: concept-car-fy27
+  RELEASE_NAME: concept-car-fy27
+  WORKLOAD_IDENTITY_PROVIDER: projects/861286997543/locations/global/workloadIdentityPools/staging-gh-pool/providers/gh-action-provider
+  BUILD_SERVICE_ACCOUNT: staging-gcloud-access@stage-23704.iam.gserviceaccount.com
+  DEPLOY_SERVICE_ACCOUNT: staging-k8s-deploy@stage-23704.iam.gserviceaccount.com
+
+jobs:
+  metadata:
+    name: Metadata
+    runs-on:
+      group: arc-scale-sets
+      labels:
+        - general-low
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+      branch_name: ${{ steps.vars.outputs.branch_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set variables
+        id: vars
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "branch_name=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+
+  build-image:
+    name: Build Image
+    needs: metadata
+    runs-on:
+      group: arc-scale-sets
+      labels:
+        - general-low
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.BUILD_SERVICE_ACCOUNT }}
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker us-docker.pkg.dev --quiet
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.IMAGE_REPO }}:${{ needs.metadata.outputs.sha_short }}
+            ${{ env.IMAGE_REPO }}:latest
+          cache-from: type=registry,ref=${{ env.IMAGE_REPO }}:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_REPO }}:buildcache,mode=max
+
+  deploy:
+    name: Deploy
+    needs:
+      - metadata
+      - build-image
+    runs-on:
+      group: arc-scale-sets
+      labels:
+        - general-low
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+
+      - name: Deploy with Helm
+        run: |
+          helm upgrade --install ${{ env.RELEASE_NAME }} ./helm/concept-car-fy27 \
+            --namespace ${{ env.NAMESPACE }} \
+            --values ./deploy/values.yaml \
+            --set image.tag=${{ needs.metadata.outputs.sha_short }} \
+            --wait \
+            --timeout 5m
+
+      - name: Verify deployment
+        run: |
+          kubectl get pods -n ${{ env.NAMESPACE }} -l "app.kubernetes.io/instance=${{ env.RELEASE_NAME }}"
