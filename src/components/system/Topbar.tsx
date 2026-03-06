@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   IconSearch,
-  IconApolloLogo,
   IconInbox,
   IconSequence,
   IconHome,
@@ -58,7 +57,6 @@ export default function Topbar() {
   const barRef = useRef<HTMLDivElement>(null)
 
   const { funnel } = weeklyScorecard
-  const inboxCount = triageItems.length
 
   const filtered = useMemo(() => {
     if (!query.trim()) return quickActions

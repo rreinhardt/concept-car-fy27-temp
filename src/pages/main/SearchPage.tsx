@@ -22,7 +22,6 @@ import {
   IconChevronLeft,
   IconChevronRight,
   IconPlus,
-  IconTrending,
   IconClock,
   IconSequence,
   IconMail,
@@ -40,7 +39,6 @@ import {
   IconRobot,
   IconGlobe,
   IconCheck,
-  IconInfo,
   IconPlay,
   IconSettings,
 } from '@/components/shared/Icons'
@@ -737,7 +735,7 @@ export default function SearchPage() {
                           <div className="search-enrich-popover">
                             <div className="search-enrich-popover-title text-caption font-medium">Enrichment log</div>
                             <div className="search-enrich-popover-waterfall">
-                              {(enrichmentState[contact.id]!.email as EnrichmentResult).sources.filter(s => s.status !== 'skipped').map((s, i, arr) => (
+                              {(enrichmentState[contact.id]!.email as EnrichmentResult).sources.filter(s => s.status !== 'skipped').map((s, i) => (
                                 <span key={s.name} className="search-enrich-popover-wf-step">
                                   {i > 0 && <span className="search-enrich-popover-wf-arrow">&rarr;</span>}
                                   <span className={`search-enrich-popover-wf-node search-enrich-popover-wf-${s.status}`}>{s.name} {s.status === 'found' ? '✓' : '✗'}</span>
