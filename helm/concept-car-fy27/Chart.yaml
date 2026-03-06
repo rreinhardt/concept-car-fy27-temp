@@ -1,0 +1,6 @@
+apiVersion: v2
+name: concept-car-fy27
+description: A Helm chart for concept-car-fy27
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
