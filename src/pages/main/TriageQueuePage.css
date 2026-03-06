@@ -1,0 +1,130 @@
+.triage-page {
+  display: flex;
+  height: 100%;
+  padding: var(--padding-section);
+  gap: var(--gap-zone);
+}
+
+/* Left — task list */
+.triage-list {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-zone);
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.triage-list-header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+}
+
+.triage-list-sub {
+  margin-top: calc(-1 * var(--gap-component));
+}
+
+.triage-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+}
+
+.triage-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sub);
+  padding: var(--padding-section-nested);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-component);
+  background: var(--color-bg-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.triage-item:hover {
+  border-color: var(--color-border-input);
+  background: var(--color-bg-tertiary);
+}
+
+.triage-item-active {
+  border-color: var(--color-brand-dark);
+  background: var(--color-bg-tertiary);
+}
+
+.triage-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Right — detail panel in white card */
+.triage-detail {
+  flex: 1;
+  padding: var(--padding-section);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);
+  overflow-y: auto;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-glow);
+}
+
+.triage-detail-header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-zone);
+}
+
+.triage-detail-header > div:nth-child(2) {
+  flex: 1;
+}
+
+.triage-context {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  padding: var(--padding-section-nested);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-component);
+}
+
+/* Thread */
+.triage-thread {
+  flex: 1;
+}
+
+.triage-message {
+  padding: var(--padding-section);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-zone);
+}
+
+.triage-message-header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  color: var(--color-text-secondary);
+}
+
+.triage-signal {
+  padding: var(--padding-section);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-surface);
+}
+
+/* Actions */
+.triage-actions {
+  display: flex;
+  gap: var(--gap-component);
+}
+
+.triage-next-hint {
+  text-align: center;
+}

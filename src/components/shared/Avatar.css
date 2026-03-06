@@ -1,0 +1,28 @@
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.avatar-sm {
+  width: var(--avatar-sm);
+  height: var(--avatar-sm);
+  font-size: 10px;
+}
+
+.avatar-md {
+  width: var(--avatar-md);
+  height: var(--avatar-md);
+  font-size: var(--text-caption-size);
+}
+
+.avatar-lg {
+  width: var(--avatar-lg);
+  height: var(--avatar-lg);
+  font-size: var(--text-body-sm-size);
+}

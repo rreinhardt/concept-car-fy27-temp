@@ -1,0 +1,132 @@
+.stl-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--padding-section);
+}
+
+.stl-card {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-glow);
+  padding: var(--padding-section);
+}
+
+.stl-container {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Header */
+.stl-header {
+  margin-bottom: var(--gap-section);
+}
+
+.stl-header h2 {
+  margin-bottom: var(--gap-sub);
+}
+
+/* List picker */
+.stl-lists {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+  margin-bottom: var(--gap-section);
+}
+
+.stl-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-section-nested);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-component);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  text-align: left;
+}
+
+.stl-list-item:hover {
+  border-color: var(--color-border-input);
+  background: var(--color-bg-tertiary);
+}
+
+.stl-list-selected {
+  border-color: var(--color-brand-dark);
+  background: var(--color-bg-tertiary);
+}
+
+.stl-list-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stl-list-check {
+  color: var(--color-brand-dark);
+}
+
+.stl-new-list {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  padding: var(--padding-section-nested);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-component);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.stl-new-list:hover {
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+}
+
+/* Actions */
+.stl-actions {
+  display: flex;
+  gap: var(--gap-component);
+}
+
+/* Success state */
+.stl-success {
+  text-align: center;
+  margin-bottom: var(--gap-section);
+}
+
+.stl-success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-green-bg);
+  color: var(--color-accent-green);
+  margin-bottom: var(--space-4);
+}
+
+.stl-success h2 {
+  margin-bottom: var(--gap-sub);
+}
+
+/* Next step */
+.stl-next {
+  padding: var(--padding-section);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-surface);
+  text-align: center;
+}
+
+.stl-next p:first-of-type {
+  margin-bottom: var(--gap-component);
+}
+
+.stl-next-actions {
+  display: flex;
+  gap: var(--gap-component);
+  justify-content: center;
+  margin-top: var(--space-4);
+}

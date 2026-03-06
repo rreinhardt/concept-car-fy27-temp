@@ -1,0 +1,138 @@
+.kb-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left */
+.kb-left {
+  flex: 0 0 420px;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6) 48px;
+}
+
+.kb-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-6);
+}
+
+.kb-logo-name {
+  font-family: var(--font-display);
+  font-size: var(--text-title-sm-size);
+  font-weight: 400;
+  letter-spacing: -0.3px;
+}
+
+.kb-left-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.kb-heading {
+  margin-bottom: var(--space-3);
+}
+
+.kb-subtext {
+  margin-bottom: var(--space-6);
+}
+
+.kb-actions {
+  display: flex;
+  gap: var(--gap-component);
+}
+
+.kb-lang {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sub);
+  color: var(--color-text-secondary);
+}
+
+/* Right */
+.kb-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: var(--color-bg-sidebar);
+}
+
+.kb-card {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-md);
+  padding: var(--padding-section);
+  width: 100%;
+  max-width: 500px;
+}
+
+.kb-card-user {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-zone);
+  margin-bottom: var(--space-4);
+}
+
+.kb-card-company {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-zone);
+  margin-bottom: var(--space-4);
+}
+
+.kb-company-logo {
+  width: var(--avatar-lg);
+  height: var(--avatar-lg);
+  border-radius: var(--radius-component);
+  background: #4A3728;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-title-sm-size);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.kb-card-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--space-4) 0;
+}
+
+.kb-card-section {
+  margin-bottom: var(--space-4);
+}
+
+.kb-card-section:last-child {
+  margin-bottom: 0;
+}
+
+.kb-card-label {
+  margin-bottom: var(--gap-component);
+  color: var(--color-text-primary);
+}
+
+.kb-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-component);
+}
+
+.kb-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sub);
+  padding-left: var(--space-4);
+  list-style: disc;
+}
+
+.kb-card-list li::marker {
+  color: var(--color-text-tertiary);
+}

@@ -1,0 +1,69 @@
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sub);
+}
+
+.input-label {
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.input-field {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-component);
+  background: var(--color-bg-primary);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.input-field:focus-within {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.08);
+}
+
+.input-field-md {
+  height: var(--input-height);
+  padding: 0 var(--space-3);
+}
+
+.input-field-sm {
+  height: var(--input-height-sm);
+  padding: 0 var(--space-2);
+}
+
+.input-element {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line);
+  color: var(--color-text-primary);
+  min-width: 0;
+}
+
+.input-field-sm .input-element {
+  font-size: var(--text-caption-size);
+}
+
+.input-element::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.input-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+}
+
+.input-icon svg {
+  width: 16px;
+  height: 16px;
+}

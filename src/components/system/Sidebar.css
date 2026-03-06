@@ -1,0 +1,646 @@
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--color-bg-sidebar);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--space-3);
+  flex-shrink: 0;
+  overflow: visible;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: width 0.2s ease;
+}
+
+/* ── Collapsed state ── */
+.sidebar-collapsed {
+  width: 56px;
+  padding: var(--space-4) 8px;
+}
+
+.sidebar-collapsed .sidebar-item-label,
+.sidebar-collapsed .sidebar-item-badge,
+.sidebar-collapsed .sidebar-item-chevron,
+.sidebar-collapsed .sidebar-group-label,
+.sidebar-collapsed .sidebar-user-name,
+.sidebar-collapsed .sidebar-user > svg {
+  display: none;
+}
+
+.sidebar-collapsed .sidebar-nav {
+  overflow: visible;
+}
+
+.sidebar-collapsed .sidebar-item {
+  justify-content: center;
+  padding: 6px;
+}
+
+.sidebar-collapsed .sidebar-user {
+  justify-content: center;
+  padding: 6px;
+}
+
+/* Tooltip on hover in collapsed mode */
+.sidebar-collapsed .sidebar-item[data-tooltip],
+.sidebar-collapsed .sidebar-user[data-tooltip] {
+  position: relative;
+}
+
+.sidebar-collapsed .sidebar-item[data-tooltip]::after,
+.sidebar-collapsed .sidebar-user[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 10px;
+  border-radius: var(--radius-element);
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  z-index: 9999;
+}
+
+.sidebar-collapsed .sidebar-item[data-tooltip]:hover::after,
+.sidebar-collapsed .sidebar-user[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
+/* ── Logo ── */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--gap-sub) var(--space-2);
+  margin-bottom: var(--space-4);
+  color: var(--color-text-primary);
+}
+
+.sidebar-logo-icon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.sidebar-collapse-btn {
+  font-size: 14px;
+  color: var(--color-text-tertiary);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  line-height: 1;
+}
+
+.sidebar:hover .sidebar-collapse-btn {
+  opacity: 1;
+}
+
+/* In collapsed mode: logo centered like icons, chevron overlays on hover */
+.sidebar-collapsed .sidebar-logo {
+  justify-content: center;
+  position: relative;
+}
+
+.sidebar-collapsed .sidebar-collapse-btn {
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
+.sidebar-collapsed:hover .sidebar-collapse-btn {
+  opacity: 1;
+}
+
+/* ── Nav ── */
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 0;
+  overflow-y: auto;
+  position: relative;
+}
+
+.sidebar-nav-animating {
+  overflow: visible;
+}
+
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-pinned-group {
+  padding-top: 4px;
+  margin-top: 4px;
+  border-top: 1px solid var(--color-border);
+}
+
+.sidebar-group-label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-tertiary);
+  padding: var(--gap-component) var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  width: 100%;
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-element);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line);
+  color: var(--color-text-secondary);
+  transition: background var(--transition-fast), color var(--transition-fast);
+  cursor: pointer;
+}
+
+.sidebar-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--color-text-primary);
+}
+
+.sidebar-item-active {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.sidebar-item-placeholder {
+  opacity: 0.6;
+}
+
+.sidebar-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.sidebar-item-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.sidebar-item-label {
+  flex: 1;
+  text-align: left;
+}
+
+.sidebar-item-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-red);
+  color: var(--color-text-inverse);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.sidebar-item-chevron {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-tertiary);
+}
+
+/* ── More accordion ── */
+.sidebar-more-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  width: 100%;
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-element);
+  font-size: var(--text-caption-size);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  margin-top: var(--space-2);
+}
+
+.sidebar-more-toggle:hover {
+  color: var(--color-text-secondary);
+}
+
+.sidebar-more-label {
+  flex: 1;
+  text-align: left;
+}
+
+.sidebar-more-items {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Collapsed "More" popover ── */
+.sidebar-more-collapsed {
+  position: relative;
+}
+
+.sidebar-more-dots {
+  justify-content: center;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--color-text-tertiary);
+}
+
+.sidebar-more-popover {
+  display: none;
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 0;
+  z-index: 9999;
+  min-width: 180px;
+  padding: var(--space-2);
+  background: var(--color-brand-dark);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-overlay);
+  flex-direction: column;
+}
+
+/* Invisible bridge between trigger and popover */
+.sidebar-more-popover::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 100%;
+  width: 16px;
+  height: calc(100% + 16px);
+}
+
+.sidebar-more-collapsed:hover .sidebar-more-popover {
+  display: flex;
+}
+
+.sidebar-more-popover .sidebar-item {
+  color: var(--color-text-inverse);
+  opacity: 0.8;
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-element);
+}
+
+.sidebar-more-popover .sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-text-inverse);
+  opacity: 1;
+}
+
+.sidebar-more-popover .sidebar-item-icon {
+  color: var(--color-text-inverse);
+}
+
+.sidebar-more-popover .sidebar-item-label {
+  display: block !important;
+}
+
+/* ── Flying ghost for FLIP-style promotion animation ── */
+.sidebar-ghost {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-element);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-sidebar);
+  transition: top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* Collapse the source item in More while ghost is flying */
+.sidebar-item-fly-collapse {
+  opacity: 0;
+  max-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  overflow: hidden;
+  transition: opacity 0.2s ease, max-height 0.2s ease, padding 0.2s ease;
+}
+
+/* Highlight glow after ghost lands */
+.sidebar-item-highlight {
+  animation: sidebar-glow 1.5s ease both;
+}
+
+/* More list collapsing fade */
+.sidebar-more-collapsing {
+  animation: sidebar-more-collapse 0.3s ease both;
+  overflow: hidden;
+}
+
+@keyframes sidebar-more-collapse {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes sidebar-glow {
+  0% {
+    background: rgba(34, 197, 94, 0.18);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+/* ── Bottom section ── */
+.sidebar-bottom {
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  width: 100%;
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-element);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  color: var(--color-text-secondary);
+}
+
+.sidebar-user:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.sidebar-user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-element);
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  font-size: 10px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.sidebar-user-name {
+  flex: 1;
+  text-align: left;
+}
+
+/* ── CRM Sync Status ── */
+.crm-sync-wrapper {
+  position: relative;
+}
+
+.crm-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-accent-green);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.sidebar-collapsed .crm-status-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  margin-left: 0;
+}
+
+.crm-sync-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+}
+
+.crm-sync-popover {
+  z-index: 9999;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-overlay);
+  animation: crm-slide-up 0.18s ease;
+  overflow: hidden;
+}
+
+@keyframes crm-slide-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.crm-sync-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.crm-sync-popover-title {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  font-size: var(--text-body-sm-size);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.crm-sync-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-element);
+  background: none;
+  border: none;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.crm-sync-close:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
+}
+
+.crm-sync-health-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  margin: 10px 14px;
+  padding: 8px 10px;
+  border-radius: var(--radius-element);
+  background: var(--color-accent-green-bg);
+  color: var(--color-accent-green-text);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+}
+
+.crm-sync-stats {
+  padding: 0 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.crm-sync-stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.crm-sync-stat-label {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.crm-sync-stat-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.crm-sync-bar {
+  height: 4px;
+  background: var(--color-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.crm-sync-bar-fill {
+  height: 100%;
+  background: var(--color-accent-green);
+  border-radius: 2px;
+}
+
+.crm-sync-section {
+  padding: 10px 14px;
+  border-top: 1px solid var(--color-border);
+}
+
+.crm-sync-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-tertiary);
+  margin-bottom: 8px;
+}
+
+.crm-sync-activity {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-component);
+  margin-bottom: 8px;
+}
+
+.crm-sync-activity:last-child {
+  margin-bottom: 0;
+}
+
+.crm-sync-activity > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.crm-sync-activity svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.crm-sync-activity-text {
+  font-size: 11px;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.crm-sync-activity-time {
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+}
+
+.crm-sync-diag {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.crm-sync-diag:last-child {
+  margin-bottom: 0;
+}
+
+.crm-sync-diag-label {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.crm-sync-diag-value {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.crm-sync-diag-value.ok {
+  color: var(--color-accent-green-text);
+}
+
+.crm-sync-settings-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sub);
+  width: calc(100% - 28px);
+  margin: 10px 14px 14px;
+  padding: 8px 14px;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-element);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+  font-family: var(--font-body);
+}
+
+.crm-sync-settings-btn:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-input);
+  color: var(--color-text-primary);
+}

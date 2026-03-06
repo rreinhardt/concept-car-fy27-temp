@@ -1,0 +1,50 @@
+.build-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-sidebar);
+  position: relative;
+}
+
+.build-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  transition: opacity 400ms ease;
+}
+
+.build-visible {
+  opacity: 1;
+}
+
+.build-fading {
+  opacity: 0;
+}
+
+.build-lottie {
+  width: 120px;
+  height: 120px;
+  margin-bottom: var(--space-4);
+}
+
+.build-heading {
+  text-align: center;
+}
+
+.build-subtext {
+  text-align: center;
+}
+
+.build-skip {
+  position: absolute;
+  bottom: var(--space-6);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.build-skip:hover {
+  color: var(--color-text-secondary);
+}

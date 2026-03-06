@@ -1,0 +1,284 @@
+.scorecard-page {
+  padding: var(--padding-section);
+  overflow-y: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-zone);
+}
+
+.scorecard-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-zone);
+}
+
+.scorecard-card {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-glow);
+  padding: var(--padding-section);
+}
+
+/* Top row: funnel (left) + metrics (right) */
+.scorecard-top {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--gap-zone);
+}
+
+/* Funnel card */
+.scorecard-funnel-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-zone);
+}
+
+/* Toggle controls */
+.scorecard-funnel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-zone);
+}
+
+.scorecard-toggle-group {
+  display: flex;
+  gap: 2px;
+  background: var(--color-bg-hover);
+  border-radius: var(--radius-component);
+  padding: 2px;
+}
+
+.scorecard-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-element);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.scorecard-toggle:hover:not(:disabled) {
+  color: var(--color-text-primary);
+}
+
+.scorecard-toggle-active {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.scorecard-toggle:disabled {
+  cursor: default;
+}
+
+.scorecard-toggle-you {
+  color: var(--color-text-primary);
+}
+
+/* Comparison dots */
+.scorecard-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+.scorecard-dot-you {
+  background: var(--color-brand-dark);
+}
+
+.scorecard-dot-industry {
+  background: var(--color-accent-purple);
+}
+
+.scorecard-dot-previous {
+  background: var(--color-text-tertiary);
+}
+
+/* Funnel */
+.scorecard-funnel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.scorecard-funnel-stage {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Conversion rate between stages */
+.scorecard-conversion {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+  padding: 4px 0 4px 80px;
+  margin-left: var(--gap-zone);
+}
+
+.scorecard-conversion-line {
+  width: 1px;
+  height: 12px;
+  background: var(--color-border);
+}
+
+.scorecard-funnel-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-zone);
+}
+
+.scorecard-funnel-label {
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.scorecard-funnel-bar-track {
+  flex: 1;
+  height: 32px;
+  background: var(--color-bg-hover);
+  border-radius: var(--radius-element);
+  overflow: hidden;
+  position: relative;
+}
+
+.scorecard-funnel-bar-compare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--color-accent-purple);
+  opacity: 0.18;
+  border-radius: var(--radius-element);
+  min-width: 4px;
+  transition: width 0.4s ease;
+}
+
+.scorecard-funnel-bar {
+  position: relative;
+  height: 100%;
+  background: var(--color-brand-dark);
+  border-radius: var(--radius-element);
+  min-width: 4px;
+  transition: width 0.4s ease;
+}
+
+.scorecard-funnel-values {
+  width: 52px;
+  text-align: right;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.scorecard-compare-value {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.scorecard-compare-visible {
+  opacity: 1;
+}
+
+/* Metrics — stacked vertically on the right */
+.scorecard-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-zone);
+}
+
+.scorecard-metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sub);
+  flex: 1;
+}
+
+/* Coaching — two equal columns */
+.scorecard-coaching {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--gap-zone);
+}
+
+.scorecard-coaching-section h3 {
+  margin-bottom: var(--gap-component);
+}
+
+.scorecard-coaching-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+  padding-left: var(--space-4);
+  list-style: disc;
+}
+
+.scorecard-coaching-list li::marker {
+  color: var(--color-text-tertiary);
+}
+
+/* Actionable change items */
+.scorecard-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+}
+
+.scorecard-action-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-zone);
+  padding: var(--gap-component) var(--padding-section-nested);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-component);
+}
+
+.scorecard-action-btn {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border-radius: var(--radius-element);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-input);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+
+.scorecard-action-btn:hover {
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+}
+
+/* Next action — full width */
+.scorecard-next-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-component);
+  background: var(--color-accent-blue-bg);
+  box-shadow: none;
+}
+
+.scorecard-next-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-zone);
+}
+
+.scorecard-saved-search {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-component);
+}

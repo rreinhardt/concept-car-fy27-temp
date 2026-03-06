@@ -1,0 +1,82 @@
+.flowbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  height: 44px;
+  padding: 0 var(--space-4);
+  background: var(--color-brand-dark);
+  color: var(--color-text-inverse);
+  font-size: var(--text-caption-size);
+  transform: translateY(100%);
+  transition: transform var(--transition-base);
+}
+
+.flowbar-visible {
+  transform: translateY(0);
+}
+
+.flowbar-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sub);
+  padding: 4px 10px;
+  border-radius: var(--radius-element);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--text-caption-size);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.flowbar-nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-inverse);
+}
+
+.flowbar-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.flowbar-steps {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.flowbar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+  padding: 0;
+}
+
+.flowbar-dot:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.3);
+}
+
+.flowbar-dot-done {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.flowbar-dot-active {
+  background: #FFFFFF;
+  transform: scale(1.4);
+}
+
+.flowbar-label {
+  color: rgba(255, 255, 255, 0.6);
+  min-width: 120px;
+  text-align: center;
+}

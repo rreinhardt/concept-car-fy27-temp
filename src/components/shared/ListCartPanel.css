@@ -1,0 +1,66 @@
+.lcp-count {
+  margin: 0;
+}
+
+.lcp-list-body {
+  gap: 4px !important;
+}
+
+.lcp-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.lcp-list-item:hover {
+  background: var(--color-bg-subtle);
+}
+
+.lcp-list-item-selected {
+  border-color: var(--color-text-primary);
+  background: color-mix(in srgb, var(--color-text-primary) 4%, transparent);
+}
+
+.lcp-list-item-selected:hover {
+  background: color-mix(in srgb, var(--color-text-primary) 7%, transparent);
+}
+
+.lcp-list-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.lcp-list-check {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
+.lcp-new-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px dashed var(--color-border);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+  width: 100%;
+}
+
+.lcp-new-list:hover {
+  background: var(--color-bg-subtle);
+  color: var(--color-text-primary);
+}
