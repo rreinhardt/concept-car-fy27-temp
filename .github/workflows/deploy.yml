@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - farhad/deploy-on-k8s
 
 env:
   IMAGE_REPO: us-docker.pkg.dev/stage-23704/us.gcr.io/concept-car-fy27
