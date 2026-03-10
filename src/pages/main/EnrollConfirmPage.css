@@ -205,7 +205,7 @@
   margin-right: calc(-1 * var(--padding-section));
   padding-left: var(--padding-section);
   padding-right: var(--padding-section);
-  margin-bottom: 30px;
+  margin-bottom: var(--space-2);
 }
 
 /* ── Steps ── */
@@ -217,7 +217,7 @@
 .seq-step-wrapper {
   display: flex;
   flex-direction: column;
-  padding-bottom: 30px;
+  padding-bottom: 0;
 }
 
 .seq-step-header {
@@ -383,7 +383,8 @@
   height: 1px;
   margin-left: calc(-1 * var(--padding-section));
   margin-right: calc(-1 * var(--padding-section));
-  margin-bottom: var(--space-3);
+  margin-top: 20px;
+  margin-bottom: 8px;
   background: var(--color-border);
 }
 
