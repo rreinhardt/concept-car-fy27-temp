@@ -5,6 +5,7 @@ import Avatar from '@/components/shared/Avatar'
 import Badge from '@/components/shared/Badge'
 import Button from '@/components/shared/Button'
 import Tabs from '@/components/shared/Tabs'
+import EmailComposeDrawer from '@/components/shared/EmailComposeDrawer'
 import {
   IconCheck,
   IconSparkle,
@@ -445,17 +446,80 @@ export default function EnrollConfirmPage() {
 
 const contactFilters = ['All', 'Upcoming', 'Step 1', 'Step 2', 'Replied', 'Opened', 'Meeting booked']
 
-const seqContactRows = mockContacts.slice(0, 12).map((c, i) => ({
-  ...c,
-  status: ['Upcoming', 'Active', 'Replied', 'Opened', 'Active', 'Meeting booked', 'Upcoming', 'Active', 'Replied', 'Opened', 'Upcoming', 'Active'][i % 12],
-  step: `Step ${(i % 5) + 1}`,
-  step1: ['Sent', 'Sent', 'Sent', 'Sent', 'Sent', 'Sent', 'Pending', 'Sent', 'Sent', 'Sent', 'Pending', 'Sent'][i % 12],
-  step2: ['Sent', 'Sent', 'Opened', '—', 'Sent', '—', '—', 'Sent', 'Replied', '—', '—', 'Sent'][i % 12],
-}))
+const stepSubjects = [
+  'Sustainability messaging and product series',
+  'Following up — sustainability at your company',
+  'Quick question for you',
+  'Still worth a conversation?',
+  'Closing the loop',
+]
+
+function buildStepBody(stepIdx: number, firstName: string, company: string) {
+  const bodies = [
+    `Hey ${firstName},\n\nYour 2024 Global Impact Report on science-based climate targets got me curious about ${company}'s supplier choices.\n\nGiven your role, I imagine that touches how you think about materials, packaging, and product stories.\n\nMany teams now struggle to make sustainability messaging feel real while still looking playful and on-brand. I get how that tension can slow decisions.\n\nOpen to a quick chat on this?`,
+    `Hey ${firstName},\n\nFollowing up on my last note — ${company}'s trajectory around sustainability has me thinking there's a timely angle here.\n\nAs someone shaping how those choices show up, you'd know better than anyone where the gaps are.\n\nWould a 15-minute call this week make sense?`,
+    `Hey ${firstName},\n\nJust bumping this up in case my earlier emails got buried. Happy to share a quick overview if that's easier than a call.\n\nOpen to connect?`,
+    `Hey ${firstName},\n\nI'll keep this short — wanted to check in one more time before I stop reaching out.\n\nWorth a quick chat?`,
+    `Hey ${firstName},\n\nLast note from me — if the timing ever gets better, feel free to reach back out. Happy to pick up where we left off.`,
+  ]
+  return bodies[stepIdx] ?? bodies[0]
+}
+
+const statusList = ['Upcoming', 'Active', 'Replied', 'Opened', 'Active', 'Meeting booked', 'Upcoming', 'Active', 'Replied', 'Opened', 'Upcoming', 'Active']
+
+const seqContactRows = mockContacts.slice(0, 12).map((c, i) => {
+  const currentStep = (i % 5) + 1
+  const firstName = c.name.split(' ')[0]
+  const stepEmails: (string | null)[] = Array.from({ length: 5 }, (_, s) =>
+    s < currentStep ? buildStepBody(s, firstName, c.company) : null
+  )
+  return {
+    ...c,
+    status: statusList[i % 12],
+    step: `Step ${currentStep}`,
+    stepEmails,
+  }
+})
+
+interface ComposeState {
+  body: string
+  subject: string
+  contactName: string
+  contactEmail: string
+  contactTitle: string
+  contactCompany: string
+}
+
+function EmailCell({ body, subject, contactName, contactEmail, contactTitle, contactCompany, onOpen }: {
+  body: string | null
+  subject: string
+  contactName: string
+  contactEmail: string
+  contactTitle: string
+  contactCompany: string
+  onOpen: (state: ComposeState) => void
+}) {
+  if (!body) return <span className="text-caption text-tertiary">—</span>
+
+  const preview = body.split('\n').find(l => l.trim()) ?? ''
+
+  return (
+    <div
+      className="seq-email-cell"
+      onClick={() => onOpen({ body, subject, contactName, contactEmail, contactTitle, contactCompany })}
+    >
+      <span className="seq-email-preview text-caption">{preview}</span>
+      <div className="seq-email-popover">
+        <p className="text-caption">{body}</p>
+      </div>
+    </div>
+  )
+}
 
 function SequenceContactsView() {
   const [activeFilter, setActiveFilter] = useState('All')
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
+  const [composeState, setComposeState] = useState<ComposeState | null>(null)
 
   const filtered = activeFilter === 'All'
     ? seqContactRows
@@ -476,6 +540,10 @@ function SequenceContactsView() {
     <div className="seq-contacts-view">
       {/* Inner sidebar */}
       <div className="seq-contacts-sidebar">
+        <div className="seq-contacts-sidebar-header">
+          <span className="text-subtitle-lg">Contacts</span>
+          <span className="text-caption text-secondary">{seqContactRows.length} enrolled in this sequence</span>
+        </div>
         {contactFilters.map((f) => (
           <button
             key={f}
@@ -496,11 +564,9 @@ function SequenceContactsView() {
               <th>Name</th>
               <th>Status</th>
               <th>Step</th>
-              <th>Step 1 email</th>
-              <th>Step 2 email</th>
-              <th>Step 3 email</th>
-              <th>Step 4 email</th>
-              <th>Step 5 email</th>
+              {stepSubjects.map((_, i) => (
+                <th key={i}>Step {i + 1} email</th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -515,16 +581,44 @@ function SequenceContactsView() {
                 </td>
                 <td><span className={`seq-status-badge seq-status-${row.status.toLowerCase().replace(/ /g, '-')}`}>{row.status}</span></td>
                 <td className="text-body-sm text-secondary">{row.step}</td>
-                <td className="text-caption text-secondary">{row.step1}</td>
-                <td className="text-caption text-secondary">{row.step2}</td>
-                <td className="text-caption text-tertiary">—</td>
-                <td className="text-caption text-tertiary">—</td>
-                <td className="text-caption text-tertiary">—</td>
+                {row.stepEmails.map((body, s) => (
+                  <td key={s}>
+                    <EmailCell
+                      body={body}
+                      subject={stepSubjects[s]}
+                      contactName={row.name}
+                      contactEmail={`${row.name.toLowerCase().replace(/\s+/g, '.')}@${row.company.toLowerCase().replace(/\s+/g, '')}.com`}
+                      contactTitle={row.title}
+                      contactCompany={row.company}
+                      onOpen={setComposeState}
+                    />
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* Compose drawer */}
+      {composeState && (
+        <div className="seq-compose-drawer-wrap">
+          <EmailComposeDrawer
+            initialBody={composeState.body}
+            initialSubject={composeState.subject}
+            sendLabel="Update"
+            contacts={[{
+              name: composeState.contactName,
+              email: composeState.contactEmail,
+              title: composeState.contactTitle,
+              company: composeState.contactCompany,
+              signals: [],
+            }]}
+            onClose={() => setComposeState(null)}
+            onBack={() => setComposeState(null)}
+          />
+        </div>
+      )}
     </div>
   )
 }

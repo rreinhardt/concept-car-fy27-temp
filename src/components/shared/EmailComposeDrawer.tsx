@@ -25,6 +25,9 @@ interface EmailComposeDrawerProps {
   onBack: () => void
   onSend?: () => void
   contacts?: ContactInfo[]
+  initialBody?: string
+  initialSubject?: string
+  sendLabel?: string
 }
 
 const mockAiEmail = `Hey Kenton,
@@ -53,6 +56,9 @@ export default function EmailComposeDrawer({
   onBack,
   onSend,
   contacts,
+  initialBody,
+  initialSubject,
+  sendLabel = 'Send now',
 }: EmailComposeDrawerProps) {
   const navigate = useNavigate()
   const contactList = contacts && contacts.length > 0 ? contacts : [defaultContact]
@@ -60,8 +66,8 @@ export default function EmailComposeDrawer({
   const [mode, setMode] = useState<'ai' | 'manual'>('ai')
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
-  const [aiSubject, setAiSubject] = useState('Scaling operations at Mercy Health')
-  const [aiBody, setAiBody] = useState(mockAiEmail)
+  const [aiSubject, setAiSubject] = useState(initialSubject ?? 'Scaling operations at Mercy Health')
+  const [aiBody, setAiBody] = useState(initialBody ?? mockAiEmail)
   const [mailboxConnected, setMailboxConnected] = useState(false)
   const [showWizard, setShowWizard] = useState(false)
   const [footerGlow, setFooterGlow] = useState(false)
@@ -243,7 +249,7 @@ export default function EmailComposeDrawer({
               <span className="ecd-health-label text-caption">Ready to send</span>
             </div>
             <Button variant="secondary" size="sm">Schedule</Button>
-            <Button variant="primary" size="sm" onClick={onSend}>Send now</Button>
+            <Button variant="primary" size="sm" onClick={onSend}>{sendLabel}</Button>
           </div>
         </div>
       )}
