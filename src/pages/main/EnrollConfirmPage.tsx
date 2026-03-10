@@ -7,7 +7,6 @@ import Button from '@/components/shared/Button'
 import Tabs from '@/components/shared/Tabs'
 import EmailComposeDrawer from '@/components/shared/EmailComposeDrawer'
 import {
-  IconCheck,
   IconSparkle,
   IconPlus,
   IconClose,
