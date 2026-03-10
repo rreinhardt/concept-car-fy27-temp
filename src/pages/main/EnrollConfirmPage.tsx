@@ -164,7 +164,7 @@ export default function EnrollConfirmPage() {
       <div className="seq-topbar">
         <div className="seq-topbar-left">
           <span className="seq-name text-subtitle-lg">Cold Outbound — Decision Makers</span>
-          <Badge variant="default" size="sm">Inactive</Badge>
+          <Badge variant="gray" size="sm">Inactive</Badge>
         </div>
         <Tabs
           tabs={topTabs}
@@ -292,10 +292,10 @@ export default function EnrollConfirmPage() {
                     {idx === initialSteps.length - 1 && (
                       <Badge variant="yellow" size="sm">Test A</Badge>
                     )}
-                    <Badge variant="default" size="sm">{step.label} ↓</Badge>
-                    <Badge variant="default" size="sm">{step.format} ↓</Badge>
+                    <Badge variant="gray" size="sm">{step.label} ↓</Badge>
+                    <Badge variant="gray" size="sm">{step.format} ↓</Badge>
                     {step.signals > 0 && (
-                      <Badge variant="default" size="sm">Signals {step.signals} ↓</Badge>
+                      <Badge variant="gray" size="sm">Signals {step.signals} ↓</Badge>
                     )}
                   </div>
                   <div className="seq-step-header-right">
@@ -314,7 +314,7 @@ export default function EnrollConfirmPage() {
                 {/* Refine prompt */}
                 {refineStepId === step.id && (
                   <div className="seq-refine-bar">
-                    <Badge variant="default" size="sm">Refine ↓</Badge>
+                    <Badge variant="gray" size="sm">Refine ↓</Badge>
                     <input
                       className="seq-refine-input"
                       placeholder={`What would you like to change about "${step.label}"?`}
@@ -393,8 +393,8 @@ export default function EnrollConfirmPage() {
                           <span className="text-caption font-medium">Channel</span>
                           <div className="seq-popover-pills">
                             <Badge variant="blue" size="sm">Email</Badge>
-                            <Badge variant="default" size="sm">LinkedIn</Badge>
-                            <Badge variant="default" size="sm">Other</Badge>
+                            <Badge variant="gray" size="sm">LinkedIn</Badge>
+                            <Badge variant="gray" size="sm">Other</Badge>
                           </div>
                         </div>
                         <div className="seq-popover-field">

@@ -112,8 +112,8 @@ export default function ReviewContactsPage() {
                   </div>
                 </td>
                 <td>
-                  <Badge variant={c.fitScore === 'Excellent' ? 'green' : c.fitScore === 'Good' ? 'blue' : 'gray'} size="sm">
-                    {c.fitScore}
+                  <Badge variant={c.reachability >= 90 ? 'green' : c.reachability >= 80 ? 'blue' : 'gray'} size="sm">
+                    {c.reachability >= 90 ? 'Excellent' : c.reachability >= 80 ? 'Good' : 'Average'}
                   </Badge>
                 </td>
                 <td style={{ position: 'relative' }}>
