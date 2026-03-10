@@ -614,17 +614,19 @@
 .seq-contacts-view {
   display: flex;
   flex: 1;
-  overflow: hidden;
+  min-height: 0;
+  padding: var(--padding-section);
+  gap: var(--gap-zone);
 }
 
 .seq-contacts-sidebar {
-  width: 180px;
+  width: 240px;
   flex-shrink: 0;
-  padding: var(--space-4) var(--space-2);
+  padding: 0 var(--padding-section-nested) 0 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  border-right: 1px solid var(--color-border);
+  overflow-y: auto;
 }
 
 .seq-contacts-filter {
@@ -652,10 +654,16 @@
   font-weight: 500;
 }
 
+/* White rounded-rect frame — matches search-table-frame */
 .seq-contacts-table-wrap {
+  position: relative;
+  z-index: 1;
   flex: 1;
+  min-height: 0;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-glow);
   overflow: auto;
-  padding: var(--space-4) var(--padding-section);
 }
 
 .seq-contacts-table {
@@ -676,7 +684,7 @@
 
 .seq-contacts-table td {
   padding: var(--space-2) var(--space-3);
-  border-bottom: 1px solid var(--color-border-subtle, var(--color-border));
+  border-bottom: 1px solid var(--color-border);
   vertical-align: middle;
 }
 
