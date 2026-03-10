@@ -315,7 +315,7 @@ export default function EnrollConfirmPage() {
                     {idx === initialSteps.length - 1 && (
                       <Badge variant="yellow" size="sm">Test A</Badge>
                     )}
-                    <Badge variant="gray" size="sm">{step.label} ↓</Badge>
+                    <Badge variant="blue" size="sm">{step.label} ↓</Badge>
                     <Badge variant="gray" size="sm">{step.format} ↓</Badge>
                     {step.signals > 0 && (
                       <Badge variant="gray" size="sm">Signals {step.signals} ↓</Badge>
