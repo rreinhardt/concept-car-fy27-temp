@@ -5,7 +5,6 @@ import { useAssistantPanel } from '@/contexts/AssistantPanelContext'
 import { useSidebar } from '@/contexts/SidebarContext'
 import {
   IconHome,
-  IconSparkle,
   IconAssistant,
   IconTasks,
   IconWorkflows,
