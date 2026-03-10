@@ -10,6 +10,7 @@ import {
   IconSparkle,
   IconPlus,
   IconClose,
+  IconChevronLeft,
 } from '@/components/shared/Icons'
 import './EnrollConfirmPage.css'
 
@@ -136,22 +137,33 @@ export default function EnrollConfirmPage() {
 
   if (activated) {
     return (
-      <div className="enroll-page enroll-page-center">
-        <div className="enroll-success-card">
-          <div className="enroll-success-icon">
-            <IconCheck size={32} />
+      <div className="seq-activate-overlay">
+        <div className="seq-activate-backdrop" />
+        <div className="seq-activate-content">
+          <div className="seq-activate-check">
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+              <circle cx="28" cy="28" r="26" fill="var(--color-accent-green)" />
+              <path
+                d="M18 28.5L25 35.5L38 21"
+                stroke="white"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="seq-activate-check-path"
+              />
+            </svg>
           </div>
-          <h2 className="text-title-md">Sequence activated</h2>
-          <p className="text-body-sm text-secondary">
+          <h2 className="seq-activate-heading text-title-lg">Sequence activated</h2>
+          <p className="seq-activate-sub text-body-sm">
             {enrolledContacts.length} contacts enrolled. First emails send Monday at 9:00 AM.
           </p>
-          <div className="enroll-success-actions">
-            <Button variant="primary" onClick={() => navigate('/triage')}>
-              Go to Inbox
-            </Button>
-            <Button variant="ghost" onClick={() => navigate('/search')}>
+          <div className="seq-activate-actions">
+            <button className="seq-activate-btn-primary" onClick={() => { setActivated(false); setActiveTopTab('contacts') }}>
+              View contacts
+            </button>
+            <button className="seq-activate-btn-ghost" onClick={() => navigate('/search')}>
               Back to search
-            </Button>
+            </button>
           </div>
         </div>
       </div>
@@ -163,6 +175,9 @@ export default function EnrollConfirmPage() {
       {/* Sequence top bar */}
       <div className="seq-topbar">
         <div className="seq-topbar-left">
+          <button className="seq-back-btn" onClick={() => navigate('/sequences')}>
+            <IconChevronLeft size={16} />
+          </button>
           <span className="seq-name text-subtitle-lg">Cold Outbound — Decision Makers</span>
           <Badge variant="gray" size="sm">Inactive</Badge>
         </div>
@@ -187,7 +202,9 @@ export default function EnrollConfirmPage() {
         </div>
       </div>
 
-      <div className="seq-body">
+      {activeTopTab === 'contacts' && <SequenceContactsView />}
+
+      <div className="seq-body" style={{ display: activeTopTab === 'editor' ? 'flex' : 'none' }}>
         {/* Left — contact list */}
         <div className="seq-contacts">
           <div className="seq-contacts-header">
@@ -421,6 +438,92 @@ export default function EnrollConfirmPage() {
             ))}
           </div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+const contactFilters = ['All', 'Upcoming', 'Step 1', 'Step 2', 'Replied', 'Opened', 'Meeting booked']
+
+const seqContactRows = mockContacts.slice(0, 12).map((c, i) => ({
+  ...c,
+  status: ['Upcoming', 'Active', 'Replied', 'Opened', 'Active', 'Meeting booked', 'Upcoming', 'Active', 'Replied', 'Opened', 'Upcoming', 'Active'][i % 12],
+  step: `Step ${(i % 5) + 1}`,
+  step1: ['Sent', 'Sent', 'Sent', 'Sent', 'Sent', 'Sent', 'Pending', 'Sent', 'Sent', 'Sent', 'Pending', 'Sent'][i % 12],
+  step2: ['Sent', 'Sent', 'Opened', '—', 'Sent', '—', '—', 'Sent', 'Replied', '—', '—', 'Sent'][i % 12],
+}))
+
+function SequenceContactsView() {
+  const [activeFilter, setActiveFilter] = useState('All')
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
+
+  const filtered = activeFilter === 'All'
+    ? seqContactRows
+    : seqContactRows.filter((r) => r.status === activeFilter)
+
+  const toggleAll = () => {
+    if (selectedIds.size === filtered.length) setSelectedIds(new Set())
+    else setSelectedIds(new Set(filtered.map((r) => r.id)))
+  }
+
+  const toggle = (id: number) => {
+    const next = new Set(selectedIds)
+    next.has(id) ? next.delete(id) : next.add(id)
+    setSelectedIds(next)
+  }
+
+  return (
+    <div className="seq-contacts-view">
+      {/* Inner sidebar */}
+      <div className="seq-contacts-sidebar">
+        {contactFilters.map((f) => (
+          <button
+            key={f}
+            className={`seq-contacts-filter ${activeFilter === f ? 'seq-contacts-filter-active' : ''}`}
+            onClick={() => setActiveFilter(f)}
+          >
+            {f}
+          </button>
+        ))}
+      </div>
+
+      {/* Table */}
+      <div className="seq-contacts-table-wrap">
+        <table className="seq-contacts-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" checked={selectedIds.size === filtered.length && filtered.length > 0} onChange={toggleAll} /></th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Step</th>
+              <th>Step 1 email</th>
+              <th>Step 2 email</th>
+              <th>Step 3 email</th>
+              <th>Step 4 email</th>
+              <th>Step 5 email</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((row) => (
+              <tr key={row.id} className={selectedIds.has(row.id) ? 'seq-row-selected' : ''}>
+                <td><input type="checkbox" checked={selectedIds.has(row.id)} onChange={() => toggle(row.id)} /></td>
+                <td>
+                  <div className="seq-contact-name-cell">
+                    <span className="text-body-sm font-medium">{row.name}</span>
+                    <span className="text-caption text-secondary">{row.company}</span>
+                  </div>
+                </td>
+                <td><span className={`seq-status-badge seq-status-${row.status.toLowerCase().replace(/ /g, '-')}`}>{row.status}</span></td>
+                <td className="text-body-sm text-secondary">{row.step}</td>
+                <td className="text-caption text-secondary">{row.step1}</td>
+                <td className="text-caption text-secondary">{row.step2}</td>
+                <td className="text-caption text-tertiary">—</td>
+                <td className="text-caption text-tertiary">—</td>
+                <td className="text-caption text-tertiary">—</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   )

@@ -214,11 +214,6 @@
   display: flex;
   flex-direction: column;
   padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.seq-step-wrapper:last-child {
-  border-bottom: none;
 }
 
 .seq-step-header {
@@ -382,7 +377,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 32px;
+  height: 1px;
+  margin-bottom: var(--space-3);
+  background: var(--color-border);
 }
 
 .seq-connector-line {
@@ -390,7 +387,10 @@
 }
 
 .seq-add-step-btn {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 1;
   padding: 2px 10px;
   border-radius: var(--radius-pill);
@@ -480,3 +480,233 @@
   display: flex;
   gap: var(--gap-component);
 }
+
+/* ── Back button ── */
+.seq-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-component);
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.seq-back-btn:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+/* ── Activation overlay ── */
+.seq-activate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: seq-fade-in 0.3s ease both;
+}
+
+.seq-activate-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 8, 6, 0.92);
+  backdrop-filter: blur(12px);
+}
+
+.seq-activate-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.seq-activate-check {
+  animation: seq-scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.seq-activate-check-path {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: seq-draw-check 0.4s ease 0.3s forwards;
+}
+
+.seq-activate-heading {
+  color: var(--color-text-inverse);
+  animation: seq-slide-up 0.4s ease 0.15s both;
+}
+
+.seq-activate-sub {
+  color: rgba(255, 255, 255, 0.65);
+  animation: seq-slide-up 0.4s ease 0.25s both;
+}
+
+.seq-activate-actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  animation: seq-slide-up 0.4s ease 0.4s both;
+}
+
+.seq-activate-btn-primary {
+  padding: 10px 20px;
+  border-radius: var(--radius-component);
+  border: none;
+  background: #fff;
+  color: #0a0806;
+  font-size: var(--text-body-sm-size);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.seq-activate-btn-primary:hover {
+  opacity: 0.9;
+}
+
+.seq-activate-btn-ghost {
+  padding: 10px 20px;
+  border-radius: var(--radius-component);
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--text-body-sm-size);
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.seq-activate-btn-ghost:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes seq-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes seq-scale-in {
+  from { opacity: 0; transform: scale(0.3); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes seq-draw-check {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes seq-slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Contacts view ── */
+.seq-contacts-view {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.seq-contacts-sidebar {
+  width: 180px;
+  flex-shrink: 0;
+  padding: var(--space-4) var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-right: 1px solid var(--color-border);
+}
+
+.seq-contacts-filter {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-component);
+  border: none;
+  background: none;
+  font-size: var(--text-body-sm-size);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.seq-contacts-filter:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.seq-contacts-filter-active {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.seq-contacts-table-wrap {
+  flex: 1;
+  overflow: auto;
+  padding: var(--space-4) var(--padding-section);
+}
+
+.seq-contacts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm-size);
+}
+
+.seq-contacts-table th {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.seq-contacts-table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border-subtle, var(--color-border));
+  vertical-align: middle;
+}
+
+.seq-contacts-table th:first-child,
+.seq-contacts-table td:first-child {
+  width: 36px;
+}
+
+.seq-row-selected td {
+  background: var(--color-accent-yellow-bg);
+}
+
+.seq-contact-name-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.seq-status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.seq-status-active { background: var(--color-accent-green-bg); color: var(--color-accent-green); }
+.seq-status-replied { background: var(--color-accent-green-bg); color: var(--color-accent-green); }
+.seq-status-meeting-booked { background: var(--color-accent-blue-bg, #EFF6FF); color: var(--color-accent-blue, #3B82F6); }
+.seq-status-opened { background: var(--color-accent-yellow-bg); color: var(--color-accent-yellow, #D97706); }
+.seq-status-upcoming { background: var(--color-bg-tertiary); color: var(--color-text-secondary); }
