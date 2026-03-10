@@ -13,6 +13,9 @@ import BuildAnimationPage from '@/pages/onboarding/BuildAnimationPage'
 import KnowledgeBasePage from '@/pages/onboarding/KnowledgeBasePage'
 import TargetAudiencePage from '@/pages/onboarding/TargetAudiencePage'
 
+/* Tool pages (standalone — no layout shell) */
+import ApolloIA from '@/pages/tools/ApolloIA'
+
 /* Main app pages (wrapped in Layout) */
 import SearchPage from '@/pages/main/SearchPage'
 import ReviewContactsPage from '@/pages/main/ReviewContactsPage'
@@ -36,6 +39,9 @@ function App() {
       <FlowProvider>
         <PrototypeProvider>
           <Routes>
+            {/* Tool pages — standalone */}
+            <Route path="/apollo-ia" element={<ApolloIA />} />
+
             {/* Onboarding — standalone pages */}
             <Route path="/" element={<SignUpPage />} />
             <Route path="/verified" element={<VerifiedPage />} />

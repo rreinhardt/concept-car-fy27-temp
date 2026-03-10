@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>iA Schema Playground</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; height: 100vh; overflow: hidden; background: #f1f5f9; }
+  #root { height: 100vh; display: flex; flex-direction: column; }
+  textarea, input { font-family: inherit; }
+  textarea { resize: none; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useCallback, useEffect } = React;
+
+const EASE = 'cubic-bezier(0.4,0,0.2,1)';
+
+// ── Zone palette ──
+const Z = {
+  nav:     { bg: '#dbeafe', fg: '#1e40af', border: '#bfdbfe', label: 'NAV' },
+  topbar:  { bg: '#bfdbfe', fg: '#1e3a8a', border: '#93c5fd', label: 'TOPBAR' },
+  toolbar: { bg: '#fce7f3', fg: '#9d174d', border: '#f9a8d4', label: 'TOOLBAR' },
+  asst:    { bg: '#fefce8', fg: '#854d0e', border: '#fde68a', label: 'ASST' },
+  sec:     { bg: '#f3e8ff', fg: '#6b21a8', border: '#d8b4fe', label: 'SEC PANEL' },
+  canvas:  { bg: '#ffe4e6', fg: '#9f1239', border: '#fecdd3', label: 'CANVAS' },
+  drawer:  { bg: '#dcfce7', fg: '#166534', border: '#86efac', label: 'DRAWER' },
+};
+
+// ── Presets ──
+const PRESETS = [
+  { name: 'Canvas only',  c: { navExpanded: true,  asst: false, sec: false, secPinned: false, drawer: false } },
+  { name: 'Nav rail',     c: { navExpanded: false, asst: false, sec: false, secPinned: false, drawer: false } },
+  { name: 'ASST only',    c: { navExpanded: true,  asst: true,  sec: false, secPinned: false, drawer: false } },
+  { name: 'SEC dropdown', c: { navExpanded: true,  asst: false, sec: true,  secPinned: false, drawer: false } },
+  { name: 'SEC pinned',   c: { navExpanded: true,  asst: false, sec: true,  secPinned: true,  drawer: false } },
+  { name: 'ASST + SEC',   c: { navExpanded: false, asst: true,  sec: true,  secPinned: true,  drawer: false } },
+  { name: 'Drawer',       c: { navExpanded: true,  asst: false, sec: false, secPinned: false, drawer: true  } },
+  { name: 'All panels',   c: { navExpanded: false, asst: true,  sec: true,  secPinned: true,  drawer: true  } },
+];
+
+// ── Two-out-of-three ──
+function resolve(cfg) {
+  if (cfg.navExpanded && cfg.asst && cfg.sec) return { ...cfg, navExpanded: false };
+  return cfg;
+}
+
+// ── URL hash state ──
+function readHash() {
+  try {
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    if (params.has('n')) return {
+      navExpanded: params.get('n') !== '0',
+      asst: params.get('a') === '1',
+      sec: params.get('s') === '1',
+      secPinned: params.get('sp') === '1',
+      drawer: params.get('d') === '1',
+      topbarOpen: false,
+    };
+  } catch {}
+  return null;
+}
+
+// ── Shared atoms ──
+const ZLabel = ({ zid, small }) => (
+  <div style={{ fontSize: small ? 10 : 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: Z[zid].fg, flexShrink: 0, userSelect: 'none' }}>
+    {Z[zid].label}
+  </div>
+);
+
+const X = ({ onClick, color }) => (
+  <button onClick={onClick} title="Close" style={{ width: 20, height: 20, border: 'none', background: 'transparent', cursor: 'pointer', color: color || '#9ca3af', fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 3, flexShrink: 0, padding: 0, opacity: 0.5 }}>×</button>
+);
+
+const Chip = ({ zid, label, icon, onClick, active }) => {
+  const z = Z[zid];
+  return (
+    <button onClick={onClick} style={{ padding: '3px 10px', borderRadius: 4, border: `1.5px solid ${z.border}`, background: active ? z.bg : 'rgba(255,255,255,0.6)', color: z.fg, fontSize: 10.5, fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase', cursor: 'pointer', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 3 }}>
+      {label}
+      {icon && <span style={{ opacity: 0.55, fontSize: 9.5 }}>{icon}</span>}
+    </button>
+  );
+};
+
+const Note = ({ zid, value, onChange, multi }) => {
+  const style = { flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 11.5, color: Z[zid].fg, opacity: 0.55, lineHeight: 1.55, minWidth: 0, width: '100%', minHeight: 0 };
+  return multi
+    ? <textarea value={value} onChange={e => onChange(zid, e.target.value)} placeholder="describe…" style={style} />
+    : <input   value={value} onChange={e => onChange(zid, e.target.value)} placeholder="describe…" style={style} />;
+};
+
+// ── Pin icon — filled when pinned, outlined when unpinned ──
+const PinIcon = ({ filled }) => (
+  <svg width="11" height="14" viewBox="0 0 11 14" fill="none" style={{ display: 'block', flexShrink: 0 }}>
+    <circle cx="5.5" cy="3.8" r="2.6"
+      fill={filled ? 'currentColor' : 'none'}
+      stroke="currentColor" strokeWidth="1.35" />
+    <line x1="5.5" y1="6.4" x2="5.5" y2="13"
+      stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+
+// ── TOPBAR ──
+const TopbarZone = ({ note, onNote, asstOpen, topbarOpen, onToggleAsst, onToggleTopbar }) => {
+  const z = Z.topbar;
+  return (
+    <div style={{ height: '100%', background: z.bg, border: `1.5px solid ${z.border}`, borderRadius: 7, display: 'flex', alignItems: 'center', padding: '0 10px', gap: 8 }}>
+      <Chip zid="asst" label="ASST" icon={asstOpen ? '×' : '↗'} onClick={onToggleAsst} active={asstOpen} />
+      <ZLabel zid="topbar" small />
+      <Note zid="topbar" value={note} onChange={onNote} />
+      <Chip zid="topbar" label="⌘K" icon={topbarOpen ? '▲' : '▼'} onClick={onToggleTopbar} active={topbarOpen} />
+    </div>
+  );
+};
+
+// Rendered inside an already-positioned wrapper; fills it fully
+const TopbarExpanded = ({ note, onNote, onClose }) => {
+  const z = Z.topbar;
+  return (
+    <div style={{ height: '100%', background: z.bg, border: `1.5px solid ${z.border}`, borderRadius: 7, padding: '9px 11px', display: 'flex', flexDirection: 'column', gap: 6, boxShadow: '0 6px 20px rgba(0,0,0,0.12)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <ZLabel zid="topbar" />
+        <span style={{ fontSize: 9.5, color: z.fg, opacity: 0.4, flex: 1 }}>overlays toolbar + canvas</span>
+        <X onClick={onClose} color={z.fg} />
+      </div>
+      <Note zid="topbar" value={note} onChange={onNote} multi />
+    </div>
+  );
+};
+
+// ── NAV ──
+const NavZone = ({ expanded, note, onNote, onToggle }) => {
+  const z = Z.nav;
+  return (
+    <div style={{ width: expanded ? '13%' : 32, minWidth: expanded ? 64 : 32, flexShrink: 0, background: z.bg, border: `1.5px solid ${z.border}`, borderRadius: 7, padding: '8px 7px', display: 'flex', flexDirection: 'column', gap: 6, overflow: 'hidden', transition: `width 0.22s ${EASE}, min-width 0.22s ${EASE}` }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: expanded ? 'space-between' : 'center' }}>
+        {expanded && <ZLabel zid="nav" />}
+        <button onClick={onToggle} title={expanded ? 'Collapse' : 'Expand'} style={{ width: 18, height: 18, border: `1px solid ${z.border}`, background: 'rgba(255,255,255,0.6)', cursor: 'pointer', borderRadius: 3, fontSize: 11, color: z.fg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, padding: 0 }}>
+          {expanded ? '←' : '→'}
+        </button>
+      </div>
+      {expanded && <Note zid="nav" value={note} onChange={onNote} multi />}
+    </div>
+  );
+};
+
+// ── ASST — fills its animated wrapper ──
+const AsstZone = ({ note, onNote, onClose }) => {
+  const z = Z.asst;
+  return (
+    <div style={{ width: '100%', height: '100%', background: z.bg, border: `1.5px solid ${z.border}`, borderRadius: 7, padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 6, overflow: 'hidden' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <ZLabel zid="asst" />
+        <X onClick={onClose} color={z.fg} />
+      </div>
+      <Note zid="asst" value={note} onChange={onNote} multi />
+    </div>
+  );
+};
+
+// ── TOOLBAR — SEC chip leftmost so dropdown falls directly below it ──
+const ToolbarZone = ({ note, onNote, sec, secPinned, drawerOpen, onToggleSec, onToggleDrawer }) => {
+  const z = Z.toolbar;
+  const secIcon = sec ? '×' : (secPinned ? '⊞' : '▾');
+  return (
+    <div style={{ height: '100%', background: z.bg, border: `1.5px solid ${z.border}`, borderRadius: 7, display: 'flex', alignItems: 'center', padding: '0 10px', gap: 8, overflow: 'hidden' }}>
+      <Chip zid="sec" label="SEC" icon={secIcon} onClick={onToggleSec} active={sec} />
+      <ZLabel zid="toolbar" small />
+      <Note zid="toolbar" value={note} onChange={onNote} />
+      <Chip zid="drawer" label="DRAWER" icon={drawerOpen ? '×' : '→'} onClick={onToggleDrawer} active={drawerOpen} />
+    </div>
+  );
+};
+
+// ── SEC PANEL — fills its wrapper (either side-panel or dropdown wrapper) ──
+const SecZone = ({ note, onNote, pinned, onTogglePin, onClose }) => {
+  const z = Z.sec;
+  return (
+    <div style={{ width: '100%', height: '100%', background: z.bg, border: `1.5px solid ${z.border}`, borderRadius: pinned ? 7 : '4px 7px 7px 7px', padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 5, overflow: 'hidden', boxShadow: pinned ? 'none' : '3px 8px 22px rgba(0,0,0,0.14)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <ZLabel zid="sec" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <button onClick={onTogglePin} title={pinned ? 'Unpin (closes panel)' : 'Pin as side panel'} style={{ width: 20, height: 20, border: `1px solid ${z.border}`, background: 'rgba(255,255,255,0.6)', cursor: 'pointer', borderRadius: 3, color: z.fg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, padding: 0, opacity: 0.75 }}>
+            <PinIcon filled={pinned} />
+          </button>
+          <X onClick={onClose} color={z.fg} />
+        </div>
+      </div>
+      <div style={{ fontSize: 9.5, color: z.fg, opacity: 0.4 }}>
+        {pinned ? 'pinned · side panel' : 'floating · dropdown'}
+      </div>
+      <Note zid="sec" value={note} onChange={onNote} multi />
+    </div>
+  );
+};
+
+// ── CANVAS ──
+const CanvasZone = ({ note, onNote }) => {
+  const z = Z.canvas;
+  return (
+    <div style={{ width: '100%', height: '100%', background: z.bg, border: `1.5px solid ${z.border}`, borderRadius: 7, padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <ZLabel zid="canvas" />
+      <Note zid="canvas" value={note} onChange={onNote} multi />
+    </div>
+  );
+};
+
+// ── DRAWER — always mounted, slides via translateX ──
+const DrawerZone = ({ open, note, onNote, onClose }) => {
+  const z = Z.drawer;
+  return (
+    <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '40%', background: z.bg, border: `1.5px solid ${z.border}`, borderRadius: '0 7px 7px 0', padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 6, boxShadow: '-4px 0 16px rgba(0,0,0,0.08)', zIndex: 5, transform: `translateX(${open ? '0' : '106%'})`, transition: `transform 0.26s ${EASE}` }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <ZLabel zid="drawer" />
+        <X onClick={onClose} color={z.fg} />
+      </div>
+      <div style={{ fontSize: 9.5, color: z.fg, opacity: 0.4 }}>overlays canvas</div>
+      <Note zid="drawer" value={note} onChange={onNote} multi />
+    </div>
+  );
+};
+
+// ── Layout constants ──
+const TOPBAR_H = 32;
+const TOOLBAR_H = 32;
+const GAP = 6;
+
+// ── Schema ──
+const Schema = ({ state: S, notes, onNote, onToggle, onToggleSecPin }) => {
+  const { navExpanded, asst, sec, secPinned, drawer, topbarOpen } = S;
+  const showSecDropdown = sec && !secPinned;
+  const showSecPinned  = sec && secPinned;
+
+  return (
+    <div style={{ height: '100%', display: 'flex', gap: GAP }}>
+
+      {/* NAV */}
+      <NavZone expanded={navExpanded} note={notes.nav} onNote={onNote} onToggle={() => onToggle('navExpanded')} />
+
+      {/* RIGHT COLUMN */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: GAP, minWidth: 0, position: 'relative' }}>
+
+        {/* TOPBAR */}
+        <div style={{ height: TOPBAR_H, flexShrink: 0 }}>
+          <TopbarZone note={notes.topbar} onNote={onNote} asstOpen={asst} topbarOpen={topbarOpen} onToggleAsst={() => onToggle('asst')} onToggleTopbar={() => onToggle('topbarOpen')} />
+        </div>
+
+        {/* MAIN AREA */}
+        <div style={{ flex: 1, display: 'flex', minHeight: 0 }}>
+
+          {/* ASST — always mounted, width + margin + opacity transition */}
+          <div style={{ width: asst ? '21%' : 0, marginRight: asst ? GAP : 0, flexShrink: 0, overflow: 'hidden', transition: `width 0.22s ${EASE}, margin-right 0.22s ${EASE}, opacity 0.18s ease`, opacity: asst ? 1 : 0 }}>
+            <AsstZone note={notes.asst} onNote={onNote} onClose={() => onToggle('asst')} />
+          </div>
+
+          {/* CONTENT COLUMN */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: GAP, minWidth: 0, position: 'relative' }}>
+
+            {/* TOOLBAR */}
+            <div style={{ height: TOOLBAR_H, flexShrink: 0 }}>
+              <ToolbarZone note={notes.toolbar} onNote={onNote} sec={sec} secPinned={secPinned} drawerOpen={drawer} onToggleSec={() => onToggle('sec')} onToggleDrawer={() => onToggle('drawer')} />
+            </div>
+
+            {/* PANELS ROW */}
+            <div style={{ flex: 1, display: 'flex', minHeight: 0 }}>
+
+              {/* SEC pinned — always mounted, width + margin + opacity transition */}
+              <div style={{ width: showSecPinned ? '24%' : 0, marginRight: showSecPinned ? GAP : 0, minWidth: 0, flexShrink: 0, overflow: 'hidden', transition: `width 0.22s ${EASE}, margin-right 0.22s ${EASE}, opacity 0.18s ease`, opacity: showSecPinned ? 1 : 0 }}>
+                <SecZone note={notes.sec} onNote={onNote} pinned={true} onTogglePin={onToggleSecPin} onClose={() => onToggle('sec')} />
+              </div>
+
+              {/* CANVAS */}
+              <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
+                <CanvasZone note={notes.canvas} onNote={onNote} />
+                <DrawerZone open={drawer} note={notes.drawer} onNote={onNote} onClose={() => onToggle('drawer')} />
+              </div>
+
+            </div>
+
+            {/* SEC dropdown — always mounted, opacity + translateY */}
+            <div style={{ position: 'absolute', top: TOOLBAR_H + GAP, left: 0, width: '22%', height: 240, zIndex: 15, opacity: showSecDropdown ? 1 : 0, transform: `translateY(${showSecDropdown ? '0' : '-7px'})`, transition: `opacity 0.18s ease, transform 0.18s ease`, pointerEvents: showSecDropdown ? 'auto' : 'none' }}>
+              <SecZone note={notes.sec} onNote={onNote} pinned={false} onTogglePin={onToggleSecPin} onClose={() => onToggle('sec')} />
+            </div>
+
+          </div>
+        </div>
+
+        {/* TOPBAR expanded — always mounted, opacity + translateY */}
+        <div style={{ position: 'absolute', top: TOPBAR_H + GAP, left: 0, right: 0, height: 130, zIndex: 20, opacity: topbarOpen ? 1 : 0, transform: `translateY(${topbarOpen ? '0' : '-7px'})`, transition: `opacity 0.18s ease, transform 0.18s ease`, pointerEvents: topbarOpen ? 'auto' : 'none' }}>
+          <TopbarExpanded note={notes.topbar} onNote={onNote} onClose={() => onToggle('topbarOpen')} />
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+// ── Header pill ──
+const Pill = ({ label, zid, active, onClick }) => {
+  const z = Z[zid];
+  return (
+    <button onClick={onClick} style={{ padding: '4px 12px', borderRadius: 100, border: `1.5px solid ${active ? z.border : '#d1d5db'}`, background: active ? z.bg : 'white', color: active ? z.fg : '#9ca3af', fontSize: 11.5, fontWeight: 600, letterSpacing: '0.04em', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, transition: `all 0.15s ${EASE}`, flexShrink: 0 }}>
+      <span style={{ width: 5, height: 5, borderRadius: '50%', background: active ? z.fg : '#d1d5db', flexShrink: 0 }} />
+      {label}
+    </button>
+  );
+};
+
+// ── App ──
+const App = () => {
+  const [S, setS] = useState(() =>
+    readHash() || { navExpanded: true, asst: false, sec: false, secPinned: false, drawer: false, topbarOpen: false }
+  );
+  const [notes, setNotes] = useState({ nav: '', topbar: '', toolbar: '', asst: '', sec: '', canvas: '', drawer: '' });
+  const [saved,       setSaved]       = useState([]);
+  const [saving,      setSaving]      = useState(false);
+  const [saveName,    setSaveName]    = useState('');
+  const [activePreset,setActivePreset]= useState(null);
+  const [copied,      setCopied]      = useState(false);
+
+  const onNote = useCallback((id, val) => setNotes(n => ({ ...n, [id]: val })), []);
+
+  const onToggle = useCallback((field) => {
+    setS(s => {
+      let next = { ...s, [field]: !s[field] };
+      if (field !== 'secPinned' && field !== 'topbarOpen') next = resolve(next);
+      return next;
+    });
+    if (field !== 'topbarOpen') setActivePreset(null);
+  }, []);
+
+  const onToggleSecPin = useCallback(() => {
+    setS(s => s.secPinned
+      ? { ...s, sec: false, secPinned: false }   // unpin → close
+      : { ...s, secPinned: true }                 // pin → attach
+    );
+    setActivePreset(null);
+  }, []);
+
+  useEffect(() => {
+    const p = new URLSearchParams({
+      n:  S.navExpanded ? '1' : '0',
+      a:  S.asst        ? '1' : '0',
+      s:  S.sec         ? '1' : '0',
+      sp: S.secPinned   ? '1' : '0',
+      d:  S.drawer      ? '1' : '0',
+    });
+    window.history.replaceState(null, '', '#' + p.toString());
+  }, [S.navExpanded, S.asst, S.sec, S.secPinned, S.drawer]);
+
+  const applyPreset = (p, i) => {
+    setS(s => resolve({ ...s, ...p.c, topbarOpen: false }));
+    setActivePreset(i);
+  };
+
+  const doSave = () => {
+    if (!saveName.trim()) return;
+    const snap = { navExpanded: S.navExpanded, asst: S.asst, sec: S.sec, secPinned: S.secPinned, drawer: S.drawer };
+    setSaved(sv => [...sv, { name: saveName.trim(), c: snap }]);
+    setSaveName(''); setSaving(false);
+  };
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  const ruleNote =
+    S.asst && S.sec         ? '2/3: ASST + SEC → NAV collapsed'             :
+    S.navExpanded && S.asst ? '2/3: NAV + ASST (opening SEC collapses NAV)' :
+    S.navExpanded && S.sec  ? '2/3: NAV + SEC (opening ASST collapses NAV)' : null;
+
+  return (
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#f1f5f9' }}>
+
+      {/* ── HEADER ── */}
+      <div style={{ padding: '8px 14px', borderBottom: '1px solid #e2e8f0', background: 'white', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0, flexWrap: 'wrap' }}>
+
+        <div style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', flexShrink: 0 }}>iA Schema</div>
+        <div style={{ width: 1, height: 16, background: '#e2e8f0', flexShrink: 0 }} />
+
+        <div style={{ display: 'flex', gap: 5, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Pill label={S.navExpanded ? 'NAV' : 'NAV ↔'} zid="nav"    active={S.navExpanded} onClick={() => onToggle('navExpanded')} />
+          <Pill label="ASST"                              zid="asst"   active={S.asst}        onClick={() => onToggle('asst')} />
+          <Pill label="SEC"                               zid="sec"    active={S.sec}         onClick={() => onToggle('sec')} />
+          <Pill label="DRAWER"                            zid="drawer" active={S.drawer}      onClick={() => onToggle('drawer')} />
+        </div>
+
+        <div style={{ width: 1, height: 16, background: '#e2e8f0', flexShrink: 0 }} />
+
+        <div style={{ display: 'flex', gap: 4, alignItems: 'center', flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 9.5, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.09em', fontWeight: 600 }}>presets</span>
+          {PRESETS.map((p, i) => (
+            <button key={i} onClick={() => applyPreset(p, i)} style={{ padding: '3px 8px', borderRadius: 4, border: '1px solid #e2e8f0', background: activePreset === i ? '#0f172a' : 'white', color: activePreset === i ? 'white' : '#475569', fontSize: 11.5, cursor: 'pointer', fontWeight: activePreset === i ? 600 : 400 }}>
+              {p.name}
+            </button>
+          ))}
+
+          {saved.map((sv, i) => (
+            <button key={`sv${i}`} onClick={() => { setS(s => resolve({ ...s, ...sv.c, topbarOpen: false })); setActivePreset(null); }} style={{ padding: '3px 8px', borderRadius: 4, border: '1.5px dashed #cbd5e1', background: 'white', color: '#475569', fontSize: 11.5, cursor: 'pointer' }}>
+              {sv.name}
+            </button>
+          ))}
+
+          {saving ? (
+            <div style={{ display: 'flex', gap: 3, alignItems: 'center' }}>
+              <input value={saveName} onChange={e => setSaveName(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') doSave(); if (e.key === 'Escape') setSaving(false); }}
+                placeholder="name…" autoFocus
+                style={{ padding: '3px 6px', border: '1px solid #94a3b8', borderRadius: 3, fontSize: 11.5, width: 80, outline: 'none' }} />
+              <button onClick={doSave} style={{ padding: '3px 8px', borderRadius: 3, border: 'none', background: '#0f172a', color: 'white', fontSize: 11.5, cursor: 'pointer' }}>Save</button>
+              <button onClick={() => setSaving(false)} style={{ padding: '3px 8px', borderRadius: 3, border: '1px solid #e2e8f0', background: 'white', fontSize: 11.5, cursor: 'pointer' }}>✕</button>
+            </div>
+          ) : (
+            <button onClick={() => setSaving(true)} style={{ padding: '3px 8px', borderRadius: 4, border: '1.5px dashed #cbd5e1', background: 'white', color: '#94a3b8', fontSize: 11.5, cursor: 'pointer' }}>+ save</button>
+          )}
+        </div>
+
+        {ruleNote && (
+          <div style={{ fontSize: 9.5, color: S.asst && S.sec ? '#7c3aed' : '#94a3b8' }}>{ruleNote}</div>
+        )}
+
+        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+          <button onClick={copyLink} title="Copy URL with current layout state" style={{ padding: '4px 10px', borderRadius: 5, border: '1px solid #e2e8f0', background: copied ? '#f0fdf4' : 'white', color: copied ? '#166534' : '#475569', fontSize: 11.5, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+            {copied ? '✓ copied' : '⎘ copy link'}
+          </button>
+          <a href="https://app.netlify.com/drop" target="_blank" rel="noopener" style={{ fontSize: 10.5, color: '#94a3b8', textDecoration: 'none' }} title="Drag this file to Netlify Drop to host it">host ↗</a>
+        </div>
+
+      </div>
+
+      {/* ── SCHEMA ── */}
+      <div style={{ flex: 1, padding: 14, overflow: 'hidden' }}>
+        <Schema state={S} notes={notes} onNote={onNote} onToggle={onToggle} onToggleSecPin={onToggleSecPin} />
+      </div>
+
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
