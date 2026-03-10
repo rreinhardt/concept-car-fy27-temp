@@ -45,7 +45,7 @@
 }
 
 .ubar-assistant-btn-active svg {
-  color: var(--color-brand-citrine);
+  color: var(--color-text-primary);
 }
 
 /* When assistant opens, topbar closes the gap left by sidebar collapse */
