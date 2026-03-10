@@ -6,6 +6,7 @@ import { useSidebar } from '@/contexts/SidebarContext'
 import {
   IconHome,
   IconSparkle,
+  IconAssistant,
   IconTasks,
   IconWorkflows,
   IconChart,
@@ -47,7 +48,7 @@ const primaryGroups: NavGroup[] = [
     label: '',
     items: [
       { id: 'home', label: 'Home', path: '/home', icon: <IconHome /> },
-      { id: 'assistant', label: 'Assistant', path: '/assistant', icon: <IconSparkle /> },
+      { id: 'assistant', label: 'Assistant', path: '/assistant', icon: <IconAssistant /> },
       { id: 'tasks', label: 'Tasks', path: '/tasks', icon: <IconTasks /> },
     ],
   },

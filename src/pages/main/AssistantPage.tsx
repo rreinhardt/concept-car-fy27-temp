@@ -1,6 +1,6 @@
 import { useUser } from '@/contexts/UserContext'
 import PageLayout from '@/components/shared/PageLayout'
-import { IconSparkle, IconChevronDown, IconApolloLogo, IconClock, IconPlus } from '@/components/shared/Icons'
+import { IconSparkle, IconChevronDown, IconAssistant, IconClock, IconPlus } from '@/components/shared/Icons'
 import '../main/SearchPage.css'
 import './AssistantPage.css'
 
@@ -62,7 +62,7 @@ export default function AssistantPage() {
       <div className="search-table-frame assistant-main">
         <div className="assistant-content">
           <div className="assistant-icon">
-            <IconApolloLogo size={28} />
+            <IconAssistant size={28} />
           </div>
 
           <h2 className="assistant-heading text-title-md">

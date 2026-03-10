@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useAssistantPanel } from '@/contexts/AssistantPanelContext'
 import {
-  IconApolloLogo,
+  IconAssistant,
   IconChevronRight,
 } from '@/components/shared/Icons'
 import './AssistantSidePanel.css'
@@ -36,7 +36,7 @@ export default function AssistantSidePanel() {
         {/* Header */}
         <div className="asst-header">
           <div className="asst-header-left">
-            <IconApolloLogo size={16} />
+            <IconAssistant size={16} />
             <span className="text-body-sm font-medium">Assistant</span>
           </div>
           <button className="asst-close" onClick={closeAssistant}>
@@ -50,7 +50,7 @@ export default function AssistantSidePanel() {
         <div className="asst-messages">
           {messages.length === 0 && (
             <div className="asst-empty">
-              <IconApolloLogo size={28} />
+              <IconAssistant size={28} />
               <span className="text-caption text-tertiary">Analyzing page context…</span>
             </div>
           )}
@@ -69,7 +69,7 @@ export default function AssistantSidePanel() {
               return (
                 <div key={msg.id} className="asst-msg asst-msg-assistant">
                   <div className="asst-msg-avatar">
-                    <IconApolloLogo size={14} />
+                    <IconAssistant size={14} />
                   </div>
                   <div className="asst-msg-bubble asst-msg-bubble-assistant">
                     <p className="text-body-sm">{msg.content}</p>

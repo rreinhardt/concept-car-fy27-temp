@@ -9,6 +9,7 @@ import {
   IconMail,
   IconChevronRight,
   IconSparkle,
+  IconAssistant,
 } from '@/components/shared/Icons'
 import MailboxSetupWizard from '@/components/shared/MailboxSetupWizard'
 import { useAssistantPanel } from '@/contexts/AssistantPanelContext'
@@ -136,7 +137,7 @@ export default function Topbar() {
               className={`ubar-assistant-btn ${assistantOpen ? 'ubar-assistant-btn-active' : ''}`}
               onClick={toggleAssistant}
             >
-              <IconSparkle size={14} />
+              <IconAssistant size={14} />
               <span>Assistant</span>
             </button>
 
