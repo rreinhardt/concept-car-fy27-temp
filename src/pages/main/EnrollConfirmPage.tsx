@@ -53,7 +53,7 @@ Open to a quick chat on this?`,
     format: 'Custom tone',
     tone: 'Custom tone',
     signals: 5,
-    subject: '',
+    subject: 'Following up — sustainability at Zendrek',
     body: `Hey Ivan,
 
 Your Global Impact Report on science-based climate targets got me thinking about Zendrek's physical touchpoints.
@@ -70,8 +70,14 @@ Open to connect?`,
     tone: 'Direct',
     signals: 0,
     subject: '',
-    body: '',
-    length: 0,
+    body: `Hey Ivan,
+
+Just bumping this up in case my earlier notes got buried.
+
+Happy to share a quick overview if that's easier than a call.
+
+Open to connect?`,
+    length: 25,
   },
   {
     id: 4,
@@ -79,7 +85,7 @@ Open to connect?`,
     format: 'Direct',
     tone: 'Direct',
     signals: 0,
-    subject: '',
+    subject: 'Still worth a conversation?',
     body: `Hey Ivan,
 
 Your Global Impact Report on science-based climate targets got me thinking about Zendrek's physical touchpoints.
@@ -95,7 +101,7 @@ Open to connect?`,
     format: 'Direct',
     tone: 'Direct',
     signals: 0,
-    subject: '',
+    subject: 'Closing the loop',
     body: `Hey Ivan,
 
 Your Global Impact Report on science-based climate targets got me thinking about Zendrek's physical touchpoints.
@@ -316,14 +322,12 @@ export default function EnrollConfirmPage() {
                     )}
                   </div>
                   <div className="seq-step-header-right">
-                    {step.body && (
-                      <button
-                        className="seq-step-refine-btn"
-                        onClick={() => setRefineStepId(refineStepId === step.id ? null : step.id)}
-                      >
-                        <IconSparkle size={13} />
-                      </button>
-                    )}
+                    <button
+                      className="seq-step-refine-btn"
+                      onClick={() => setRefineStepId(refineStepId === step.id ? null : step.id)}
+                    >
+                      <IconSparkle size={13} />
+                    </button>
                     <span className="text-caption text-tertiary">···</span>
                   </div>
                 </div>

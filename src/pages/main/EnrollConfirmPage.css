@@ -201,7 +201,11 @@
 }
 
 .seq-detail-tabs {
-  margin-bottom: var(--space-2);
+  margin-left: calc(-1 * var(--padding-section));
+  margin-right: calc(-1 * var(--padding-section));
+  padding-left: var(--padding-section);
+  padding-right: var(--padding-section);
+  margin-bottom: 30px;
 }
 
 /* ── Steps ── */
@@ -213,7 +217,7 @@
 .seq-step-wrapper {
   display: flex;
   flex-direction: column;
-  padding-bottom: var(--space-3);
+  padding-bottom: 30px;
 }
 
 .seq-step-header {
@@ -290,7 +294,6 @@
   flex-direction: column;
   gap: 2px;
   padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--color-border);
 }
 
 .seq-step-email {
@@ -378,6 +381,8 @@
   align-items: center;
   justify-content: center;
   height: 1px;
+  margin-left: calc(-1 * var(--padding-section));
+  margin-right: calc(-1 * var(--padding-section));
   margin-bottom: var(--space-3);
   background: var(--color-border);
 }
