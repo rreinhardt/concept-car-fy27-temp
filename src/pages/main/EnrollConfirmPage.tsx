@@ -417,6 +417,7 @@ export default function EnrollConfirmPage() {
                           onClick={() => setRefineStepId(step.id)}
                         >
                           <IconSparkle size={13} />
+                          <span className="text-caption">Refine</span>
                         </button>
                       </div>
                     )}
