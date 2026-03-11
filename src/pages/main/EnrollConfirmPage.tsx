@@ -244,31 +244,17 @@ export default function EnrollConfirmPage() {
           className="seq-top-tabs"
         />
         <div className="seq-topbar-right">
-          <Button variant="primary" size="sm" onClick={() => setActionsPanelOpen(true)}>
+          <Button variant={actionsPanelOpen ? 'secondary' : 'primary'} size="sm" onClick={() => setActionsPanelOpen(v => !v)}>
             Actions
           </Button>
         </div>
       </div>
 
-      {actionsPanelOpen && (
-        <div className="seq-actions-panel-wrap">
-          <ActionsPanel
-            onClose={() => setActionsPanelOpen(false)}
-            onAction={(id) => {
-              if (id === 'activate') { setActionsPanelOpen(false); setActivated(true) }
-              else if (id === 'add-contacts') { setActionsPanelOpen(false); navigate('/search') }
-              else setActionsPanelOpen(false)
-            }}
-            selectedCount={0}
-            onDeselect={() => {}}
-            suggestedGroups={enrollActionGroups}
-          />
-        </div>
-      )}
+      <div className="enroll-body-row">
+        <div className="enroll-main">
+          {activeTopTab === 'contacts' && <SequenceContactsView />}
 
-      {activeTopTab === 'contacts' && <SequenceContactsView />}
-
-      <div className="seq-body" style={{ display: activeTopTab === 'editor' ? 'flex' : 'none' }}>
+          <div className="seq-body" style={{ display: activeTopTab === 'editor' ? 'flex' : 'none' }}>
         {/* Left — contact list */}
         <div className="seq-contacts">
           <div className="seq-contacts-header">
@@ -538,6 +524,25 @@ export default function EnrollConfirmPage() {
           </div>
         </div>
       </div>
+        </div>{/* end enroll-main */}
+
+        {/* Actions panel — splits the page like other pages */}
+        <aside className={`page-actions-panel ${actionsPanelOpen ? 'page-actions-panel-open' : ''}`}>
+          <div className="page-actions-panel-inner">
+            <ActionsPanel
+              onClose={() => setActionsPanelOpen(false)}
+              onAction={(id) => {
+                if (id === 'activate') { setActionsPanelOpen(false); setActivated(true) }
+                else if (id === 'add-contacts') { setActionsPanelOpen(false); navigate('/search') }
+                else setActionsPanelOpen(false)
+              }}
+              selectedCount={0}
+              onDeselect={() => {}}
+              suggestedGroups={enrollActionGroups}
+            />
+          </div>
+        </aside>
+      </div>{/* end enroll-body-row */}
     </div>
   )
 }

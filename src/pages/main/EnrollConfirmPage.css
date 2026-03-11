@@ -4,6 +4,23 @@
   height: 100%;
 }
 
+.enroll-body-row {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 var(--padding-section) var(--padding-section);
+  gap: 8px;
+}
+
+.enroll-main {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
 .enroll-page-center {
   align-items: center;
   justify-content: center;
@@ -63,7 +80,6 @@
   display: flex;
   flex: 1;
   overflow: hidden;
-  padding: var(--padding-section);
   gap: var(--gap-zone);
 }
 
@@ -695,7 +711,6 @@
   display: flex;
   flex: 1;
   min-height: 0;
-  padding: var(--padding-section);
   gap: var(--gap-zone);
 }
 
@@ -865,24 +880,6 @@
 }
 
 .seq-compose-drawer-wrap > * {
-  pointer-events: all;
-  height: 100%;
-}
-
-.seq-actions-panel-wrap {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 320px;
-  padding: var(--padding-section);
-  z-index: 200;
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-}
-
-.seq-actions-panel-wrap > * {
   pointer-events: all;
   height: 100%;
 }
