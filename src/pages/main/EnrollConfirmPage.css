@@ -294,13 +294,21 @@
 
 /* ── Manual edit inputs ── */
 .seq-manual-subject {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: none;
-  font-family: inherit;
-  color: var(--color-text-primary);
   width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-component);
+  padding: 6px var(--space-3);
+  font-family: inherit;
+  font-size: var(--text-body-sm-size);
+  color: var(--color-text-primary);
+  background: var(--color-bg-tertiary);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.seq-manual-subject:focus {
+  border-color: var(--color-border-input);
+  background: var(--color-bg-primary);
 }
 
 .seq-manual-body {
