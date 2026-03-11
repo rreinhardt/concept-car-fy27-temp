@@ -372,7 +372,7 @@ export default function EnrollConfirmPage() {
                           value={getManual(step).body}
                           onChange={e => setManual(step.id, 'body', e.target.value)}
                           placeholder="Write your email..."
-                          rows={6}
+                          rows={12}
                         />
                       </>
                     ) : (
