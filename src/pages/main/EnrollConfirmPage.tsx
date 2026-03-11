@@ -136,6 +136,15 @@ export default function EnrollConfirmPage() {
   const [addStepPopover, setAddStepPopover] = useState<number | null>(null)
   const [refineStepId, setRefineStepId] = useState<number | null>(null)
   const [activated, setActivated] = useState(false)
+  const [stepModes, setStepModes] = useState<Record<number, 'ai' | 'manual'>>({})
+  const [manualContent, setManualContent] = useState<Record<number, { subject: string; body: string }>>({})
+
+  const getStepMode = (id: number) => stepModes[id] ?? 'ai'
+  const setStepMode = (id: number, mode: 'ai' | 'manual') =>
+    setStepModes(prev => ({ ...prev, [id]: mode }))
+  const getManual = (step: StepData) => manualContent[step.id] ?? { subject: step.subject, body: step.body }
+  const setManual = (id: number, field: 'subject' | 'body', value: string) =>
+    setManualContent(prev => ({ ...prev, [id]: { ...getManual(initialSteps.find(s => s.id === id)!), [field]: value } }))
 
   const selectedContact = [...enrolledContacts, ...recentlySaved].find(
     (c) => c.id === selectedContactId
@@ -316,65 +325,101 @@ export default function EnrollConfirmPage() {
                       <Badge variant="yellow" size="sm">Test A</Badge>
                     )}
                     <Badge variant="blue" size="sm">{step.label} ↓</Badge>
-                    <Badge variant="gray" size="sm">{step.format} ↓</Badge>
-                    {step.signals > 0 && (
-                      <Badge variant="gray" size="sm">Signals {step.signals} ↓</Badge>
+                    {getStepMode(step.id) === 'ai' && (
+                      <>
+                        <Badge variant="gray" size="sm">{step.format} ↓</Badge>
+                        {step.signals > 0 && (
+                          <Badge variant="gray" size="sm">Signals {step.signals} ↓</Badge>
+                        )}
+                      </>
                     )}
                   </div>
                   <div className="seq-step-header-right">
-                    <button
-                      className="seq-step-refine-btn"
-                      onClick={() => setRefineStepId(refineStepId === step.id ? null : step.id)}
-                    >
-                      <IconSparkle size={13} />
-                    </button>
-                    <span className="text-caption text-tertiary">···</span>
+                    <div className="seq-mode-toggle">
+                      <button
+                        className={`seq-mode-btn ${getStepMode(step.id) === 'ai' ? 'seq-mode-btn-active' : ''}`}
+                        onClick={() => setStepMode(step.id, 'ai')}
+                      >
+                        <IconSparkle size={11} />
+                        Write with AI
+                      </button>
+                      <button
+                        className={`seq-mode-btn ${getStepMode(step.id) === 'manual' ? 'seq-mode-btn-active' : ''}`}
+                        onClick={() => setStepMode(step.id, 'manual')}
+                      >
+                        Write your own
+                      </button>
+                    </div>
                   </div>
                 </div>
-
-                {/* Refine prompt */}
-                {refineStepId === step.id && (
-                  <div className="seq-refine-bar">
-                    <Badge variant="gray" size="sm">Refine ↓</Badge>
-                    <input
-                      className="seq-refine-input"
-                      placeholder={`What would you like to change about "${step.label}"?`}
-                    />
-                    <Button variant="ghost" size="sm" onClick={() => setRefineStepId(null)}>Cancel</Button>
-                    <Button variant="primary" size="sm">Apply</Button>
-                  </div>
-                )}
 
                 {/* Step body — email content */}
                 {step.body ? (
                   <div className="seq-step-body">
-                    {step.subject && (
-                      <div className="seq-step-subject">
-                        <span className="text-caption text-secondary">Subject</span>
-                        <span className="text-body-sm">{step.subject}</span>
-                      </div>
-                    )}
-                    <div className="seq-step-email text-body-sm">
-                      {step.body.split('\n\n').map((p, i) => (
-                        <p key={i}>{p}</p>
-                      ))}
-                    </div>
-                    <div className="seq-step-footer">
-                      <div className="seq-step-length">
-                        <span className="text-caption text-secondary">Length</span>
-                        <div className="seq-length-track">
-                          <div
-                            className="seq-length-fill"
-                            style={{ width: `${step.length}%` }}
-                          />
-                          <div
-                            className="seq-length-thumb"
-                            style={{ left: `${step.length}%` }}
+                    {getStepMode(step.id) === 'manual' ? (
+                      <>
+                        <div className="seq-step-subject">
+                          <span className="text-caption text-secondary">Subject</span>
+                          <input
+                            className="seq-manual-subject text-body-sm"
+                            value={getManual(step).subject}
+                            onChange={e => setManual(step.id, 'subject', e.target.value)}
+                            placeholder="Subject line"
                           />
                         </div>
+                        <textarea
+                          className="seq-manual-body text-body-sm"
+                          value={getManual(step).body}
+                          onChange={e => setManual(step.id, 'body', e.target.value)}
+                          placeholder="Write your email..."
+                          rows={6}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        {step.subject && (
+                          <div className="seq-step-subject">
+                            <span className="text-caption text-secondary">Subject</span>
+                            <span className="text-body-sm">{step.subject}</span>
+                          </div>
+                        )}
+                        <div className="seq-step-email text-body-sm">
+                          {step.body.split('\n\n').map((p, i) => (
+                            <p key={i}>{p}</p>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                    {refineStepId === step.id ? (
+                      <div className="seq-refine-bar">
+                        <Badge variant="gray" size="sm">Refine ↓</Badge>
+                        <input
+                          className="seq-refine-input"
+                          placeholder={`What would you like to change about "${step.label}"?`}
+                          autoFocus
+                        />
+                        <Button variant="ghost" size="sm" onClick={() => setRefineStepId(null)}>Cancel</Button>
+                        <Button variant="primary" size="sm">Apply</Button>
                       </div>
-                      <span className="text-caption text-tertiary">Full AI email</span>
-                    </div>
+                    ) : (
+                      <div className="seq-step-footer">
+                        {getStepMode(step.id) === 'ai' && (
+                          <div className="seq-step-length">
+                            <span className="text-caption text-secondary">Length</span>
+                            <div className="seq-length-track">
+                              <div className="seq-length-fill" style={{ width: `${step.length}%` }} />
+                              <div className="seq-length-thumb" style={{ left: `${step.length}%` }} />
+                            </div>
+                          </div>
+                        )}
+                        <button
+                          className="seq-step-refine-btn"
+                          onClick={() => setRefineStepId(step.id)}
+                        >
+                          <IconSparkle size={13} />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="seq-step-empty">

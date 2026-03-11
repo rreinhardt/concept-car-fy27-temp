@@ -243,6 +243,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: auto;
   width: 28px;
   height: 28px;
   border-radius: var(--radius-component);
@@ -253,8 +254,72 @@
   transition: background var(--transition-fast);
 }
 
-.seq-step-refine-btn:hover {
+.seq-step-refine-btn:hover,
+.seq-step-refine-btn-active {
   background: var(--color-bg-hover);
+}
+
+/* ── AI / manual mode toggle ── */
+.seq-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 2px;
+  background: var(--color-bg-hover);
+  border-radius: var(--radius-component);
+}
+
+.seq-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sub);
+  padding: 3px 10px;
+  border-radius: calc(var(--radius-component) - 2px);
+  border: none;
+  background: none;
+  font-size: var(--text-caption-size);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.seq-mode-btn-active {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Manual edit inputs ── */
+.seq-manual-subject {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: inherit;
+  color: var(--color-text-primary);
+  width: 100%;
+}
+
+.seq-manual-body {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-component);
+  padding: var(--space-3);
+  font-family: inherit;
+  font-size: var(--text-body-sm-size);
+  color: var(--color-text-primary);
+  resize: vertical;
+  outline: none;
+  background: var(--color-bg-tertiary);
+  line-height: 1.6;
+  transition: border-color var(--transition-fast);
+}
+
+.seq-manual-body:focus {
+  border-color: var(--color-border-input);
+  background: var(--color-bg-primary);
 }
 
 /* Refine bar */
