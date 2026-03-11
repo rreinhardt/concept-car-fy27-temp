@@ -868,3 +868,21 @@
   pointer-events: all;
   height: 100%;
 }
+
+.seq-actions-panel-wrap {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  padding: var(--padding-section);
+  z-index: 200;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.seq-actions-panel-wrap > * {
+  pointer-events: all;
+  height: 100%;
+}

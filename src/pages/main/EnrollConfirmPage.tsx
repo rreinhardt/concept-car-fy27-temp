@@ -6,13 +6,52 @@ import Badge from '@/components/shared/Badge'
 import Button from '@/components/shared/Button'
 import Tabs from '@/components/shared/Tabs'
 import EmailComposeDrawer from '@/components/shared/EmailComposeDrawer'
+import ActionsPanel, { type ActionGroup } from '@/components/shared/ActionsPanel'
 import {
   IconSparkle,
   IconPlus,
   IconClose,
   IconChevronLeft,
+  IconClock,
+  IconChart,
+  IconSequence,
+  IconSpreadsheet,
+  IconPeople,
+  IconRobot,
 } from '@/components/shared/Icons'
 import './EnrollConfirmPage.css'
+
+const enrollActionGroups: ActionGroup[] = [
+  {
+    items: [
+      { icon: <IconSparkle size={15} />, label: 'Activate sequence', desc: 'Start sending to enrolled contacts', id: 'activate' },
+      { icon: <IconPlus size={15} />, label: 'Add contacts', desc: 'Search and enroll new contacts', id: 'add-contacts' },
+    ],
+  },
+  {
+    label: 'Manage',
+    items: [
+      { icon: <IconClock size={15} />, label: 'Pause sequence', desc: 'Stop all sends until resumed', id: 'pause' },
+      { icon: <IconSequence size={15} />, label: 'Duplicate sequence', desc: 'Clone this sequence to edit separately', id: 'duplicate' },
+      { icon: <IconPeople size={15} />, label: 'Reassign sequence', desc: 'Move to another rep or team', id: 'reassign' },
+    ],
+  },
+  {
+    label: 'Analytics',
+    items: [
+      { icon: <IconChart size={15} />, label: 'View report', desc: 'Open open/reply/meeting metrics', id: 'view-report' },
+      { icon: <IconSpreadsheet size={15} />, label: 'Export contacts', desc: 'Download enrolled contacts as CSV', id: 'export-contacts' },
+      { icon: <IconClock size={15} />, label: 'Activity log', desc: 'See recent sends and events', id: 'activity-log' },
+    ],
+  },
+  {
+    label: 'AI',
+    items: [
+      { icon: <IconSparkle size={15} />, label: 'Optimize sequence', desc: 'AI suggestions to improve performance', id: 'optimize' },
+      { icon: <IconRobot size={15} />, label: 'Rewrite all steps', desc: 'Regenerate copy with fresh AI drafts', id: 'rewrite-all' },
+    ],
+  },
+]
 
 const enrolledContacts = mockContacts.slice(0, 4)
 const recentlySaved = mockContacts.slice(4, 9)
@@ -138,6 +177,7 @@ export default function EnrollConfirmPage() {
   const [activated, setActivated] = useState(false)
   const [stepModes, setStepModes] = useState<Record<number, 'ai' | 'manual'>>({})
   const [manualContent, setManualContent] = useState<Record<number, { subject: string; body: string }>>({})
+  const [actionsPanelOpen, setActionsPanelOpen] = useState(false)
 
   const getStepMode = (id: number) => stepModes[id] ?? 'ai'
   const setStepMode = (id: number, mode: 'ai' | 'manual') =>
@@ -204,18 +244,27 @@ export default function EnrollConfirmPage() {
           className="seq-top-tabs"
         />
         <div className="seq-topbar-right">
-          <button className="seq-topbar-icon-btn">
-            <IconSparkle size={16} />
-          </button>
-          <Button variant="secondary" size="sm" onClick={() => navigate('/search')}>
-            <IconPlus size={14} />
-            Add contacts
-          </Button>
-          <Button variant="primary" size="sm" onClick={() => setActivated(true)}>
-            Activate
+          <Button variant="primary" size="sm" onClick={() => setActionsPanelOpen(true)}>
+            Actions
           </Button>
         </div>
       </div>
+
+      {actionsPanelOpen && (
+        <div className="seq-actions-panel-wrap">
+          <ActionsPanel
+            onClose={() => setActionsPanelOpen(false)}
+            onAction={(id) => {
+              if (id === 'activate') { setActionsPanelOpen(false); setActivated(true) }
+              else if (id === 'add-contacts') { setActionsPanelOpen(false); navigate('/search') }
+              else setActionsPanelOpen(false)
+            }}
+            selectedCount={0}
+            onDeselect={() => {}}
+            suggestedGroups={enrollActionGroups}
+          />
+        </div>
+      )}
 
       {activeTopTab === 'contacts' && <SequenceContactsView />}
 
