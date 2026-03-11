@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import PageLayout from '@/components/shared/PageLayout'
 import Badge from '@/components/shared/Badge'
+import ActionsPanel, { type ActionGroup } from '@/components/shared/ActionsPanel'
+import EmailComposeDrawer from '@/components/shared/EmailComposeDrawer'
 import {
   IconMail,
   IconSearch,
@@ -8,6 +10,12 @@ import {
   IconChevronRight,
   IconSequence,
   IconSparkle,
+  IconClock,
+  IconBookmark,
+  IconTag,
+  IconPhone,
+  IconPeople,
+  IconCheck,
 } from '@/components/shared/Icons'
 import Input from '@/components/shared/Input'
 import '../main/SearchPage.css'
@@ -43,10 +51,44 @@ const mailboxLabels: Record<MailboxView, string> = {
   'ai-written': 'Written by AI',
 }
 
+const emailsSuggestedGroups: ActionGroup[] = [
+  {
+    items: [
+      { icon: <IconMail size={15} />, label: 'New email', desc: 'Compose a one-off email', id: 'new-email' },
+    ],
+  },
+  {
+    label: 'Respond',
+    items: [
+      { icon: <IconCheck size={15} />, label: 'Mark as replied', desc: 'Log a manual reply', id: 'mark-replied' },
+      { icon: <IconClock size={15} />, label: 'Schedule follow-up', desc: 'Set a reminder to follow up', id: 'schedule-followup' },
+      { icon: <IconPhone size={15} />, label: 'Log a call', desc: 'Record a call with this contact', id: 'log-call' },
+    ],
+  },
+  {
+    label: 'Organize',
+    items: [
+      { icon: <IconSequence size={15} />, label: 'Add to sequence', desc: 'Enroll contact in a sequence', id: 'add-to-sequence' },
+      { icon: <IconPeople size={15} />, label: 'View contact', desc: 'Open full contact profile', id: 'view-contact' },
+      { icon: <IconBookmark size={15} />, label: 'Save to list', desc: 'Add contact to a list', id: 'save-to-list' },
+      { icon: <IconTag size={15} />, label: 'Tag contact', desc: 'Apply a tag to this contact', id: 'tag' },
+    ],
+  },
+  {
+    label: 'AI',
+    items: [
+      { icon: <IconSparkle size={15} />, label: 'Draft reply with AI', desc: 'Generate a reply based on context', id: 'draft-ai' },
+      { icon: <IconSparkle size={15} />, label: 'Summarize thread', desc: 'Get a quick summary of this thread', id: 'summarize' },
+    ],
+  },
+]
+
 export default function EmailsPage() {
   const [activeView, setActiveView] = useState<MailboxView>('inbox')
   const [groupBy, setGroupBy] = useState<GroupBy>('sequence')
   const [groupByOpen, setGroupByOpen] = useState(false)
+  const [actionsPanelOpen, setActionsPanelOpen] = useState(false)
+  const [panelView, setPanelView] = useState<'actions' | 'email'>('actions')
 
   const sidebar = (
     <>
@@ -145,6 +187,32 @@ export default function EmailsPage() {
       }
       sidebar={sidebar}
       sidebarLabel="Mailbox"
+      actionsPanel={
+        panelView === 'email' ? (
+          <EmailComposeDrawer
+            onClose={() => { setPanelView('actions'); setActionsPanelOpen(false) }}
+            onBack={() => setPanelView('actions')}
+            onSend={() => { setPanelView('actions'); setActionsPanelOpen(false) }}
+          />
+        ) : (
+          <ActionsPanel
+            onClose={() => setActionsPanelOpen(false)}
+            onAction={(id) => {
+              if (id === 'new-email' || id === 'draft-ai') setPanelView('email')
+              else if (id === 'add-to-sequence') { /* navigate('/sequences') */ }
+              else setActionsPanelOpen(false)
+            }}
+            selectedCount={0}
+            onDeselect={() => {}}
+            suggestedGroups={emailsSuggestedGroups}
+          />
+        )
+      }
+      actionsPanelOpen={actionsPanelOpen}
+      actionsPanelWidth={panelView === 'email' ? 680 : undefined}
+      actionsBtnVariant={panelView === 'email' ? 'secondary' : 'primary'}
+      collapseSidebar={panelView === 'email'}
+      onActionsPanelToggle={(open) => { setActionsPanelOpen(open); if (!open) setPanelView('actions') }}
     >
       <div className="search-table-area">
         <div className="search-table-frame">

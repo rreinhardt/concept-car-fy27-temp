@@ -5,6 +5,7 @@ import Button from '@/components/shared/Button'
 import Badge from '@/components/shared/Badge'
 import PageLayout from '@/components/shared/PageLayout'
 import ActionsPanel, { type ActionGroup } from '@/components/shared/ActionsPanel'
+import EmailComposeDrawer from '@/components/shared/EmailComposeDrawer'
 import {
   IconSearch,
   IconFilter,
@@ -199,6 +200,7 @@ export default function TasksPage() {
   const [dismissedBlockers, setDismissedBlockers] = useState<Set<string>>(new Set())
   const [selectedRows, setSelectedRows] = useState<number[]>([])
   const [actionsPanelOpen, setActionsPanelOpen] = useState(false)
+  const [panelView, setPanelView] = useState<'actions' | 'email'>('actions')
 
   const visibleTasks = mockTasks.filter((t) => !dismissed.has(t.id))
   const visibleBlockers = blockers.filter((b) => !dismissedBlockers.has(b.id))
@@ -272,22 +274,33 @@ export default function TasksPage() {
       }
       sidebar={sidebar}
       actionsPanel={
-        <ActionsPanel
-          onClose={() => setActionsPanelOpen(false)}
-          onAction={(id) => {
-            if (id === 'add-to-sequence') navigate('/sequences')
-            else if (id === 'add-to-list') navigate('/save-to-list')
-            else if (id === 'enrich') navigate('/review')
-            else setActionsPanelOpen(false)
-          }}
-          selectedCount={selectedRows.length}
-          onDeselect={() => setSelectedRows([])}
-          suggestedGroups={taskSuggestedGroups}
-          advancedGroups={taskAdvancedGroups}
-        />
+        panelView === 'email' ? (
+          <EmailComposeDrawer
+            onClose={() => { setPanelView('actions'); setActionsPanelOpen(false) }}
+            onBack={() => setPanelView('actions')}
+            onSend={() => { setPanelView('actions'); setActionsPanelOpen(false) }}
+          />
+        ) : (
+          <ActionsPanel
+            onClose={() => setActionsPanelOpen(false)}
+            onAction={(id) => {
+              if (id === 'email') setPanelView('email')
+              else if (id === 'add-to-sequence') navigate('/sequences')
+              else if (id === 'add-to-list') navigate('/save-to-list')
+              else setActionsPanelOpen(false)
+            }}
+            selectedCount={selectedRows.length}
+            onDeselect={() => setSelectedRows([])}
+            suggestedGroups={taskSuggestedGroups}
+            advancedGroups={taskAdvancedGroups}
+          />
+        )
       }
       actionsPanelOpen={actionsPanelOpen}
-      onActionsPanelToggle={setActionsPanelOpen}
+      actionsPanelWidth={panelView === 'email' ? 680 : undefined}
+      actionsBtnVariant={panelView === 'email' ? 'secondary' : 'primary'}
+      collapseSidebar={panelView === 'email'}
+      onActionsPanelToggle={(open) => { setActionsPanelOpen(open); if (!open) setPanelView('actions') }}
     >
       {/* Blockers */}
       {visibleBlockers.length > 0 && (
