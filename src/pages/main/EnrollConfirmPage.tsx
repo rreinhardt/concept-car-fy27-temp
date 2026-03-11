@@ -178,6 +178,10 @@ export default function EnrollConfirmPage() {
   const [stepModes, setStepModes] = useState<Record<number, 'ai' | 'manual'>>({})
   const [manualContent, setManualContent] = useState<Record<number, { subject: string; body: string }>>({})
   const [actionsPanelOpen, setActionsPanelOpen] = useState(false)
+  const [composeState, setComposeState] = useState<ComposeState | null>(null)
+
+  const panelOpen = !!composeState || actionsPanelOpen
+  const panelWidth = composeState ? 680 : undefined
 
   const getStepMode = (id: number) => stepModes[id] ?? 'ai'
   const setStepMode = (id: number, mode: 'ai' | 'manual') =>
@@ -252,7 +256,7 @@ export default function EnrollConfirmPage() {
 
       <div className="enroll-body-row">
         <div className="enroll-main">
-          {activeTopTab === 'contacts' && <SequenceContactsView />}
+          {activeTopTab === 'contacts' && <SequenceContactsView onOpenCompose={(state) => { setComposeState(state); setActionsPanelOpen(false) }} />}
 
           <div className="seq-body" style={{ display: activeTopTab === 'editor' ? 'flex' : 'none' }}>
         {/* Left — contact list */}
@@ -526,20 +530,41 @@ export default function EnrollConfirmPage() {
       </div>
         </div>{/* end enroll-main */}
 
-        {/* Actions panel — splits the page like other pages */}
-        <aside className={`page-actions-panel ${actionsPanelOpen ? 'page-actions-panel-open' : ''}`}>
+        {/* Actions / compose panel — splits the page */}
+        <aside
+          className={`page-actions-panel ${panelOpen ? 'page-actions-panel-open' : ''}`}
+          style={panelWidth ? { '--panel-width': `${panelWidth}px` } as React.CSSProperties : undefined}
+        >
           <div className="page-actions-panel-inner">
-            <ActionsPanel
-              onClose={() => setActionsPanelOpen(false)}
-              onAction={(id) => {
-                if (id === 'activate') { setActionsPanelOpen(false); setActivated(true) }
-                else if (id === 'add-contacts') { setActionsPanelOpen(false); navigate('/search') }
-                else setActionsPanelOpen(false)
-              }}
-              selectedCount={0}
-              onDeselect={() => {}}
-              suggestedGroups={enrollActionGroups}
-            />
+            {composeState ? (
+              <EmailComposeDrawer
+                initialBody={composeState.body}
+                initialSubject={composeState.subject}
+                sendLabel="Update"
+                contacts={[{
+                  name: composeState.contactName,
+                  email: composeState.contactEmail,
+                  title: composeState.contactTitle,
+                  company: composeState.contactCompany,
+                  signals: [],
+                }]}
+                onClose={() => setComposeState(null)}
+                onBack={() => setComposeState(null)}
+                onSend={() => setComposeState(null)}
+              />
+            ) : (
+              <ActionsPanel
+                onClose={() => setActionsPanelOpen(false)}
+                onAction={(id) => {
+                  if (id === 'activate') { setActionsPanelOpen(false); setActivated(true) }
+                  else if (id === 'add-contacts') { setActionsPanelOpen(false); navigate('/search') }
+                  else setActionsPanelOpen(false)
+                }}
+                selectedCount={0}
+                onDeselect={() => {}}
+                suggestedGroups={enrollActionGroups}
+              />
+            )}
           </div>
         </aside>
       </div>{/* end enroll-body-row */}
@@ -619,10 +644,9 @@ function EmailCell({ body, subject, contactName, contactEmail, contactTitle, con
   )
 }
 
-function SequenceContactsView() {
+function SequenceContactsView({ onOpenCompose }: { onOpenCompose: (state: ComposeState) => void }) {
   const [activeFilter, setActiveFilter] = useState('All')
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
-  const [composeState, setComposeState] = useState<ComposeState | null>(null)
 
   const filtered = activeFilter === 'All'
     ? seqContactRows
@@ -693,7 +717,7 @@ function SequenceContactsView() {
                       contactEmail={`${row.name.toLowerCase().replace(/\s+/g, '.')}@${row.company.toLowerCase().replace(/\s+/g, '')}.com`}
                       contactTitle={row.title}
                       contactCompany={row.company}
-                      onOpen={setComposeState}
+                      onOpen={onOpenCompose}
                     />
                   </td>
                 ))}
@@ -703,25 +727,6 @@ function SequenceContactsView() {
         </table>
       </div>
 
-      {/* Compose drawer */}
-      {composeState && (
-        <div className="seq-compose-drawer-wrap">
-          <EmailComposeDrawer
-            initialBody={composeState.body}
-            initialSubject={composeState.subject}
-            sendLabel="Update"
-            contacts={[{
-              name: composeState.contactName,
-              email: composeState.contactEmail,
-              title: composeState.contactTitle,
-              company: composeState.contactCompany,
-              signals: [],
-            }]}
-            onClose={() => setComposeState(null)}
-            onBack={() => setComposeState(null)}
-          />
-        </div>
-      )}
     </div>
   )
 }
