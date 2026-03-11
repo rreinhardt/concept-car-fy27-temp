@@ -10,7 +10,7 @@ interface TabsProps {
   tabs: Tab[]
   activeId: string
   onTabChange: (id: string) => void
-  variant?: 'underline' | 'pill'
+  variant?: 'underline' | 'pill' | 'plain'
   className?: string
 }
 

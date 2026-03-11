@@ -58,6 +58,28 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Plain variant — no underline, no box; active tab gets a soft bg pill */
+.tabs-plain {
+  gap: 2px;
+}
+
+.tabs-plain .tab-item {
+  padding: 4px 10px;
+  border-radius: var(--radius-component);
+  color: var(--color-text-tertiary);
+}
+
+.tabs-plain .tab-item:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
+}
+
+.tabs-plain .tab-active {
+  background: var(--color-bg-active);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
 /* Count badge */
 .tab-count {
   font-size: 11px;

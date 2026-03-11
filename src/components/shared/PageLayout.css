@@ -238,6 +238,6 @@
   flex-direction: column;
   border-radius: var(--radius-surface);
   box-shadow: var(--shadow-glow);
-  background: var(--color-bg-surface);
+  background: var(--color-bg-primary);
   overflow: hidden;
 }

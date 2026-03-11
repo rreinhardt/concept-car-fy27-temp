@@ -240,7 +240,7 @@ export default function EnrollConfirmPage() {
           tabs={topTabs}
           activeId={activeTopTab}
           onTabChange={setActiveTopTab}
-          variant="underline"
+          variant="plain"
           className="seq-top-tabs"
         />
         <div className="seq-topbar-right">
