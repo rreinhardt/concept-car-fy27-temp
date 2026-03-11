@@ -10,7 +10,6 @@
   min-height: 0;
   overflow: hidden;
   padding: 0 var(--padding-section) var(--padding-section);
-  gap: 8px;
 }
 
 .enroll-main {
@@ -31,8 +30,7 @@
   display: flex;
   align-items: center;
   gap: var(--gap-zone);
-  padding: 0 var(--padding-section);
-  height: 48px;
+  padding: var(--padding-section) var(--padding-section) 0;
   flex-shrink: 0;
 }
 

@@ -16,7 +16,6 @@ import ListCartPanel from '@/components/shared/ListCartPanel'
 import SequenceCartPanel from '@/components/shared/SequenceCartPanel'
 import {
   IconSearch,
-  IconFilter,
   IconLock,
   IconChevronDown,
   IconChevronLeft,
@@ -314,7 +313,6 @@ export default function SearchPage() {
           <span className="text-body-sm">Default view</span>
           <IconChevronDown size={14} />
         </div>
-        <Button variant="ghost" size="sm" icon={<IconFilter />}>Filters</Button>
       </div>
 
       <Input

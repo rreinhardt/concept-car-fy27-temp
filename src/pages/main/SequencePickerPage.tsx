@@ -71,6 +71,63 @@ export default function SequencePickerPage() {
     </>
   )
 
+  const previewPanel = selected ? (
+    <div className="seqp-preview-content">
+      <div className="seqp-preview-header">
+        <div className="seqp-preview-title-row">
+          <h3 className="text-subtitle-lg">{selected.name}</h3>
+          <button
+            className="seqp-preview-close text-caption text-tertiary"
+            onClick={() => setSelectedId(null)}
+          >
+            &times;
+          </button>
+        </div>
+        <Badge
+          variant={selected.goal === 'Book meeting' ? 'blue' : selected.goal === 'Nurture' ? 'green' : 'yellow'}
+          size="sm"
+        >
+          {selected.goal}
+        </Badge>
+      </div>
+
+      <div className="seqp-preview-stats">
+        <div className="seqp-preview-stat">
+          <span className="text-caption text-secondary">Steps</span>
+          <span className="text-title-md">{selected.steps}</span>
+        </div>
+        <div className="seqp-preview-stat">
+          <span className="text-caption text-secondary">Days</span>
+          <span className="text-title-md">{selected.days}</span>
+        </div>
+      </div>
+
+      <p className="text-body-sm text-secondary">{selected.description}</p>
+
+      <div className="seqp-preview-steps">
+        <h4 className="text-caption font-medium">Sequence steps</h4>
+        {Array.from({ length: selected.steps }, (_, i) => (
+          <div key={i} className="seqp-preview-step">
+            <div className="seqp-step-dot" />
+            <div className="seqp-step-content">
+              <span className="text-body-sm font-medium">
+                {i === 0 ? 'Initial outreach' : i === selected.steps - 1 ? 'Break-up email' : `Follow-up ${i}`}
+              </span>
+              <span className="text-caption text-secondary">
+                Day {i === 0 ? 1 : Math.round((selected.days / selected.steps) * i)} &middot; Email
+                {i === 0 ? ' + AI personalization' : ''}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <Button variant="primary" onClick={() => navigate('/enroll')}>
+        Use this sequence
+      </Button>
+    </div>
+  ) : null
+
   return (
     <PageLayout
       title="Sequences"
@@ -85,6 +142,9 @@ export default function SequencePickerPage() {
       sidebar={sidebar}
       sidebarLabel="Sequences"
       mainClassName="seqp-main-wrapper"
+      actionsPanel={previewPanel}
+      actionsPanelOpen={!!selected}
+      onActionsPanelToggle={(open) => { if (!open) setSelectedId(null) }}
     >
       <div className="search-table-frame seqp-main-content">
         <div className="seqp-header">
@@ -128,66 +188,6 @@ export default function SequencePickerPage() {
             </button>
           ))}
         </div>
-      </div>
-
-      {/* Preview panel — overlays the white round rect from the left */}
-      <div className={`seqp-preview-panel ${selected ? 'seqp-preview-panel-open' : ''}`}>
-        {selected && (
-          <>
-            <div className="seqp-preview-header">
-              <div className="seqp-preview-title-row">
-                <h3 className="text-subtitle-lg">{selected.name}</h3>
-                <button
-                  className="seqp-preview-close text-caption text-tertiary"
-                  onClick={() => setSelectedId(null)}
-                >
-                  &times;
-                </button>
-              </div>
-              <Badge
-                variant={selected.goal === 'Book meeting' ? 'blue' : selected.goal === 'Nurture' ? 'green' : 'yellow'}
-                size="sm"
-              >
-                {selected.goal}
-              </Badge>
-            </div>
-
-            <div className="seqp-preview-stats">
-              <div className="seqp-preview-stat">
-                <span className="text-caption text-secondary">Steps</span>
-                <span className="text-title-md">{selected.steps}</span>
-              </div>
-              <div className="seqp-preview-stat">
-                <span className="text-caption text-secondary">Days</span>
-                <span className="text-title-md">{selected.days}</span>
-              </div>
-            </div>
-
-            <p className="text-body-sm text-secondary">{selected.description}</p>
-
-            <div className="seqp-preview-steps">
-              <h4 className="text-caption font-medium">Sequence steps</h4>
-              {Array.from({ length: selected.steps }, (_, i) => (
-                <div key={i} className="seqp-preview-step">
-                  <div className="seqp-step-dot" />
-                  <div className="seqp-step-content">
-                    <span className="text-body-sm font-medium">
-                      {i === 0 ? 'Initial outreach' : i === selected.steps - 1 ? 'Break-up email' : `Follow-up ${i}`}
-                    </span>
-                    <span className="text-caption text-secondary">
-                      Day {i === 0 ? 1 : Math.round((selected.days / selected.steps) * i)} &middot; Email
-                      {i === 0 ? ' + AI personalization' : ''}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <Button variant="primary" onClick={() => navigate('/enroll')}>
-              Use this sequence
-            </Button>
-          </>
-        )}
       </div>
     </PageLayout>
   )

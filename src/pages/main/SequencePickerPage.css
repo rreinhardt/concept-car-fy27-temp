@@ -156,6 +156,16 @@
   pointer-events: auto;
 }
 
+/* Content inside the page-actions-panel-inner wrapper */
+.seqp-preview-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-zone);
+  padding: var(--padding-section);
+  overflow-y: auto;
+  height: 100%;
+}
+
 .seqp-preview-title-row {
   display: flex;
   align-items: flex-start;

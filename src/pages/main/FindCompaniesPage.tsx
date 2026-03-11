@@ -10,7 +10,6 @@ import EmailComposeDrawer from '@/components/shared/EmailComposeDrawer'
 import SendingOverlay from '@/components/shared/SendingOverlay'
 import {
   IconSearch,
-  IconFilter,
   IconChevronDown,
   IconChevronLeft,
   IconChevronRight,
@@ -145,7 +144,6 @@ export default function FindCompaniesPage() {
           <span className="text-body-sm">Default view</span>
           <IconChevronDown size={14} />
         </div>
-        <Button variant="ghost" size="sm" icon={<IconFilter />}>Filters</Button>
       </div>
 
       <Input
