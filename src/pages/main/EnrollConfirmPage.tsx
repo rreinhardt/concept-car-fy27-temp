@@ -12,6 +12,7 @@ import {
   IconPlus,
   IconClose,
   IconChevronLeft,
+  IconPanelLeft,
   IconClock,
   IconChart,
   IconSequence,
@@ -178,6 +179,7 @@ export default function EnrollConfirmPage() {
   const [stepModes, setStepModes] = useState<Record<number, 'ai' | 'manual'>>({})
   const [manualContent, setManualContent] = useState<Record<number, { subject: string; body: string }>>({})
   const [actionsPanelOpen, setActionsPanelOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [composeState, setComposeState] = useState<ComposeState | null>(null)
 
   const panelOpen = !!composeState || actionsPanelOpen
@@ -237,6 +239,13 @@ export default function EnrollConfirmPage() {
           <button className="seq-back-btn" onClick={() => navigate('/sequences')}>
             <IconChevronLeft size={16} />
           </button>
+          <button
+            className={`page-sidebar-toggle ${sidebarCollapsed ? 'page-sidebar-toggle-collapsed' : ''}`}
+            onClick={() => setSidebarCollapsed(v => !v)}
+            title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <IconPanelLeft size={16} />
+          </button>
           <span className="seq-name text-subtitle-lg">Cold Outbound — Decision Makers</span>
           <Badge variant="gray" size="sm">Inactive</Badge>
         </div>
@@ -260,7 +269,7 @@ export default function EnrollConfirmPage() {
 
           <div className="seq-body" style={{ display: activeTopTab === 'editor' ? 'flex' : 'none' }}>
         {/* Left — contact list */}
-        <div className="seq-contacts">
+        <div className={`seq-contacts ${sidebarCollapsed ? 'seq-contacts-collapsed' : ''}`}>
           <div className="seq-contacts-header">
             <span className="text-subtitle-lg">Preview sample</span>
             <span className="text-caption text-secondary">
