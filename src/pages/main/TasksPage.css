@@ -32,8 +32,8 @@
 }
 
 /* Next Best Action row highlight */
-.tasks-row-next {
-  background: var(--color-accent-green-bg) !important;
+.tasks-row-next td {
+  background: var(--color-accent-green-bg);
 }
 
 /* "Next" badge inline with contact name */
