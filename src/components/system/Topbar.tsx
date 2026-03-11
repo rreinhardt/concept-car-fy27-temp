@@ -45,6 +45,7 @@ export default function Topbar() {
   const navigate = useNavigate()
   const { assistantOpen, toggleAssistant } = useAssistantPanel()
   const [expanded, setExpanded] = useState(false)
+  const [creditsOpen, setCreditsOpen] = useState(false)
   // 0 = not configured, 1 = healthy, 2 = poor health
   const [healthStage, setHealthStage] = useState<0 | 1 | 2>(0)
   const [showMailboxWizard, setShowMailboxWizard] = useState(false)
@@ -56,6 +57,7 @@ export default function Topbar() {
   const healthItems = healthItemLabels.map(h => ({ ...h, status: dotColor }))
   const inputRef = useRef<HTMLInputElement>(null)
   const barRef = useRef<HTMLDivElement>(null)
+  const creditsRef = useRef<HTMLDivElement>(null)
 
   const { funnel } = weeklyScorecard
 
@@ -111,6 +113,17 @@ export default function Topbar() {
     return () => document.removeEventListener('keydown', handleKey)
   }, [])
 
+  useEffect(() => {
+    if (!creditsOpen) return
+    const handleClick = (e: MouseEvent) => {
+      if (creditsRef.current && !creditsRef.current.contains(e.target as Node)) {
+        setCreditsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [creditsOpen])
+
   const handleExpand = () => {
     setExpanded(true)
     setTimeout(() => inputRef.current?.focus(), 0)
@@ -151,9 +164,12 @@ export default function Topbar() {
 
             <div className="ubar-divider" />
 
-            <span className="ubar-credit">
-              <span>{creditUsage.remaining.toLocaleString()} credits</span>
-            </span>
+            <div className="ubar-credit-wrap" ref={creditsRef}>
+              <button className="ubar-credit" onClick={() => setCreditsOpen(v => !v)}>
+                <span>{creditUsage.remaining.toLocaleString()} credits</span>
+              </button>
+              {creditsOpen && <CreditsPopover />}
+            </div>
 
             <div className="ubar-divider" />
 
@@ -216,9 +232,12 @@ export default function Topbar() {
 
               <div className="ubar-divider" />
 
-              <span className="ubar-credit">
-                <span>{creditUsage.remaining.toLocaleString()} credits</span>
-              </span>
+              <div className="ubar-credit-wrap" ref={creditsRef}>
+                <button className="ubar-credit" onClick={() => setCreditsOpen(v => !v)}>
+                  <span>{creditUsage.remaining.toLocaleString()} credits</span>
+                </button>
+                {creditsOpen && <CreditsPopover />}
+              </div>
 
               <div className="ubar-divider" />
 
@@ -405,5 +424,33 @@ export default function Topbar() {
         />
       )}
     </header>
+  )
+}
+
+function CreditsPopover() {
+  return (
+    <div className="ubar-credits-popover">
+      <div className="ubar-credit-summary">
+        <div className="ubar-credit-header">
+          <span className="ubar-credit-remaining">{creditUsage.remaining.toLocaleString()}</span>
+          <span className="ubar-credit-total">/ {creditUsage.total.toLocaleString()}</span>
+        </div>
+        <div className="ubar-credit-bar">
+          <div className="ubar-credit-bar-fill" style={{ width: `${creditUsage.percentUsed}%` }} />
+        </div>
+        <div className="ubar-credit-meta">
+          <span>Used today: {creditUsage.usedToday}</span>
+          <span>{creditUsage.percentUsed}% used</span>
+        </div>
+      </div>
+      <div className="ubar-credit-breakdown">
+        {creditUsage.breakdown.map((item) => (
+          <div key={item.label} className="ubar-credit-row">
+            <span className="ubar-credit-row-label">{item.label}</span>
+            <span className="ubar-credit-row-count">{item.count}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }

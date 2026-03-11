@@ -123,6 +123,11 @@
   margin-left: 0;
 }
 
+.ubar-credit-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
 .ubar-credit {
   display: flex;
   align-items: center;
@@ -130,11 +135,31 @@
   font-size: var(--text-caption-size);
   color: var(--color-text-secondary);
   white-space: nowrap;
-  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.ubar-credit:hover {
+  color: var(--color-text-primary);
 }
 
 .ubar-credit svg {
   color: var(--color-text-tertiary);
+}
+
+.ubar-credits-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 220px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-component);
+  box-shadow: var(--shadow-overlay);
+  padding: var(--space-2) 0;
+  z-index: 300;
 }
 
 .ubar-stats {
